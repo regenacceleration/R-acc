@@ -1,14 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import {Source_Code_Pro,Courier_Prime } from "next/font/google";
+import PrelineScript from "@/app/components/PrelineScript";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sourceCodePro = Source_Code_Pro({
+  variable: "--primary-font",
   subsets: ["latin"],
+  weight: ['200' , '300' , '400' , '500' , '600' , '700' , '800' , '900']
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const courierPrime = Courier_Prime({
+  variable: "--secondary-font",
   subsets: ["latin"],
+  weight: ['400','700']
 });
 
 export const metadata = {
@@ -20,9 +23,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sourceCodePro.variable} ${courierPrime.variable} antialiased`}
       >
         {children}
+        {/* <PrelineScript /> */}
+       
       </body>
     </html>
   );

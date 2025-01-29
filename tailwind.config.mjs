@@ -4,6 +4,7 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    // "./node_modules/preline/preline.js",
   ],
   theme: {
     extend: {
@@ -11,6 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+    },
+    fontFamily: {
+      primary: ["var(--primary-font)"],
+      secondary: ["var(--secondary-font)"],
     },
   },
   plugins: [],
