@@ -4,6 +4,7 @@ import Header from './Header';
 import Link from 'next/link';
 import Image from 'next/image';
 import images from '../constants/images';
+import { supabase } from '../services/supabaseClient.js';
 
 export function CreateTokenModal() {
 
@@ -11,7 +12,7 @@ export function CreateTokenModal() {
     name: '',
     ticker: '',
     description: '',
-    image: null,
+    image:"",
     telegram: '',
     twitter: '',
     website: '',
@@ -39,6 +40,9 @@ export function CreateTokenModal() {
     if (!formData.ticker) newErrors.ticker = 'Ticker is required';
     if (!formData.description) newErrors.description = 'Description is required';
     if (!formData.image) newErrors.image = 'Image URL is required';
+    if (!formData.telegram) newErrors.telegram = 'Telegram is required';
+    if (!formData.twitter) newErrors.twitter = 'Twitter is required';
+    if (!formData.website) newErrors.website = 'Website URL is required';
     if (formData.percentage && isNaN(Number(formData.percentage))) {
       newErrors.percentage = 'Percentage must be a number';
     }
@@ -47,10 +51,32 @@ export function CreateTokenModal() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log(formData)
+    try {
+      if (validateForm()) {
+        console.log(formData)
+        const { data, error } = await supabase
+          .from('token-details') // Table name
+          .insert([{ 
+            ...formData,
+          }]);
+        console.log(data)
+        if (error) throw error;
+      }
+
+      setFormData({
+        name: '',
+        ticker: '',
+        description: '',
+        image: '',
+        telegram: '',
+        twitter: '',
+        website: '',
+        percentage: '',
+      })
+    } catch (error) {
+      console.error('Error inserting data:', error);
     }
   };
 
