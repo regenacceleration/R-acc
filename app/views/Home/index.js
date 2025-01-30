@@ -1,53 +1,66 @@
 "use client"
 import Header from "@/app/components/Header";
 import images from "@/app/constants/images";
+import { supabase } from "@/app/services/supabaseClient.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 
 export default function Home() {
   const router = useRouter();
-  const tokens = [
-    {
-      id: 1,
-      name: "$SOIL",
-      marketCap: "12.36 M",
-      hodlers: "106,964",
-      address: "0x1C4C...F463A3",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus velit diam, Nullam rhoncus laoreet.",
-        telegram : images.telegram ,
-        twitter : images.twitter,
-        website :images.website,
-        coverPic : images.coverPic,
-    },
-    {
-      id: 2,
-      name: "$FIYAH",
-      marketCap: "12.36 M",
-      hodlers: "106,964",
-      address: "0x1C4C...F463A3",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus velit diam, Nullam rhoncus laoreet.",
-        telegram : images.telegram ,
-        twitter : images.twitter,
-        website :images.website,
-        coverPic : images.coverPic,
-    },
-    {
-      id: 3,
-      name: "$GEARTH",
-      marketCap: "12.36 M",
-      hodlers: "106,964",
-      address: "0x1C4C...F463A3",
-      description: "We got Girth ;)",
-      telegram : images.telegram ,
-        twitter : images.twitter,
-        website :images.website,
-        coverPic : images.coverPic,
-    },
-  ];
+  const [tokens, setTokens] = useState([]);
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const { data, error } = await supabase.from('token').select('*');
+      if (error) console.error('Error fetching data:', error);
+      else setTokens(data);
+    };
+
+    fetchToken();
+  }, []);
+
+  // const tokens = [
+  //   {
+  //     id: 1,
+  //     name: "$SOIL",
+  //     marketCap: "12.36 M",
+  //     hodlers: "106,964",
+  //     address: "0x1C4C...F463A3",
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus velit diam, Nullam rhoncus laoreet.",
+  //       telegram : images.telegram ,
+  //       twitter : images.twitter,
+  //       website :images.website,
+  //       coverPic : images.coverPic,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "$FIYAH",
+  //     marketCap: "12.36 M",
+  //     hodlers: "106,964",
+  //     address: "0x1C4C...F463A3",
+  //     description:
+  //       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus velit diam, Nullam rhoncus laoreet.",
+  //       telegram : images.telegram ,
+  //       twitter : images.twitter,
+  //       website :images.website,
+  //       coverPic : images.coverPic,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "$GEARTH",
+  //     marketCap: "12.36 M",
+  //     hodlers: "106,964",
+  //     address: "0x1C4C...F463A3",
+  //     description: "We got Girth ;)",
+  //     telegram : images.telegram ,
+  //       twitter : images.twitter,
+  //       website :images.website,
+  //       coverPic : images.coverPic,
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50 ">
@@ -101,25 +114,28 @@ export default function Home() {
             <div className="flex justify-between items-center text-center">
               {/* Market Cap */}
               <div className="flex flex-col justify-start items-start">
-                <p className="text-[#000000] font-secondary font-normal text-[13px]">{token.marketCap}</p>
+                <p className="text-[#000000] font-secondary font-normal text-[13px]">12.36 M</p>
                 <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Market Cap</p>
               </div>
 
               {/* Image and Main Info */}
               <div className="flex">
-                <Image
+                <img 
+                className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
+                src={token.image} />
+                {/* <Image
                   width={40}
                   height={40}
                   src={token.coverPic}
                   alt="Token"
                   className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
-                />
+                /> */}
 
               </div>
 
               {/* Hodlers */}
               <div className="flex flex-col justify-start items-start">
-                <p className="text-[#000000] font-secondary font-normal text-[13px]">{token.hodlers}</p>
+                <p className="text-[#000000] font-secondary font-normal text-[13px]">106,964</p>
                 <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Hodlers</p>
               </div>
             </div>
@@ -130,11 +146,11 @@ export default function Home() {
               <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">{token.address}</p>
               {/* Action Icons */}
               <div className="flex gap-4 mt-2 items-center justify-center ">
-                <Image width={40}  alt="Token" height={40} src={token.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                <Image width={40}  alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
 
-                <Image width={40}  alt="Token" height={40} src={token.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                <Image width={40}  alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
 
-                <Image width={40}  alt="Token" height={40} src={token.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                <Image width={40}  alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
 
 
               </div>

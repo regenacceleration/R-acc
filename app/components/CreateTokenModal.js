@@ -13,6 +13,7 @@ export function CreateTokenModal() {
     ticker: '',
     description: '',
     image:"",
+    address: "0x1C4C...F463A3",
     telegram: '',
     twitter: '',
     website: '',
@@ -27,7 +28,16 @@ export function CreateTokenModal() {
     }
   };
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    name: '',
+    ticker: '',
+    description: '',
+    image:"",
+    telegram: '',
+    twitter: '',
+    website: '',
+    percentage: '',
+  });
 
   // const handleImageUpload = (e) => {
   //   setFormData({ ...formData, image: URL.createObjectURL(e.target.files[0]) });
@@ -39,10 +49,11 @@ export function CreateTokenModal() {
     if (!formData.name) newErrors.name = 'Name is required';
     if (!formData.ticker) newErrors.ticker = 'Ticker is required';
     if (!formData.description) newErrors.description = 'Description is required';
-    if (!formData.image) newErrors.image = 'Image URL is required';
+    // if (!formData.image) newErrors.image = 'Image is required';
     if (!formData.telegram) newErrors.telegram = 'Telegram is required';
     if (!formData.twitter) newErrors.twitter = 'Twitter is required';
     if (!formData.website) newErrors.website = 'Website URL is required';
+    if (!formData.percentage) newErrors.percentage = "Percentage is required";
     if (formData.percentage && isNaN(Number(formData.percentage))) {
       newErrors.percentage = 'Percentage must be a number';
     }
@@ -57,7 +68,7 @@ export function CreateTokenModal() {
       if (validateForm()) {
         console.log(formData)
         const { data, error } = await supabase
-          .from('token-details') // Table name
+          .from('token') // Table name
           .insert([{ 
             ...formData,
           }]);
@@ -123,12 +134,12 @@ export function CreateTokenModal() {
             <label className=" font-normal font-primary text-[13px] text-[#000000]">IMAGE</label>
             <input
               type="text"
-              value={formData.ticker}
-              onChange={(e) => setFormData({ ...formData, ticker: e.target.value })}
+              value={formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
               className="  w-full   border-b-[1px] bg-gray-50 border-[#D5D5D5]  "
             />
             
-            {errors.ticker && <p className="text-red-500 text-sm ">{errors.ticker}</p>}
+            {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
           </div> */}
 
           {/* <div>
@@ -138,11 +149,11 @@ export function CreateTokenModal() {
           <div>
             <label className=" font-normal font-primary text-[13px] text-[#000000]">IMAGE</label>
             <div className="relative flex flex-col items-center justify-center w-full  p-4 border-b-[1px] bg-gray-50 border-[#D5D5D5]">
-              {/* {selectedImage ? (
+              {selectedImage ? (
                 <img src={selectedImage} alt="Uploaded Preview" className="w-full h-40 object-cover rounded-md" />
               ) : (
                 <p className="text-gray-600">IMAGE</p>
-              )} */}
+              )}
               <input
                 type="file"
                 accept="image/*"
@@ -156,10 +167,6 @@ export function CreateTokenModal() {
                   className="w-[22px] h-[22px]"
                   width={40} height={40} alt='upload' src={images.upload} />
               </button>
-
-
-
-
             </div>
           </div>
 
@@ -171,6 +178,7 @@ export function CreateTokenModal() {
               onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
               className="  w-full   border-b-[1px] bg-gray-50 border-[#D5D5D5]  "
             />
+            {errors.telegram && <p className="text-red-500 text-sm ">{errors.telegram}</p>}
           </div>
 
           <div>
@@ -181,6 +189,7 @@ export function CreateTokenModal() {
               onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
               className="  w-full   border-b-[1px] bg-gray-50 border-[#D5D5D5]  "
             />
+            {errors.twitter && <p className="text-red-500 text-sm ">{errors.twitter}</p>}
           </div>
 
           <div>
@@ -191,6 +200,7 @@ export function CreateTokenModal() {
               onChange={(e) => setFormData({ ...formData, website: e.target.value })}
               className="  w-full   border-b-[1px] bg-gray-50 border-[#D5D5D5]  "
             />
+            {errors.website && <p className="text-red-500 text-sm ">{errors.website}</p>}
           </div>
 
           <div>
