@@ -2,7 +2,7 @@
 import Header from "@/app/components/Header";
 import { Loader } from "@/app/components/Loader";
 import images from "@/app/constants/images";
-import { supabase } from "@/app/services/supabaseClient.js";
+import { supabase } from "@/app/services/supabase.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
