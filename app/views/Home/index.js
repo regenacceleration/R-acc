@@ -4,6 +4,7 @@ import { Loader } from "@/app/components/Loader";
 import images from "@/app/constants/images";
 import { supabase } from "@/app/services/supabase.js";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -18,11 +19,11 @@ export default function Home() {
       setLoading(true)
       const { data, error } = await supabase.from('token').select('*');
       if (error) console.error('Error fetching data:', error);
-      else 
-      setLoading(false)
+      else
+        setLoading(false)
       setTokens(data);
     };
-    
+
     fetchToken();
   }, []);
 
@@ -158,13 +159,17 @@ export default function Home() {
                   <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">{token.address}</p>
                   {/* Action Icons */}
                   <div className="flex gap-4 mt-2 items-center justify-center ">
-                    <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                    <Link href={token.website} target='_blank'>
+                      <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                    </Link>
 
-                    <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                    <Link href={token.twitter} target='_blank'>
+                      <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                    </Link>
 
-                    <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-
-
+                    <Link href={token.telegram} target='_blank'>
+                      <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                    </Link>
                   </div>
                   <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
                     {token.description}

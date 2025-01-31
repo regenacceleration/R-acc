@@ -7,6 +7,7 @@ import images from '../constants/images';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '../services/supabase.js';
 import { Loader } from './Loader';
+import Link from 'next/link';
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -71,16 +72,25 @@ export function TokenDetails() {
               {/* Action Icons */}
               <div className="flex gap-6 mt-4 items-center justify-center ">
                 <div className="flex gap-2 justify-center items-center">
-                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                  <Link href={token.website} target='_blank'>
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Website</p>
+                  </Link>
+                  
                 </div>
                 <div className="flex gap-2 justify-center items-center">
                   <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.twitter} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                  <Link href={token.twitter} target='_blank'>
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Twitter</p>
+                  </Link>
+                  
                 </div>
                 <div className="flex gap-2 justify-center items-center">
                   <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.telegram} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                 <Link href={token.telegram} target='_blank'>
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Telegram</p>
+                 </Link>
+                 
                 </div>
               </div>
               <p className="text-[#000000] mt-4 px-8 font-primary font-normal text-[12px] w-full">
