@@ -1,24 +1,35 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Header from './Header';
 import images from '../constants/images';
+import { useParams, useRouter } from 'next/navigation';
+import { supabase } from '../services/supabaseClient.js';
+import { Loader } from './Loader';
 
 export function TokenDetails() {
-  const [token, setToken] = [{
-    id: 1,
-    name: "$SOIL",
-    marketCap: "12.36 M",
-    hodlers: "106,964",
-    address: "0x1C4C...F463A3",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus velit diam, Nullam rhoncus laoreet.",
-    telegram: images.telegram,
-    twitter: images.twitter,
-    website: images.website,
-    coverPic: images.coverPic,
-  }];
+  const { id } = useParams();
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      const fetchToken = async () => {
+        const { data, error } = await supabase
+          .from('token')
+          .select('*')
+          .eq('id', id)
+          .single(); // Get a single record
+        
+        if (error) console.error(error);
+        else setToken(data);
+        setLoading(false);
+      };
+      fetchToken();
+    }
+  }, [id]);
+  
   return (
 
     <div className="min-h-screen bg-gray-50">
@@ -28,23 +39,28 @@ export function TokenDetails() {
       {/* Main Content */}
       <div className="flex w-full p-6">
         {/* Left Section */}
+        {loading ?
+                    <div className="flex w-[50%] items-center justify-center h-64">
+                        <Loader className="text-[#7C7C7C]" size="text-7xl" />
+
+                    </div>
+                    :
         <div className='flex w-[50%] flex-col'>
           <div
-            key={token.id}
             style={{ borderRadius: "5px", cursor: "pointer" }}
             className="border-[1px] mt-6 border-[#D5D5D5] text-center bg-white relative"
-            onClick={() => router.push(`/token/${token.id}`)}
           >
             <div className="flex justify-center items-center text-center">
               {/* Image and Main Info */}
               <div className="flex">
-                <Image
+                <img className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2" src={token.image} />
+                {/* <Image
                   width={40}
                   height={40}
-                  src={token.coverPic}
+                  src={token.image}
                   alt="Token"
                   className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
-                />
+                /> */}
               </div>
             </div>
 
@@ -55,15 +71,15 @@ export function TokenDetails() {
               {/* Action Icons */}
               <div className="flex gap-6 mt-4 items-center justify-center ">
                 <div className="flex gap-2 justify-center items-center">
-                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={token.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Website</p>
                 </div>
                 <div className="flex gap-2 justify-center items-center">
-                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={token.twitter} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.twitter} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Twitter</p>
                 </div>
                 <div className="flex gap-2 justify-center items-center">
-                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={token.telegram} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
+                  <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.telegram} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
                   <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Telegram</p>
                 </div>
               </div>
@@ -164,6 +180,7 @@ export function TokenDetails() {
 
           </div>
         </div>
+}
 
         {/* Right Section */}
         <div className='flex flex-col p-4  w-full'>
