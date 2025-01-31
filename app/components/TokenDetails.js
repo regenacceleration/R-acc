@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Header from './Header';
 import images from '../constants/images';
 import { useParams, useRouter } from 'next/navigation';
-import { supabase } from '../services/supabaseClient.js';
+import { supabase } from '../services/supabase.js';
 import { Loader } from './Loader';
 
 export function TokenDetails() {

@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 
 export function BtnLoader() {
-  return <LoadingOutlined spin delay={500} className='text-white' />;
+  return <LoadingOutlined spin delay={500} className='text-black' />;
 }
 
 export function Loader({ className }) {
@@ -9,7 +9,7 @@ export function Loader({ className }) {
     <LoadingOutlined
       spin
       delay={500}
-      className={`${className} text-6xl text-primary-color`}
+      className={`${className} text-6xl text-black`}
     />
   );
 }
