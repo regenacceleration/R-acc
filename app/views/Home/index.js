@@ -121,7 +121,7 @@ export default function Home() {
               <div
                 key={token.id}
                 style={{ borderRadius: "5px", cursor: "pointer" }}
-                className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
+                className="border-[1px] border-[#D5D5D5] p-4 mb-10 text-center bg-white relative"
                 onClick={() => router.push(`/token/${token.id}`)}
               >
                 <div className="flex justify-between items-center text-center">

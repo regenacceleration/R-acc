@@ -1,5 +1,5 @@
 "use client";
-import  { useState } from "react";
+import { useState } from "react";
 import Header from "./Header";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,6 +7,8 @@ import images from "../constants/images";
 import { supabase } from "../services/supabase.js";
 import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
+import { abi, contractAddress } from "./constants";
+import { ethers } from "ethers";
 
 export function CreateTokenModal() {
   const [formData, setFormData] = useState({
@@ -19,9 +21,37 @@ export function CreateTokenModal() {
     twitter: "",
     website: "",
     percentage: "",
+    // // name: "",
+    // tokenSymbol: "",
+    // // percentage: "",
+    // fee: "",
+    // salt: "",
+    // pairedToken: "",
+    // fid: "",
+    // // image: "",
+    // castHash: "",
+    // // tick: "",
+    // devBuyFee: "",
+    // allowed: false,
+    // tokenIn: "",
+    // tokenOut: "",
+    // recipient: "",
+    // deadline: "300",
+    // amountIn: "0.01",
+    // amountOutMin: "0.001",
+    // newOwner: "",
+    // newLocker: "",
   });
+  const [debugInfo, setDebugInfo] = useState("");
+  const [status, setStatus] = useState("");
   const { apiFn } = useImgApi();
   const [loading, setLoading] = useState(false);
+
+  const addDebugInfo = (info) => {
+    const timestamp = new Date().toISOString();
+    setDebugInfo((prev) => `${timestamp}: ${info}\n${prev}`);
+  };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) setFormData((data) => ({ ...data, image: file }));
@@ -36,6 +66,27 @@ export function CreateTokenModal() {
     twitter: "",
     website: "",
     percentage: "",
+
+    // // name: "",
+    // tokenSymbol: "",
+    // // percentage: "",
+    // fee: "",
+    // salt: "",
+    // pairedToken: "",
+    // fid: "",
+    // // image: "",
+    // castHash: "",
+    // // tick: "",
+    // devBuyFee: "",
+    // allowed: false,
+    // tokenIn: "",
+    // tokenOut: "",
+    // recipient: "",
+    // deadline: "300",
+    // amountIn: "0.01",
+    // amountOutMin: "0.001",
+    // newOwner: "",
+    // newLocker: "",
   });
 
   const validateForm = () => {
@@ -60,10 +111,201 @@ export function CreateTokenModal() {
     return Object.keys(newErrors).length === 0;
   };
 
+  // const deployToken = async () => {
+  //   const provider = new ethers.providers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
+  //   const signer = await provider.getSigner();
+  //   const contract = new ethers.Contract(contractAddress, abi);
+
+  //   if (!signer) {
+  //     setStatus("Please connect wallet first");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     setStatus("Validating deployment parameters...");
+
+  //     const { name, tokenSymbol, percentage, fee, salt, pairedToken, fid, image, castHash, ticker, devBuyFee } =
+  //       formData;
+
+  //     // Enhanced input validation
+  //     if (!name?.trim()) {
+  //       setStatus("Token name is required");
+  //       return;
+  //     }
+  //     if (!tokenSymbol?.trim()) {
+  //       setStatus("Token symbol is required");
+  //       return;
+  //     }
+  //     if (!ticker?.trim()) {
+  //       setStatus("Ticker is required");
+  //       return;
+  //     }
+  //     if (!percentage || Number(percentage) <= 0) {
+  //       setStatus("Valid token supply is required");
+  //       return;
+  //     }
+  //     if (!fee || Number(fee) <= 0) {
+  //       setStatus("Valid fee is required");
+  //       return;
+  //     }
+  //     if (!salt?.trim()) {
+  //       setStatus("Salt is required");
+  //       return;
+  //     }
+  //     if (!pairedToken?.trim() || !ethers.isAddress(pairedToken)) {
+  //       setStatus("Valid paired token address is required");
+  //       return;
+  //     }
+
+  //     // Format parameters
+  //     const parsedSupply = BigInt(percentage);
+  //     const parsedFee = Number(fee);
+  //     const hashedSalt = ethers.encodeBytes32String(salt);
+  //     const pairedAddress = ethers.getAddress(pairedToken);
+
+  //     // Check if we want to attach ETH
+  //     const attachEth = form.attachEth || false; // Add this to your form state
+  //     let valueToSend = 0n;
+
+      
+
+  //     if (attachEth) {
+  //       try {
+  //         // Check if paired token is allowed
+  //         const isAllowed = await contract.allowedPairedTokens(pairedAddress);
+  //         if (!isAllowed) {
+  //           setStatus("Paired token is not allowed for ETH attachment");
+  //           return;
+  //         }
+
+  //         // Get WETH address from contract
+  //         const wethAddress = await contract.weth();
+
+  //         // Verify swap router is set
+  //         const swapRouter = await contract.swapRouter();
+  //         if (!swapRouter) {
+  //           setStatus("Swap router not configured");
+  //           return;
+  //         }
+
+         
+  //         valueToSend = ethers.parseEther("0.1"); 
+  //         addDebugInfo(`Attaching ${ethers.formatEther(valueToSend)} ETH to deployment`);
+  //       } catch (error) {
+  //         setStatus(`ETH attachment check failed: ${error.message}`);
+  //         return;
+  //       }
+  //     }
+
+  //     // Prepare deployment parameters
+  //     const deploymentParams = {
+  //       name,
+  //       tokenSymbol,
+  //       parsedSupply,
+  //       parsedFee,
+  //       hashedSalt,
+  //       account,
+  //       fid,
+  //       image,
+  //       castHash,
+  //       poolConfig: {
+  //         ticker: Number(ticker),
+  //         pairedToken: pairedAddress,
+  //         devBuyFee: Number(devBuyFee),
+  //       },
+  //     };
+
+  //     addDebugInfo(
+  //       `Deploying token with parameters: ${JSON.stringify(
+  //         deploymentParams,
+  //         (_, v) => (typeof v === "bigint" ? v.toString() : v),
+  //         2
+  //       )}`
+  //     );
+
+  //     // Execute deployment
+  //     setStatus("Deploying token...");
+  //     const tx = await contract.deployToken(
+  //       name,
+  //       tokenSymbol,
+  //       parsedSupply,
+  //       parsedFee,
+  //       hashedSalt,
+  //       account,
+  //       fid,
+  //       image,
+  //       castHash,
+  //       {
+  //         ticker: Number(ticker),
+  //         pairedToken: pairedAddress,
+  //         devBuyFee: Number(devBuyFee),
+  //       },
+  //       valueToSend > 0n ? { value: valueToSend } : {}
+  //     );
+
+  //     addDebugInfo(`Deployment transaction sent: ${tx.hash}`);
+  //     setStatus("Waiting for deployment confirmation...");
+
+  //     const receipt = await tx.wait();
+
+  //     // Enhanced event parsing
+  //     const tokenCreatedEvent = receipt.logs
+  //       .map((log) => {
+  //         try {
+  //           return contract.interface.parseLog(log);
+  //         } catch (e) {
+  //           return null;
+  //         }
+  //       })
+  //       .find((event) => event?.name === "TokenCreated");
+
+  //     if (tokenCreatedEvent) {
+  //       const [tokenAddress, positionId, deployer, fidValue, name, symbol, supply, lockerAddress, castHashValue] =
+  //         tokenCreatedEvent.args;
+
+  //       setStatus(`Token deployed successfully!`);
+  //       addDebugInfo(
+  //         `Deployment details:\n` +
+  //         `- Token Address: ${tokenAddress}\n` +
+  //         `- Position ID: ${positionId}\n` +
+  //         `- Deployer: ${deployer}\n` +
+  //         `- Locker Address: ${lockerAddress}`
+  //       );
+  //       console.log(debugInfo)
+  //       console.log(status)
+
+  //     } else {
+
+  //       setStatus("Token deployed but event not found in logs");
+  //     }
+  //   } catch (error) {
+  //     console.error("Deployment error:", error);
+  //     let errorMessage = error.message;
+
+  //     // Check for specific error types
+  //     if (error.message.includes("NotAllowedPairedToken")) {
+  //       errorMessage = "The selected paired token is not allowed";
+  //     } else if (error.message.includes("Invalid ticker")) {
+  //       errorMessage = "Invalid ticker value for the selected fee tier";
+  //     } else if (error.message.includes("insufficient funds")) {
+  //       errorMessage = "Insufficient ETH for deployment";
+  //     }
+
+  //     setStatus(`Deployment failed: ${errorMessage}`);
+  //     addDebugInfo(`Deployment error: ${error.message}\n${error.stack}`);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log(formData.image);
+
+      // const deploy = await deployToken();
+      // console.log(deploy)
 
       if (validateForm() && formData?.image) {
         setLoading(true);
@@ -83,7 +325,7 @@ export function CreateTokenModal() {
           },
         ]);
         console.log(data);
-        if (error) throw new Error(error);
+        if (error) throw new Errors(error);
         setLoading(false);
         setFormData({
           name: "",

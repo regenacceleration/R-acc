@@ -13,17 +13,9 @@ export default function Header() {
     if (typeof window.ethereum !== "undefined") {
       try {
         // Request account access
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        setAccount("Connected");
-
-        // Set up provider and signer
-        const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
-        const signer = await provider.getSigner();
-
-
-        // Get and set the account address
-        const address = await signer.getAddress();
-        setAccount(address);
+        const address = await window.ethereum.request({ method: "eth_requestAccounts" });
+        console.log(address[0]);
+        setAccount(address[0]);
       } catch (error) {
         alert(`Error: ${error.message}`);
       }

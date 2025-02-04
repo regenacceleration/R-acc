@@ -13,7 +13,30 @@ export function TokenDetails() {
   const { id } = useParams();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pairData, setPairData] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
+
+  useEffect(() => {
+    const fetchPairData = async () => {
+      try {
+        const response = await fetch(
+          'https://api.dexscreener.com/latest/dex/pairs/base/0xe31c372a7af875b3b5e0f3713b17ef51556da667'
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setPairData(data);
+        console.log(data)
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPairData();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -54,29 +77,29 @@ export function TokenDetails() {
           <div className='flex w-full flex-col'>
             <div className='flex items-center px-4 gap-6'>
               <div className='flex gap-3'>
-                <img className="w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]" src={token?.image} />
-                <p className="text-[#000000] font-primary font-semibold text-[36px]">{token?.name}</p>
+                <img className="w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]" src={pairData?.pair?.info?.imageUrl} />
+                <p className="text-[#000000] font-primary font-semibold text-[36px]">{pairData?.pair?.baseToken?.symbol}</p>
               </div>
               <div className='flex items-end mt-3 gap-3'>
-                <p className="text-[#7C7C7C] font-normal text-[12px]">{token?.address}</p>
+                <p className="text-[#7C7C7C] font-normal text-[12px]">{`${pairData?.pair?.baseToken?.address?.substring(0, 6)}...${pairData?.pair?.baseToken?.address?.substring(pairData?.pair?.baseToken?.address?.length - 4)}`}</p>
                 <div className="flex gap-6 items-end ">
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={token?.website} target='_blank'>
+                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Website</p>
                     </Link>
 
                   </div>
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.twitter} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={token?.twitter} target='_blank'>
+                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Twitter</p>
                     </Link>
 
                   </div>
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.telegram} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={token?.telegram} target='_blank'>
+                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Telegram</p>
                     </Link>
 
@@ -88,7 +111,7 @@ export function TokenDetails() {
               <div className="w-full rounded-lg  ">
                 <iframe
                   className="w-full h-fit bg-white min-h-[64vh] mt-4 rounded-lg"
-                  src="https://www.geckoterminal.com/base/pools/0xc68d5282c006bb9a174023dde84b8e22ea2e0f29?embed=1&info=0&swaps=0&chart=1"
+                  src="https://www.geckoterminal.com/base/pools/0xe31c372a7af875b3b5e0f3713b17ef51556da667?embed=1&info=0&swaps=0&chart=1"
                   frameBorder="0"
                 ></iframe>
               </div>
@@ -215,19 +238,19 @@ export function TokenDetails() {
             <div className='flex justify-between gap-0 mt-4  border-[1px] border-[#D5D5D5]'>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >5M</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>8.48%</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.m5}%`}</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
-                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >5M</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>8.48%</p>
+                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >1H</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h1}%`}</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
-                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >5M</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>8.48%</p>
+                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >6H</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h6}%`}</p>
               </div>
               <div className=' px-4 py-1 '>
-                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >5M</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>8.48%</p>
+                <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h24}%`}</p>
               </div>
               {/* <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Basescan</p>
             <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Dexscreener</p>
@@ -238,11 +261,11 @@ export function TokenDetails() {
               <div className='flex justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H VOL</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>$127.38M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.volume?.h24 / 1000000).toFixed(2)}M</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >LIQUITITY</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>8.48%</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.liquidity?.usd / 1000000).toFixed(2)}M</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >HOLDERS</p>
@@ -252,16 +275,16 @@ export function TokenDetails() {
 
               <div className='flex  justify-between'>
                 <div className=' px-4 py-1  '>
-                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H VOL</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>$127.38M</p>
+                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >AGE</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>22 days</p>
                 </div>
                 <div className=' px-4 py-1  '>
-                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >LIQUITITY</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>8.48%</p>
+                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >FDV</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.fdv / 1000000).toFixed(2)}M</p>
                 </div>
                 <div className=' px-4 py-1  '>
-                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >HOLDERS</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>$127.38M</p>
+                  <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >MARKET CAP</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.marketCap/ 1000000).toFixed(2)}M</p>
                 </div>
               </div>
 
