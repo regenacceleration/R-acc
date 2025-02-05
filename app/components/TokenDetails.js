@@ -15,6 +15,7 @@ export function TokenDetails() {
   const [loading, setLoading] = useState(true);
   const [pairData, setPairData] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
+  const theme = "light"
 
   useEffect(() => {
     const fetchPairData = async () => {
@@ -110,7 +111,7 @@ export function TokenDetails() {
             <div className='flex flex-col px-4  w-full'>
               <div className="w-full rounded-lg  ">
                 <iframe
-                  className="w-full h-fit bg-white min-h-[64vh] mt-4 rounded-lg"
+                  className="w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg"
                   src="https://www.geckoterminal.com/base/pools/0xe31c372a7af875b3b5e0f3713b17ef51556da667?embed=1&info=0&swaps=0&chart=1"
                   frameBorder="0"
                 ></iframe>
@@ -186,14 +187,30 @@ export function TokenDetails() {
 
           </div>
           :
-          <div className='flex w-[50%] flex-col'>
-            <div
+          <div className='flex w-[50%] mt-10 flex-col'>
+            <iframe
+              src="https://app.uniswap.org/#/swap?exactField=input&exactAmount=10&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f&theme=light"
+              width="100%"
+              style={{
+                height: "500px"
+              }}
+            // style="
+            //   border: 0;
+            //   margin: 0 auto;
+            //   margin-bottom: .5rem;
+            //   display: block;
+            //   border-radius: 10px;
+            //   max-width: 960px;
+            //   min-width: 300px;
+            // "
+            />
+            {/* <div
               style={{ borderRadius: "5px", cursor: "pointer" }}
               className="border-[1px] mt-6 border-[#D5D5D5] text-center bg-white relative"
             >
 
 
-              {/* Description */}
+              
               <div className=" px-4 text-center">
 
 
@@ -233,7 +250,7 @@ export function TokenDetails() {
                 <p className='w-full font-secondary text-[#7C7C7C] text-[12px] py-2 border-r-[1px]'>Dexscreener</p>
                 <p className='w-full font-secondary text-[#7C7C7C] text-[12px] py-2 '>Uniswap</p>
               </div>
-            </div>
+            </div> */}
 
             <div className='flex justify-between gap-0 mt-4  border-[1px] border-[#D5D5D5]'>
               <div className=' px-4 py-1 border-r-[1px]  '>
@@ -284,7 +301,7 @@ export function TokenDetails() {
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >MARKET CAP</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.marketCap/ 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.marketCap / 1000000).toFixed(2)}M</p>
                 </div>
               </div>
 

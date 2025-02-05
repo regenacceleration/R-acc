@@ -6,26 +6,66 @@ import { supabase } from "@/app/services/supabase.js";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 
 export default function Home() {
   const router = useRouter();
   const [tokens, setTokens] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const containerRef = useRef(null);
+  const [page, setPage] = useState(0);
+  const POSTS_PER_PAGE = 3
+
+
+  const fetchToken = async () => {
+    if (loading || !hasMore) return;
+    setLoading(true)
+    const { data, error } = await supabase.from('token')
+      .select('*')
+      .range(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE - 1)
+      .order('created_at', { ascending: false });
+
+    if (error) console.error('Error fetching data:', error);
+
+    if (data.length < POSTS_PER_PAGE) {
+      setHasMore(false);
+    }
+    setTokens(prev => [...prev, ...data]);
+    setPage(prev => prev + 1);
+    setLoading(false)
+    console.log(data)
+  };
 
   useEffect(() => {
-    const fetchToken = async () => {
-      setLoading(true)
-      const { data, error } = await supabase.from('token').select('*');
-      if (error) console.error('Error fetching data:', error);
-      else
-        setLoading(false)
-      setTokens(data);
-    };
-
     fetchToken();
   }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const target = entries[0];
+        if (target.isIntersecting && hasMore && !loading) {
+          fetchToken();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '20px',
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, [hasMore, loading]);
+
 
   // const tokens = [
   //   {
@@ -109,81 +149,106 @@ export default function Home() {
 
 
       {/* Token Cards */}
-      {loading ?
+      {/* {loading ?
         <div className="flex items-center justify-center h-64">
           <Loader className="text-[#7C7C7C]" size="text-6xl" />
         </div>
         :
-        <div className="grid grid-cols-1 md:grid-cols-3 p-8 gap-4">
+        <InfiniteScroll
+        dataLength={tokens.length}
+        next={fetchToken}
+        hasMore={hasMore}
+        loader={loading}
+        endMessage={<p>No more Tokens to load</p>}
+      >
+        
+       <p></p>
+        </InfiniteScroll>
+      } */}
+      <div
 
-          {tokens.length > 0 ?
-            tokens.map((token) => (
-              <div
-                key={token.id}
-                style={{ borderRadius: "5px", cursor: "pointer" }}
-                className="border-[1px] border-[#D5D5D5] p-4 mb-10 text-center bg-white relative"
-                onClick={() => router.push(`/token/${token.id}`)}
-              >
-                <div className="flex justify-between items-center text-center">
-                  {/* Market Cap */}
-                  <div className="flex flex-col justify-start items-start">
-                    <p className="text-[#000000] font-secondary font-normal text-[13px]">12.36 M</p>
-                    <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Market Cap</p>
-                  </div>
+        className="grid grid-cols-1 md:grid-cols-3 p-8 gap-4">
 
-                  {/* Image and Main Info */}
-                  <div className="flex">
-                    <img
-                      className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
-                      src={token.image} />
-                    {/* <Image
-                  width={40}
-                  height={40}
-                  src={token.coverPic}
-                  alt="Token"
-                  className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
-                /> */}
-
-                  </div>
-
-                  {/* Hodlers */}
-                  <div className="flex flex-col justify-start items-start">
-                    <p className="text-[#000000] font-secondary font-normal text-[13px]">106,964</p>
-                    <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Hodlers</p>
-                  </div>
+        {tokens.length > 0 ?
+          tokens.map((token) => (
+            <div
+              key={token.id}
+              style={{ borderRadius: "5px", cursor: "pointer" }}
+              className="border-[1px] border-[#D5D5D5] p-4 mb-10 text-center bg-white relative"
+              onClick={() => router.push(`/token/${token.id}`)}
+            >
+              <div className="flex justify-between items-center text-center">
+                {/* Market Cap */}
+                <div className="flex flex-col justify-start items-start">
+                  <p className="text-[#000000] font-secondary font-normal text-[13px]">12.36 M</p>
+                  <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Market Cap</p>
                 </div>
 
-                {/* Description */}
-                <div className="mt-2 text-center">
-                  <h2 className="text-[#000000] font-primary font-semibold text-[24px]">{token.name}</h2>
-                  <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">{token.address}</p>
-                  {/* Action Icons */}
-                  <div className="flex gap-4 mt-2 items-center justify-center ">
-                    <Link href={token.website} target='_blank'>
-                      <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                    </Link>
+                {/* Image and Main Info */}
+                <div className="flex">
+                  <img
+                    className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
+                    src={token.image} />
+                  {/* <Image
+          width={40}
+          height={40}
+          src={token.coverPic}
+          alt="Token"
+          className="w-[80px] h-[80px] top-[-2.5rem] rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
+        /> */}
 
-                    <Link href={token.twitter} target='_blank'>
-                      <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                    </Link>
-
-                    <Link href={token.telegram} target='_blank'>
-                      <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                    </Link>
-                  </div>
-                  <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
-                    {token.description}
-                  </p>
                 </div>
 
+                {/* Hodlers */}
+                <div className="flex flex-col justify-start items-start">
+                  <p className="text-[#000000] font-secondary font-normal text-[13px]">106,964</p>
+                  <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Hodlers</p>
+                </div>
               </div>
-            )) :
-            (<div className="text-center py-4">
-              No Tokens Available
+
+              {/* Description */}
+              <div className="mt-2 text-center">
+                <h2 className="text-[#000000] font-primary font-semibold text-[24px]">{token.name}</h2>
+                <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">{token.address}</p>
+                {/* Action Icons */}
+                <div className="flex gap-4 mt-2 items-center justify-center ">
+                  <Link href={token.website} target='_blank'>
+                    <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                  </Link>
+
+                  <Link href={token.twitter} target='_blank'>
+                    <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                  </Link>
+
+                  <Link href={token.telegram} target='_blank'>
+                    <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
+                  </Link>
+                </div>
+                <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
+                  {token.description}
+                </p>
+              </div>
+
             </div>
-            )}
-        </div>
-      }
+          )) :
+          (<div className="text-center py-4">
+            No Tokens Available
+          </div>
+          )}
+      </div>
+      <div
+        ref={containerRef}
+        className="h-20 flex items-center justify-center"
+      >
+        {loading && (
+          <div className="flex items-center justify-center h-64">
+            <Loader className="text-[#7C7C7C]" size="text-6xl" />
+          </div>
+        )}
+        {!hasMore && tokens.length > 0 && (
+          <p className="text-gray-500">No more posts to load</p>
+        )}
+      </div>
     </div>
   );
 }
