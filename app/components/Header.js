@@ -1,28 +1,36 @@
 "use client"
-import { ethers } from "ethers";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { formatAddress, getAddress } from "../utils/helperFn";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
   const pathname = usePathname();
 
-  // Connect to the user's wallet
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
-        // Request account access
         const address = await window.ethereum.request({ method: "eth_requestAccounts" });
-        console.log(address[0]);
+        localStorage.setItem('address', address[0])
         setAccount(address[0]);
       } catch (error) {
-        alert(`Error: ${error.message}`);
+        console.log(error);
       }
     } else {
       alert("Please install MetaMask.");
     }
   };
+
+  useEffect(() => {
+    const address = getAddress();
+    setAccount(address)
+  }, [])
+  
+  const disconnectWallet = () => {
+    localStorage.clear();
+    setAccount('')
+  }
 
   return (
     <div>
@@ -46,8 +54,8 @@ export default function Header() {
             <button className="text-[#FF0000] font-normal font-primary text-[13px]">CREATE TOKEN</button>
           </Link>
           <button className="text-[#000000] font-normal font-primary text-[13px]"
-            onClick={connectWallet}
-          > {account ? "CONNECTED" : "CONNECT WALLET"}</button>
+            onClick={account ? disconnectWallet : connectWallet}
+          > {account ? formatAddress(account) : "CONNECT WALLET"}</button>
         </div>
       </header>
     </div>

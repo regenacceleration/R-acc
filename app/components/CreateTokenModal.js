@@ -9,14 +9,17 @@ import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
 import { abi, contractAddress } from "./constants";
 import { ethers } from "ethers";
+import { getAddress } from "../utils/helperFn";
 
 export function CreateTokenModal() {
+
+  const address=getAddress()
   const [formData, setFormData] = useState({
     name: "Test Token",
     ticker: "300",
     description: "",
     image: "",
-    address: "0x1C4C...F463A3",
+    address,
     telegram: "",
     twitter: "",
     website: "",
@@ -162,7 +165,7 @@ export function CreateTokenModal() {
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
   const signer = await provider.getSigner();
   const contract = new ethers.Contract(contractAddress, abi,signer);
-    const account = "0x7AE90ae51C836a51B0d165FE452c0af3677Fb9fd";
+    
   console.log(signer)
 
     if (!signer) {
@@ -239,7 +242,7 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        account,
+        address,
         fid,
         image,
         castHash,
@@ -260,21 +263,7 @@ export function CreateTokenModal() {
       );
 
       // Execute deployment
-      console.log("Deploying token...",name,
-        tokenSymbol,
-        parsedSupply,
-        parsedFee,
-        hashedSalt,
-        account,
-        fid,
-        "image",
-        castHash,
-        {
-          tick: Number(ticker),
-          pairedToken: pairedAddress,
-          devBuyFee: Number(devBuyFee),
-        },
-        parsedEarth);
+      console.log("Deploying token...");
       console.log(contract);
       
       const tx = await contract.deployToken(
@@ -283,7 +272,7 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        account,
+        address,
         fid,
         image,
         castHash,

@@ -128,7 +128,7 @@ export default function Home() {
         <div className="flex justify-center mt-[2rem] gap-3 w-full items-end">
           <input
             type="text"
-            className="border-b-[1px]  w-[28%] bg-gray-50 border-[#D5D5D5] rounded px-4 py-2"
+            className="border-b-[1px] outline-none text-black font-primary w-[28%] bg-gray-50 border-[#D5D5D5] rounded px-4 py-2"
           />
           <button className="text-[#000000] font-normal font-primary text-[13px]">SEARCH</button>
         </div>
