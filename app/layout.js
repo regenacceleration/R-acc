@@ -1,5 +1,4 @@
 import {Source_Code_Pro,Courier_Prime } from "next/font/google";
-import PrelineScript from "@/app/components/PrelineScript";
 import "./globals.css";
 
 const sourceCodePro = Source_Code_Pro({
@@ -26,7 +25,6 @@ export default function RootLayout({ children }) {
         className={`${sourceCodePro.variable} ${courierPrime.variable} antialiased`}
       >
         {children}
-        {/* <PrelineScript /> */}
        
       </body>
     </html>
