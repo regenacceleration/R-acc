@@ -12,35 +12,38 @@ import { ethers } from "ethers";
 
 export function CreateTokenModal() {
   const [formData, setFormData] = useState({
-    name: "",
-    ticker: "",
+    name: "Test Token",
+    ticker: "300",
     description: "",
     image: "",
     address: "0x1C4C...F463A3",
     telegram: "",
     twitter: "",
     website: "",
-    percentage: "",
-    // // name: "",
-    // tokenSymbol: "",
-    // // percentage: "",
-    // fee: "",
-    // salt: "",
-    // pairedToken: "",
-    // fid: "",
-    // // image: "",
-    // castHash: "",
-    // // tick: "",
-    // devBuyFee: "",
-    // allowed: false,
-    // tokenIn: "",
-    // tokenOut: "",
-    // recipient: "",
-    // deadline: "300",
-    // amountIn: "0.01",
-    // amountOutMin: "0.001",
-    // newOwner: "",
-    // newLocker: "",
+    percentage: "5000",
+
+
+    // name: "",
+    tokenSymbol: "TT",
+    fee: "3000",
+    salt: "randomSalt",
+    pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
+    fid: "122",
+    // image: "",
+    castHash: "hash",
+    // tick: "300",
+    earthToken:"5",
+    devBuyFee: "300",
+    allowed: false,
+    tokenIn: "",
+    tokenOut: "",
+    recipient: "",
+    deadline: "300",
+
+    amountIn: "0.01",
+    amountOutMin: "0.001",
+    newOwner: "1",
+    newLocker: "1",
   });
   const [debugInfo, setDebugInfo] = useState("");
   const [status, setStatus] = useState("");
@@ -66,27 +69,28 @@ export function CreateTokenModal() {
     twitter: "",
     website: "",
     percentage: "",
-
-    // // name: "",
-    // tokenSymbol: "",
-    // // percentage: "",
-    // fee: "",
-    // salt: "",
-    // pairedToken: "",
-    // fid: "",
-    // // image: "",
-    // castHash: "",
-    // // tick: "",
-    // devBuyFee: "",
-    // allowed: false,
-    // tokenIn: "",
-    // tokenOut: "",
-    // recipient: "",
-    // deadline: "300",
-    // amountIn: "0.01",
-    // amountOutMin: "0.001",
-    // newOwner: "",
-    // newLocker: "",
+    percentage:"",
+    // name: "",
+    tokenSymbol: "",
+    // percentage: "",
+    fee: "",
+    salt: "",
+    pairedToken: "",
+    fid: "",
+    // image: "",
+    castHash: "",
+    ticker: "",
+    earthToken:"",
+    devBuyFee: "",
+    allowed: false,
+    tokenIn: "",
+    tokenOut: "",
+    recipient: "",
+    deadline: "",
+    amountIn: "",
+    amountOutMin: "",
+    newOwner: "",
+    newLocker: "",
   });
 
   const validateForm = () => {
@@ -111,201 +115,238 @@ export function CreateTokenModal() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const deployToken = async () => {
-  //   const provider = new ethers.providers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
-  //   const signer = await provider.getSigner();
-  //   const contract = new ethers.Contract(contractAddress, abi);
+  // const approveDeployToken = async () => {
+  //   const { pairedToken } = form;
+  //   const pairedAddress = ethers.getAddress(pairedToken);
+  //   try {
+  //     const earthTokenAdd = new ethers.Contract(pairedAddress, ERC20_ABI, signer);
+  //     await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
+  //     addDebugInfo(`Approved Earth Token successfully to account: ${contractAddress}`);
+  //     setStatus("Approved Earth Token successfully!");
+  //   } catch (error) {
+  //     setStatus("Failed to approve Earth Token!");
+  //     addDebugInfo(`Failed to approve Earth Token: ${error.message}`);
+  //   }
+  // };
 
-  //   if (!signer) {
-  //     setStatus("Please connect wallet first");
+   // Toggle
+  //  const togglePairedToken = async () => {
+  //   if (!contract || !signer) {
+  //     setToggleStatus("Please connect your wallet first.");
+  //     return;
+  //   }
+
+  //   const { pairedToken, allowed } = form;
+
+  //   if (!pairedToken) {
+  //     setToggleStatus("Please enter a paired token address.");
   //     return;
   //   }
 
   //   try {
-  //     setLoading(true);
-  //     setStatus("Validating deployment parameters...");
-
-  //     const { name, tokenSymbol, percentage, fee, salt, pairedToken, fid, image, castHash, ticker, devBuyFee } =
-  //       formData;
-
-  //     // Enhanced input validation
-  //     if (!name?.trim()) {
-  //       setStatus("Token name is required");
-  //       return;
-  //     }
-  //     if (!tokenSymbol?.trim()) {
-  //       setStatus("Token symbol is required");
-  //       return;
-  //     }
-  //     if (!ticker?.trim()) {
-  //       setStatus("Ticker is required");
-  //       return;
-  //     }
-  //     if (!percentage || Number(percentage) <= 0) {
-  //       setStatus("Valid token supply is required");
-  //       return;
-  //     }
-  //     if (!fee || Number(fee) <= 0) {
-  //       setStatus("Valid fee is required");
-  //       return;
-  //     }
-  //     if (!salt?.trim()) {
-  //       setStatus("Salt is required");
-  //       return;
-  //     }
-  //     if (!pairedToken?.trim() || !ethers.isAddress(pairedToken)) {
-  //       setStatus("Valid paired token address is required");
-  //       return;
-  //     }
-
-  //     // Format parameters
-  //     const parsedSupply = BigInt(percentage);
-  //     const parsedFee = Number(fee);
-  //     const hashedSalt = ethers.encodeBytes32String(salt);
-  //     const pairedAddress = ethers.getAddress(pairedToken);
-
-  //     // Check if we want to attach ETH
-  //     const attachEth = form.attachEth || false; // Add this to your form state
-  //     let valueToSend = 0n;
-
-      
-
-  //     if (attachEth) {
-  //       try {
-  //         // Check if paired token is allowed
-  //         const isAllowed = await contract.allowedPairedTokens(pairedAddress);
-  //         if (!isAllowed) {
-  //           setStatus("Paired token is not allowed for ETH attachment");
-  //           return;
-  //         }
-
-  //         // Get WETH address from contract
-  //         const wethAddress = await contract.weth();
-
-  //         // Verify swap router is set
-  //         const swapRouter = await contract.swapRouter();
-  //         if (!swapRouter) {
-  //           setStatus("Swap router not configured");
-  //           return;
-  //         }
-
-         
-  //         valueToSend = ethers.parseEther("0.1"); 
-  //         addDebugInfo(`Attaching ${ethers.formatEther(valueToSend)} ETH to deployment`);
-  //       } catch (error) {
-  //         setStatus(`ETH attachment check failed: ${error.message}`);
-  //         return;
-  //       }
-  //     }
-
-  //     // Prepare deployment parameters
-  //     const deploymentParams = {
-  //       name,
-  //       tokenSymbol,
-  //       parsedSupply,
-  //       parsedFee,
-  //       hashedSalt,
-  //       account,
-  //       fid,
-  //       image,
-  //       castHash,
-  //       poolConfig: {
-  //         ticker: Number(ticker),
-  //         pairedToken: pairedAddress,
-  //         devBuyFee: Number(devBuyFee),
-  //       },
-  //     };
-
-  //     addDebugInfo(
-  //       `Deploying token with parameters: ${JSON.stringify(
-  //         deploymentParams,
-  //         (_, v) => (typeof v === "bigint" ? v.toString() : v),
-  //         2
-  //       )}`
+  //     setToggleStatus("Toggling token status...");
+  //     const tx = await contract.toggleAllowedPairedToken(
+  //       ethers.getAddress(pairedToken), // Ensure address is checksummed
+  //       allowed
   //     );
-
-  //     // Execute deployment
-  //     setStatus("Deploying token...");
-  //     const tx = await contract.deployToken(
-  //       name,
-  //       tokenSymbol,
-  //       parsedSupply,
-  //       parsedFee,
-  //       hashedSalt,
-  //       account,
-  //       fid,
-  //       image,
-  //       castHash,
-  //       {
-  //         ticker: Number(ticker),
-  //         pairedToken: pairedAddress,
-  //         devBuyFee: Number(devBuyFee),
-  //       },
-  //       valueToSend > 0n ? { value: valueToSend } : {}
-  //     );
-
-  //     addDebugInfo(`Deployment transaction sent: ${tx.hash}`);
-  //     setStatus("Waiting for deployment confirmation...");
-
-  //     const receipt = await tx.wait();
-
-  //     // Enhanced event parsing
-  //     const tokenCreatedEvent = receipt.logs
-  //       .map((log) => {
-  //         try {
-  //           return contract.interface.parseLog(log);
-  //         } catch (e) {
-  //           return null;
-  //         }
-  //       })
-  //       .find((event) => event?.name === "TokenCreated");
-
-  //     if (tokenCreatedEvent) {
-  //       const [tokenAddress, positionId, deployer, fidValue, name, symbol, supply, lockerAddress, castHashValue] =
-  //         tokenCreatedEvent.args;
-
-  //       setStatus(`Token deployed successfully!`);
-  //       addDebugInfo(
-  //         `Deployment details:\n` +
-  //         `- Token Address: ${tokenAddress}\n` +
-  //         `- Position ID: ${positionId}\n` +
-  //         `- Deployer: ${deployer}\n` +
-  //         `- Locker Address: ${lockerAddress}`
-  //       );
-  //       console.log(debugInfo)
-  //       console.log(status)
-
-  //     } else {
-
-  //       setStatus("Token deployed but event not found in logs");
-  //     }
+  //     await tx.wait();
+  //     setToggleStatus("Token status toggled successfully!");
   //   } catch (error) {
-  //     console.error("Deployment error:", error);
-  //     let errorMessage = error.message;
-
-  //     // Check for specific error types
-  //     if (error.message.includes("NotAllowedPairedToken")) {
-  //       errorMessage = "The selected paired token is not allowed";
-  //     } else if (error.message.includes("Invalid ticker")) {
-  //       errorMessage = "Invalid ticker value for the selected fee tier";
-  //     } else if (error.message.includes("insufficient funds")) {
-  //       errorMessage = "Insufficient ETH for deployment";
-  //     }
-
-  //     setStatus(`Deployment failed: ${errorMessage}`);
-  //     addDebugInfo(`Deployment error: ${error.message}\n${error.stack}`);
-  //   } finally {
-  //     setLoading(false);
+  //     setToggleStatus(`Error: ${error.message}`);
   //   }
   // };
+
+  
+
+  const deployToken = async () => {
+    const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
+  const signer = await provider.getSigner();
+  const contract = new ethers.Contract(contractAddress, abi);
+  const account = "0x404d58Fb9EB5617FC4E5E3a79c72F3618D19B465";
+  console.log(signer)
+
+    if (!signer) {
+      console.log("Please connect wallet first");
+
+      return;
+    }
+
+    try {
+      setLoading(true);
+      console.log("Validating deployment parameters...");
+
+      const {
+        name,
+        tokenSymbol,
+        percentage,
+        fee,
+        salt,
+        pairedToken,
+        fid,
+        image,
+        castHash,
+        ticker,
+        devBuyFee,
+        earthToken,
+      } = formData;
+
+      // Enhanced input validation
+      if (!name?.trim()) {
+        console.log("Token name is required");
+       
+        return;
+      }
+      if (!tokenSymbol?.trim()) {
+        console.log("Token symbol is required");
+        return;
+      }
+      if (!percentage || Number(percentage) <= 0) {
+        console.log("Valid token supply is required");
+        return;
+      }
+      if (!fee || Number(fee) <= 0) {
+        console.log("Valid fee is required");
+        return;
+      }
+      if (!salt?.trim()) {
+        console.log("Salt is required");
+        return;
+      }
+      if (!pairedToken?.trim() || !ethers.isAddress(pairedToken)) {
+        console.log("Valid paired token address is required");
+        return;
+      }
+      if (!earthToken?.trim()) {
+        console.log("Earth Token Amount is required");
+        return;
+      }
+
+      console.log(signer)
+      
+
+      // Format parameters
+      const parsedSupply = BigInt(percentage);
+      const parsedFee = Number(fee);
+      const hashedSalt = ethers.encodeBytes32String(salt);
+      const pairedAddress = ethers.getAddress(pairedToken);
+      const parsedEarth = ethers.parseUnits(earthToken, 18);
+      console.log(pairedAddress)
+
+      // Prepare deployment parameters
+      const deploymentParams = {
+        name,
+        tokenSymbol,
+        parsedSupply,
+        parsedFee,
+        hashedSalt,
+        account,
+        fid,
+        image,
+        castHash,
+        poolConfig: {
+          ticker: Number(ticker),
+          pairedToken: pairedAddress,
+          devBuyFee: Number(devBuyFee),
+        },
+        parsedEarth,
+      };
+
+      addDebugInfo(
+        `Deploying token with parameters: ${JSON.stringify(
+          deploymentParams,
+          (_, v) => (typeof v === "bigint" ? v.toString() : v),
+          2
+        )}`
+      );
+
+      // Execute deployment
+      console.log("Deploying token...");
+      const tx = await contract.deployToken(
+        name,
+        tokenSymbol,
+        parsedSupply,
+        parsedFee,
+        hashedSalt,
+        account,
+        fid,
+        image,
+        castHash,
+        {
+          ticker: Number(ticker),
+          pairedToken: pairedAddress,
+          devBuyFee: Number(devBuyFee),
+        },
+        parsedEarth
+      );
+
+      console.log(tx)
+
+      addDebugInfo(`Deployment transaction sent: ${tx.hash}`);
+      console.log("Waiting for deployment confirmation...");
+
+      const receipt = await tx.wait();
+
+      // Enhanced event parsing
+      const tokenCreatedEvent = receipt.logs
+        .map((log) => {
+          try {
+            return contract.interface.parseLog(log);
+          } catch (e) {
+            return null;
+          }
+        })
+        .find((event) => event?.name === "TokenCreated");
+
+      if (tokenCreatedEvent) {
+        const [tokenAddress, positionId, deployer, fidValue, name, symbol, supply, lockerAddress, castHashValue] =
+          tokenCreatedEvent.args;
+
+        console.log(`Token deployed successfully!`);
+        addDebugInfo(
+          `Deployment details:\n` +
+            `- Token Address: ${tokenAddress}\n` +
+            `- Position ID: ${positionId}\n` +
+            `- Deployer: ${deployer}\n` +
+            `- Locker Address: ${lockerAddress}`
+        );
+
+        // Store deployment info in state if needed
+        setDeploymentInfo({
+          tokenAddress,
+          positionId: positionId.toString(),
+          lockerAddress,
+        });
+      } else {
+        console.log("Token deployed but event not found in logs");
+      }
+    } catch (error) {
+      console.error("Deployment error:", error);
+      let errorMessage = error.message;
+
+      // Check for specific error types
+      if (error.message.includes("NotAllowedPairedToken")) {
+        errorMessage = "The selected paired token is not allowed";
+      } else if (error.message.includes("Invalid tick")) {
+        errorMessage = "Invalid tick value for the selected fee tier";
+      } else if (error.message.includes("insufficient funds")) {
+        errorMessage = "Insufficient ETH for deployment";
+      }
+
+      console.log(`Deployment failed: ${errorMessage}`);
+      addDebugInfo(`Deployment error: ${error.message}\n${error.stack}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       console.log(formData.image);
 
-      // const deploy = await deployToken();
-      // console.log(deploy)
+      const deploy = await deployToken();
+      console.log(deploy)
+
 
       if (validateForm() && formData?.image) {
         setLoading(true);
@@ -325,7 +366,7 @@ export function CreateTokenModal() {
           },
         ]);
         console.log(data);
-        if (error) throw new Errors(error);
+        if (error) throw new console.log(error);
         setLoading(false);
         setFormData({
           name: "",
@@ -339,7 +380,7 @@ export function CreateTokenModal() {
         });
       }
     } catch (error) {
-      console.error("Error inserting data:", error);
+      console.log("Error inserting data:", error);
     }
   };
 

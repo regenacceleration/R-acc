@@ -1,848 +1,325 @@
-export const contractAddress = "0x861ddf689cd4dd0fd7c4a41ab023d7fdcfb50f45";
+export const contractAddress = "0xef85fe40f25bf8ad9d4c43968c3592997df22e5b";
 export const abi = [
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "locker_",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "uniswapV3Factory_",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "positionManager_",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "swapRouter_",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "owner_",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
     type: "constructor",
-  },
-  {
-    inputs: [],
-    name: "Deprecated",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InsufficientETH",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidConfig",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidTickSpacing",
-    type: "error",
-  },
-  {
     inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
+      { name: "locker_", type: "address", internalType: "address" },
+      { name: "uniswapV3Factory_", type: "address", internalType: "address" },
+      { name: "positionManager_", type: "address", internalType: "address" },
+      { name: "swapRouter_", type: "address", internalType: "address" },
+      { name: "owner_", type: "address", internalType: "address" },
     ],
-    name: "NotAdmin",
-    type: "error",
+    stateMutability: "nonpayable",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-    ],
-    name: "NotAllowedPairedToken",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "OwnableInvalidOwner",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "OwnableUnauthorizedAccount",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "PoolCreationFailed",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "SwapFailed",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-    ],
-    name: "TokenNotFound",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "TransferFailed",
-    type: "error",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "admin",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "status",
-        type: "bool",
-      },
-    ],
-    name: "AdminUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "status",
-        type: "bool",
-      },
-    ],
-    name: "DeprecatedStatusUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "newLocker",
-        type: "address",
-      },
-    ],
-    name: "LockerUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "previousOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bool",
-        name: "allowed",
-        type: "bool",
-      },
-    ],
-    name: "PairedTokenUpdated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "positionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-    ],
-    name: "RewardsClaimed",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "tokenIn",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "tokenOut",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amountIn",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amountOut",
-        type: "uint256",
-      },
-    ],
-    name: "SwapExecuted",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "tokenAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "positionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "deployer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "fid",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "name",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "symbol",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "supply",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "lockerAddress",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "castHash",
-        type: "string",
-      },
-    ],
-    name: "TokenCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "deployer",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "deployerAmount",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "poolAmount",
-        type: "uint256",
-      },
-    ],
-    name: "TokensSplit",
-    type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "admins",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "allowedPairedTokens",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
+    inputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amountIn",
-        type: "uint256",
-      },
-    ],
+    type: "function",
     name: "approveToken",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
     ],
-    name: "claimRewards",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
+    type: "function",
+    name: "claimRewards",
+    inputs: [{ name: "token", type: "address", internalType: "address" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "deployToken",
     inputs: [
+      { name: "_name", type: "string", internalType: "string" },
+      { name: "_symbol", type: "string", internalType: "string" },
+      { name: "_supply", type: "uint256", internalType: "uint256" },
+      { name: "_fee", type: "uint24", internalType: "uint24" },
+      { name: "_salt", type: "bytes32", internalType: "bytes32" },
+      { name: "_deployer", type: "address", internalType: "address" },
+      { name: "_fid", type: "uint256", internalType: "uint256" },
+      { name: "_image", type: "string", internalType: "string" },
+      { name: "_castHash", type: "string", internalType: "string" },
       {
-        internalType: "string",
-        name: "_name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_symbol",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "_supply",
-        type: "uint256",
-      },
-      {
-        internalType: "uint24",
-        name: "_fee",
-        type: "uint24",
-      },
-      {
-        internalType: "bytes32",
-        name: "_salt",
-        type: "bytes32",
-      },
-      {
-        internalType: "address",
-        name: "_deployer",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_fid",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "_image",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "_castHash",
-        type: "string",
-      },
-      {
-        components: [
-          {
-            internalType: "int24",
-            name: "tick",
-            type: "int24",
-          },
-          {
-            internalType: "address",
-            name: "pairedToken",
-            type: "address",
-          },
-          {
-            internalType: "uint24",
-            name: "devBuyFee",
-            type: "uint24",
-          },
-        ],
-        internalType: "struct Clanker.PoolConfig",
         name: "_poolConfig",
         type: "tuple",
-      },
-    ],
-    name: "deployToken",
-    outputs: [
-      {
-        internalType: "contract ClankerToken",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "positionId",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "payable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "deploymentInfoForToken",
-    outputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "positionId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "locker",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "deprecated",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "user",
-        type: "address",
-      },
-    ],
-    name: "getTokensDeployedByUser",
-    outputs: [
-      {
+        internalType: "struct Clanker.PoolConfig",
         components: [
-          {
-            internalType: "address",
-            name: "token",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "positionId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "locker",
-            type: "address",
-          },
+          { name: "tick", type: "int24", internalType: "int24" },
+          { name: "pairedToken", type: "address", internalType: "address" },
+          { name: "devBuyFee", type: "uint24", internalType: "uint24" },
         ],
-        internalType: "struct Clanker.DeploymentInfo[]",
-        name: "",
-        type: "tuple[]",
       },
+      { name: "earthAmount", type: "uint256", internalType: "uint256" },
     ],
-    stateMutability: "view",
-    type: "function",
+    outputs: [
+      { name: "token", type: "address", internalType: "contract ClankerToken" },
+      { name: "positionId", type: "uint256", internalType: "uint256" },
+    ],
+    stateMutability: "nonpayable",
   },
   {
+    type: "function",
+    name: "deploymentInfoForToken",
+    inputs: [{ name: "", type: "address", internalType: "address" }],
+    outputs: [
+      { name: "token", type: "address", internalType: "address" },
+      { name: "positionId", type: "uint256", internalType: "uint256" },
+      { name: "locker", type: "address", internalType: "address" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "deprecated",
     inputs: [],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "earth",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "liquidityLocker",
-    outputs: [
-      {
-        internalType: "contract LpLockerv2",
-        name: "",
-        type: "address",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract LpLockerv2" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "positionManager",
-    outputs: [
-      {
-        internalType: "contract INonfungiblePositionManager",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
+    outputs: [{ name: "", type: "address", internalType: "contract INonfungiblePositionManager" }],
+    stateMutability: "view",
   },
+  { type: "function", name: "renounceOwnership", inputs: [], outputs: [], stateMutability: "nonpayable" },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "admin",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "isAdmin",
-        type: "bool",
-      },
-    ],
+    type: "function",
     name: "setAdmin",
+    inputs: [
+      { name: "admin", type: "address", internalType: "address" },
+      { name: "isAdmin", type: "bool", internalType: "bool" },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "bool",
-        name: "_deprecated",
-        type: "bool",
-      },
-    ],
+    type: "function",
     name: "setDeprecated",
+    inputs: [{ name: "_deprecated", type: "bool", internalType: "bool" }],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "tokenIn",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "tokenOut",
-        type: "address",
-      },
-      {
-        internalType: "uint24",
-        name: "fee",
-        type: "uint24",
-      },
-      {
-        internalType: "address",
-        name: "recipient",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "deadline",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "amountIn",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "amountOutMinimum",
-        type: "uint256",
-      },
-    ],
+    type: "function",
     name: "swapExactInputSingle",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "amountOut",
-        type: "uint256",
-      },
+    inputs: [
+      { name: "tokenIn", type: "address", internalType: "address" },
+      { name: "tokenOut", type: "address", internalType: "address" },
+      { name: "fee", type: "uint24", internalType: "uint24" },
+      { name: "recipient", type: "address", internalType: "address" },
+      { name: "deadline", type: "uint256", internalType: "uint256" },
+      { name: "amountIn", type: "uint256", internalType: "uint256" },
+      { name: "amountOutMinimum", type: "uint256", internalType: "uint256" },
     ],
-    stateMutability: "payable",
-    type: "function",
+    outputs: [{ name: "amountOut", type: "uint256", internalType: "uint256" }],
+    stateMutability: "nonpayable",
   },
   {
-    inputs: [],
+    type: "function",
     name: "swapRouter",
-    outputs: [
-      {
-        internalType: "contract ISwapRouter",
-        name: "",
-        type: "address",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract ISwapRouter" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "bool",
-        name: "allowed",
-        type: "bool",
-      },
-    ],
+    type: "function",
     name: "toggleAllowedPairedToken",
+    inputs: [
+      { name: "token", type: "address", internalType: "address" },
+      { name: "allowed", type: "bool", internalType: "bool" },
+    ],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
+    type: "function",
     name: "tokensDeployedByUsers",
+    inputs: [
+      { name: "", type: "address", internalType: "address" },
+      { name: "", type: "uint256", internalType: "uint256" },
+    ],
     outputs: [
-      {
-        internalType: "address",
-        name: "token",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "positionId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "locker",
-        type: "address",
-      },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "positionId", type: "uint256", internalType: "uint256" },
+      { name: "locker", type: "address", internalType: "address" },
     ],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "transferOwnership",
+    inputs: [{ name: "newOwner", type: "address", internalType: "address" }],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "uniswapV3Factory",
-    outputs: [
-      {
-        internalType: "contract IUniswapV3Factory",
-        name: "",
-        type: "address",
-      },
-    ],
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract IUniswapV3Factory" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newLocker",
-        type: "address",
-      },
-    ],
+    type: "function",
     name: "updateLiquidityLocker",
+    inputs: [{ name: "newLocker", type: "address", internalType: "address" }],
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
   },
   {
-    inputs: [],
+    type: "function",
     name: "version",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
-    name: "weth",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
+    outputs: [{ name: "", type: "string", internalType: "string" }],
     stateMutability: "view",
-    type: "function",
   },
   {
-    stateMutability: "payable",
-    type: "receive",
+    type: "event",
+    name: "AdminUpdated",
+    inputs: [
+      { name: "admin", type: "address", indexed: false, internalType: "address" },
+      { name: "status", type: "bool", indexed: false, internalType: "bool" },
+    ],
+    anonymous: false,
   },
+  {
+    type: "event",
+    name: "DeprecatedStatusUpdated",
+    inputs: [{ name: "status", type: "bool", indexed: false, internalType: "bool" }],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "LockerUpdated",
+    inputs: [{ name: "newLocker", type: "address", indexed: false, internalType: "address" }],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      { name: "previousOwner", type: "address", indexed: true, internalType: "address" },
+      { name: "newOwner", type: "address", indexed: true, internalType: "address" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PairedTokenUpdated",
+    inputs: [
+      { name: "token", type: "address", indexed: false, internalType: "address" },
+      { name: "allowed", type: "bool", indexed: false, internalType: "bool" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RewardsClaimed",
+    inputs: [
+      { name: "token", type: "address", indexed: false, internalType: "address" },
+      { name: "positionId", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "recipient", type: "address", indexed: false, internalType: "address" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SwapExecuted",
+    inputs: [
+      { name: "tokenIn", type: "address", indexed: false, internalType: "address" },
+      { name: "tokenOut", type: "address", indexed: false, internalType: "address" },
+      { name: "amountIn", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "amountOut", type: "uint256", indexed: false, internalType: "uint256" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TokenCreated",
+    inputs: [
+      { name: "tokenAddress", type: "address", indexed: false, internalType: "address" },
+      { name: "positionId", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "deployer", type: "address", indexed: false, internalType: "address" },
+      { name: "fid", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "name", type: "string", indexed: false, internalType: "string" },
+      { name: "symbol", type: "string", indexed: false, internalType: "string" },
+      { name: "supply", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "lockerAddress", type: "address", indexed: false, internalType: "address" },
+      { name: "castHash", type: "string", indexed: false, internalType: "string" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TokensSplit",
+    inputs: [
+      { name: "token", type: "address", indexed: false, internalType: "address" },
+      { name: "deployer", type: "address", indexed: false, internalType: "address" },
+      { name: "deployerAmount", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "poolAmount", type: "uint256", indexed: false, internalType: "uint256" },
+    ],
+    anonymous: false,
+  },
+  { type: "error", name: "Deprecated", inputs: [] },
+  { type: "error", name: "ExpiredDeadline", inputs: [] },
+  { type: "error", name: "InsufficientEARTH", inputs: [] },
+  { type: "error", name: "InsufficientLiquidity", inputs: [] },
+  { type: "error", name: "InvalidConfig", inputs: [] },
+  { type: "error", name: "InvalidFee", inputs: [] },
+  { type: "error", name: "InvalidTickSpacing", inputs: [] },
+  { type: "error", name: "NotAdmin", inputs: [{ name: "user", type: "address", internalType: "address" }] },
+  {
+    type: "error",
+    name: "NotAllowedPairedToken",
+    inputs: [{ name: "token", type: "address", internalType: "address" }],
+  },
+  { type: "error", name: "OwnableInvalidOwner", inputs: [{ name: "owner", type: "address", internalType: "address" }] },
+  {
+    type: "error",
+    name: "OwnableUnauthorizedAccount",
+    inputs: [{ name: "account", type: "address", internalType: "address" }],
+  },
+  { type: "error", name: "PoolCreationFailed", inputs: [] },
+  { type: "error", name: "SwapFailed", inputs: [] },
+  { type: "error", name: "TokenNotFound", inputs: [{ name: "token", type: "address", internalType: "address" }] },
+  { type: "error", name: "TransferFailed", inputs: [] },
+  { type: "error", name: "ZeroMinimumOutput", inputs: [] },
 ];
