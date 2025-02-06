@@ -28,7 +28,7 @@ export function CreateTokenModal() {
     fee: "3000",
     salt: "randomSalt",
     pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
-    fid: "122",
+    fid: 122,
     // image: "",
     castHash: "hash",
     // tick: "300",
@@ -161,8 +161,8 @@ export function CreateTokenModal() {
   const deployToken = async () => {
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
   const signer = await provider.getSigner();
-  const contract = new ethers.Contract(contractAddress, abi);
-  const account = "0x404d58Fb9EB5617FC4E5E3a79c72F3618D19B465";
+  const contract = new ethers.Contract(contractAddress, abi,signer);
+    const account = "0x7AE90ae51C836a51B0d165FE452c0af3677Fb9fd";
   console.log(signer)
 
     if (!signer) {
@@ -260,7 +260,23 @@ export function CreateTokenModal() {
       );
 
       // Execute deployment
-      console.log("Deploying token...");
+      console.log("Deploying token...",name,
+        tokenSymbol,
+        parsedSupply,
+        parsedFee,
+        hashedSalt,
+        account,
+        fid,
+        "image",
+        castHash,
+        {
+          tick: Number(ticker),
+          pairedToken: pairedAddress,
+          devBuyFee: Number(devBuyFee),
+        },
+        parsedEarth);
+      console.log(contract);
+      
       const tx = await contract.deployToken(
         name,
         tokenSymbol,
@@ -272,7 +288,7 @@ export function CreateTokenModal() {
         image,
         castHash,
         {
-          ticker: Number(ticker),
+          tick: Number(ticker),
           pairedToken: pairedAddress,
           devBuyFee: Number(devBuyFee),
         },
@@ -347,7 +363,7 @@ export function CreateTokenModal() {
       const deploy = await deployToken();
       console.log(deploy)
 
-
+return
       if (validateForm() && formData?.image) {
         setLoading(true);
         const { response, error: Error } = await apiFn({
