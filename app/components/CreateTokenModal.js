@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,7 +13,7 @@ import { getAddress } from "../utils/helperFn";
 
 export function CreateTokenModal() {
 
-  const address=getAddress()
+  const [address,setAddress]=useState("")
   const [formData, setFormData] = useState({
     name: "Test Token 1",
     ticker: "300",
@@ -126,6 +126,10 @@ export function CreateTokenModal() {
     "function approve(address spender, uint256 amount) returns (bool)",
     "function allowance(address owner, address spender) view returns (uint256)",
   ];
+
+  useEffect(() => {
+    setAddress(getAddress())
+  },[])
 
   const approveDeployToken = async () => {
 
