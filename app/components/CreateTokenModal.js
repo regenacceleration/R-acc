@@ -136,9 +136,9 @@ export function CreateTokenModal() {
       const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
       const signer = await provider.getSigner();
       const earthTokenAdd = new ethers.Contract(pairedAddress, ERC20_ABI, signer);
-      await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
       console.log(`Approved Earth Token successfully to account: ${contractAddress}`);
       setStatus("Approved Earth Token successfully!");
+      return await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
     } catch (error) {
       setStatus("Failed to approve Earth Token!");
       console.log(`Failed to approve Earth Token: ${error.message}`);
@@ -153,6 +153,11 @@ export function CreateTokenModal() {
   const deployToken = async () => {
 
     const approveToken = await approveDeployToken()
+
+    if (!approveToken)
+    {
+      return
+    }
     console.log(approveToken);
     
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
