@@ -17,31 +17,53 @@ export default function Home() {
   const [hasMore, setHasMore] = useState(true);
   const containerRef = useRef(null);
   const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const POSTS_PER_PAGE = 3
-
 
   const fetchToken = async () => {
     if (loading || !hasMore) return;
-    setLoading(true)
-    const { data, error } = await supabase.from('token')
+    setLoading(true);
+
+    let query = supabase.from('token')
       .select('*')
       .range(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE - 1)
       .order('created_at', { ascending: false });
 
+    if (searchQuery) {
+      query = query.ilike('name', `%${searchQuery}%`);
+    }
+
+    const { data, error } = await query;
+
     if (error) console.error('Error fetching data:', error);
 
-    if (data.length < POSTS_PER_PAGE) {
+    if (!data || data.length < POSTS_PER_PAGE) {
       setHasMore(false);
     }
-    setTokens(prev => [...prev, ...data]);
+
+    if (page === 0) {
+      setTokens(data || []);
+    } else {
+      setTokens(prev => [...prev, ...(data || [])]);
+    }
+    
     setPage(prev => prev + 1);
-    setLoading(false)
-    console.log(data)
+    setLoading(false);
+  };
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value === "") {
+      fetchToken(); // If input is cleared, fetch all data
+    }
   };
 
   useEffect(() => {
+    setPage(0);
+    setHasMore(true);
+    setTokens([]);
     fetchToken();
-  }, []);
+  }, [searchQuery]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -65,6 +87,52 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, [hasMore, loading]);
+
+  // const fetchToken = async () => {
+  //   if (loading || !hasMore) return;
+  //   setLoading(true)
+  //   const { data, error } = await supabase.from('token')
+  //     .select('*')
+  //     .range(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE - 1)
+  //     .order('created_at', { ascending: false });
+
+  //   if (error) console.error('Error fetching data:', error);
+
+  //   if (data.length < POSTS_PER_PAGE) {
+  //     setHasMore(false);
+  //   }
+  //   setTokens(prev => [...prev, ...data]);
+  //   setPage(prev => prev + 1);
+  //   setLoading(false)
+  //   console.log(data)
+  // };
+
+  // useEffect(() => {
+  //   fetchToken();
+  // }, []);
+
+  // useEffect(() => {
+  //   const container = containerRef.current;
+  //   if (!container) return;
+
+  //   const observer = new IntersectionObserver(
+  //     entries => {
+  //       const target = entries[0];
+  //       if (target.isIntersecting && hasMore && !loading) {
+  //         fetchToken();
+  //       }
+  //     },
+  //     {
+  //       root: null,
+  //       rootMargin: '20px',
+  //       threshold: 0.1,
+  //     }
+  //   );
+
+  //   observer.observe(container);
+
+  //   return () => observer.disconnect();
+  // }, [hasMore, loading]);
 
 
   // const tokens = [
@@ -128,6 +196,8 @@ export default function Home() {
         <div className="flex justify-center mt-[2rem] gap-3 w-full items-end">
           <input
             type="text"
+            value={searchQuery}
+            onChange={handleInputChange}
             className="border-b-[1px] outline-none text-black font-primary w-[28%] bg-gray-50 border-[#D5D5D5] rounded px-4 py-2"
           />
           <button className="text-[#000000] font-normal font-primary text-[13px]">SEARCH</button>
@@ -167,14 +237,14 @@ export default function Home() {
       } */}
       <div
 
-        className="grid grid-cols-1 md:grid-cols-3 p-8 gap-4">
+        className="grid grid-cols-1 md:grid-cols-3 p-8 gap-x-4 gap-y-16">
 
         {tokens.length > 0 ?
           tokens.map((token) => (
             <div
               key={token.id}
               style={{ borderRadius: "5px", cursor: "pointer" }}
-              className="border-[1px] border-[#D5D5D5] p-4 mb-10 text-center bg-white relative"
+              className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
               onClick={() => router.push(`/token/${token.id}`)}
             >
               <div className="flex justify-between items-center text-center">
@@ -231,8 +301,8 @@ export default function Home() {
 
             </div>
           )) :
-          (<div className="text-center py-4">
-            No Tokens Available
+          (<div className="flex col-start-2 justify-center items-center w-full py-4">
+            <p className="text-[#000000] font-primary font-normal text-[13px]">No Tokens Available</p>
           </div>
           )}
       </div>
