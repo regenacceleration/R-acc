@@ -1,4 +1,4 @@
-export const contractAddress = "0xC3De61699d0B33af83C56d5FF1714F6B018b19af";
+export const contractAddress = "0x23A77631CB711f7737c8E3C333a9fFF9CD583F13";
 export const abi = [
   {
     inputs: [
@@ -287,7 +287,6 @@ export const abi = [
       { internalType: "uint256", name: "_supply", type: "uint256" },
       { internalType: "uint24", name: "_fee", type: "uint24" },
       { internalType: "bytes32", name: "_salt", type: "bytes32" },
-      { internalType: "address", name: "_deployer", type: "address" },
       { internalType: "uint256", name: "_fid", type: "uint256" },
       { internalType: "string", name: "_image", type: "string" },
       { internalType: "string", name: "_castHash", type: "string" },

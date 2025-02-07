@@ -15,7 +15,7 @@ export function CreateTokenModal() {
 
   const address=getAddress()
   const [formData, setFormData] = useState({
-    name: "Test Token",
+    name: "Test Token 1",
     ticker: "300",
     description: "",
     image: "",
@@ -27,7 +27,7 @@ export function CreateTokenModal() {
 
 
     // name: "",
-    tokenSymbol: "TT",
+    tokenSymbol: "T",
     fee: "3000",
     salt: "randomSalt",
     pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
@@ -35,7 +35,7 @@ export function CreateTokenModal() {
     // image: "",
     castHash: "hash",
     // tick: "300",
-    earthToken:"5",
+    earthToken:"0",
     devBuyFee: "300",
     allowed: false,
     tokenIn: "",
@@ -118,50 +118,43 @@ export function CreateTokenModal() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const approveDeployToken = async () => {
-  //   const { pairedToken } = form;
-  //   const pairedAddress = ethers.getAddress(pairedToken);
-  //   try {
-  //     const earthTokenAdd = new ethers.Contract(pairedAddress, ERC20_ABI, signer);
-  //     await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
-  //     addDebugInfo(`Approved Earth Token successfully to account: ${contractAddress}`);
-  //     setStatus("Approved Earth Token successfully!");
-  //   } catch (error) {
-  //     setStatus("Failed to approve Earth Token!");
-  //     addDebugInfo(`Failed to approve Earth Token: ${error.message}`);
-  //   }
-  // };
 
-   // Toggle
-  //  const togglePairedToken = async () => {
-  //   if (!contract || !signer) {
-  //     setToggleStatus("Please connect your wallet first.");
-  //     return;
-  //   }
+  const ERC20_ABI = [
+    "function decimals() view returns (uint8)",
+    "function symbol() view returns (string)",
+    "function balanceOf(address) view returns (uint256)",
+    "function approve(address spender, uint256 amount) returns (bool)",
+    "function allowance(address owner, address spender) view returns (uint256)",
+  ];
 
-  //   const { pairedToken, allowed } = form;
+  const approveDeployToken = async () => {
 
-  //   if (!pairedToken) {
-  //     setToggleStatus("Please enter a paired token address.");
-  //     return;
-  //   }
 
-  //   try {
-  //     setToggleStatus("Toggling token status...");
-  //     const tx = await contract.toggleAllowedPairedToken(
-  //       ethers.getAddress(pairedToken), // Ensure address is checksummed
-  //       allowed
-  //     );
-  //     await tx.wait();
-  //     setToggleStatus("Token status toggled successfully!");
-  //   } catch (error) {
-  //     setToggleStatus(`Error: ${error.message}`);
-  //   }
-  // };
+    const { pairedToken } = formData;
+    const pairedAddress = ethers.getAddress(pairedToken);
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
+      const signer = await provider.getSigner();
+      const earthTokenAdd = new ethers.Contract(pairedAddress, ERC20_ABI, signer);
+      await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
+      console.log(`Approved Earth Token successfully to account: ${contractAddress}`);
+      setStatus("Approved Earth Token successfully!");
+    } catch (error) {
+      setStatus("Failed to approve Earth Token!");
+      console.log(`Failed to approve Earth Token: ${error.message}`);
+    }
+  };
+
+ 
+
 
   
 
   const deployToken = async () => {
+
+    const approveToken = await approveDeployToken()
+    console.log(approveToken);
+    
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
   const signer = await provider.getSigner();
   const contract = new ethers.Contract(contractAddress, abi,signer);
@@ -253,6 +246,8 @@ export function CreateTokenModal() {
         },
         parsedEarth,
       };
+      console.log(deploymentParams);
+      
 
       addDebugInfo(
         `Deploying token with parameters: ${JSON.stringify(
@@ -272,7 +267,6 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        address,
         fid,
         image,
         castHash,
@@ -316,7 +310,7 @@ export function CreateTokenModal() {
         );
 
         // Store deployment info in state if needed
-        setDeploymentInfo({
+        console.log({
           tokenAddress,
           positionId: positionId.toString(),
           lockerAddress,
