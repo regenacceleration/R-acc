@@ -15,15 +15,15 @@ export function CreateTokenModal() {
 
   const [address,setAddress]=useState("")
   const [formData, setFormData] = useState({
-    name: "Test Token 1",
-    ticker: "300",
+    name: "",
+    ticker: "",
     description: "",
     image: "",
     address,
     telegram: "",
     twitter: "",
     website: "",
-    percentage: "5000",
+    percentage: "",
 
 
     // name: "",
@@ -50,7 +50,7 @@ export function CreateTokenModal() {
   });
   const [debugInfo, setDebugInfo] = useState("");
   const [status, setStatus] = useState("");
-  const { apiFn } = useImgApi();
+  const { apiFn , loading:imgLoading} = useImgApi();
   const [loading, setLoading] = useState(false);
 
   const addDebugInfo = (info) => {
@@ -58,9 +58,20 @@ export function CreateTokenModal() {
     setDebugInfo((prev) => `${timestamp}: ${info}\n${prev}`);
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) setFormData((data) => ({ ...data, image: file }));
+  const handleImageChange = async(event) => {
+    const file = event.target.files[0]; 
+
+    const { response, error: Error } = await apiFn({
+      file: file,
+    });
+    setFormData((data) => ({ ...data, image: file }));
+    console.log(formData?.image)
+    if (Error) {
+      console.log(Error);
+      setLoading(false);
+      setErrors((errors) => ({ ...errors, image: Error }));
+      return;
+    }
   };
 
   const [errors, setErrors] = useState({
@@ -352,41 +363,31 @@ export function CreateTokenModal() {
     try {
       console.log(formData.image);
 
+      if (!validateForm() || !formData?.image) {
+        return;
+      }
+      setLoading(true);
+      const { data, error } = await supabase.from("token").insert([
+        {
+          ...formData,
+          image: response,
+        },
+      ]);
+      console.log(data);
+      if (error) throw new console.log(error);
+      setLoading(false);
+      setFormData({
+        name: "",
+        ticker: "",
+        description: "",
+        image: "",
+        telegram: "",
+        twitter: "",
+        website: "",
+        percentage: "",
+      });
       const deploy = await deployToken();
       console.log(deploy)
-
-return
-      if (validateForm() && formData?.image) {
-        setLoading(true);
-        const { response, error: Error } = await apiFn({
-          file: formData?.image,
-        });
-        if (Error) {
-          console.log(Error);
-          setLoading(false);
-          setErrors((errors) => ({ ...errors, image: Error }));
-          return;
-        }
-        const { data, error } = await supabase.from("token").insert([
-          {
-            ...formData,
-            image: response,
-          },
-        ]);
-        console.log(data);
-        if (error) throw new console.log(error);
-        setLoading(false);
-        setFormData({
-          name: "",
-          ticker: "",
-          description: "",
-          image: "",
-          telegram: "",
-          twitter: "",
-          website: "",
-          percentage: "",
-        });
-      }
     } catch (error) {
       console.log("Error inserting data:", error);
     }
@@ -479,6 +480,7 @@ return
                   <p className=' text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden'>
                     {formData?.image?.name}
                   </p>
+                  { imgLoading ? <BtnLoader /> :
                   <Image
                     className='w-5 h-5 '
                     width={40}
@@ -486,6 +488,7 @@ return
                     alt='upload'
                     src={URL.createObjectURL(formData?.image)}
                   />
+}
                 </div>
               )}
 
