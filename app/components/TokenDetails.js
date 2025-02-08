@@ -40,24 +40,18 @@ export function TokenDetails() {
   }, []);
 
   useEffect(() => {
-    if (id) {
-      const fetchToken = async () => {
-        console.log(token)
-        const { data, error } = await supabase
-          .from('token')
-          .select('*')
-          .eq('id', id)
-          .single(); // Get a single record
+    const fetchToken = async () => {
+      const { data, error } = await supabase.from("token").select("*").eq("id", id).single();
+      if (error) {
+        console.error("Error fetching details:", error.message);
+      } else {
+        setToken(data);
+        console.log(data)
+      }
+      setLoading(false);
+    };
 
-        if (error) console.error(error);
-        else {
-          setToken(data);
-          console.log(token)
-          setLoading(false);
-        }
-      };
-      fetchToken();
-    }
+    fetchToken();
   }, [id]);
 
   return (
@@ -78,29 +72,29 @@ export function TokenDetails() {
           <div className='flex w-full flex-col'>
             <div className='flex items-center px-4 gap-6'>
               <div className='flex gap-3'>
-                <img className="w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]" src={pairData?.pair?.info?.imageUrl} />
-                <p className="text-[#000000] font-primary font-semibold text-[36px]">{pairData?.pair?.baseToken?.symbol}</p>
+                <img className="w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]" src={token?.image} alt='racc' />
+                <p className="text-[#000000] font-primary font-semibold text-[36px]">{token?.name}</p>
               </div>
               <div className='flex items-end mt-3 gap-3'>
-                <p className="text-[#7C7C7C] font-normal text-[12px]">{`${pairData?.pair?.baseToken?.address?.substring(0, 6)}...${pairData?.pair?.baseToken?.address?.substring(pairData?.pair?.baseToken?.address?.length - 4)}`}</p>
+                <p className="text-[#7C7C7C] font-normal text-[12px]">{`${token?.address?.substring(0, 6)}...${token?.address?.substring(pairData?.pair?.baseToken?.address?.length - 4)}`}</p>
                 <div className="flex gap-6 items-end ">
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
+                    <Link href={token?.website} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Website</p>
                     </Link>
 
                   </div>
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.twitter} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
+                    <Link href={token?.twitter} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Twitter</p>
                     </Link>
 
                   </div>
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.telegram} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
-                    <Link href={pairData?.pair?.info?.socials[0]?.url} target='_blank'>
+                    <Link href={token?.telegram} target='_blank'>
                       <p className="text-[#7C7C7C] font-normal font-secondary text-[12px]">Telegram</p>
                     </Link>
 
