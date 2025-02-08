@@ -10,10 +10,11 @@ import { BtnLoader } from "./Loader";
 import { abi, contractAddress } from "./constants";
 import { ethers } from "ethers";
 import { getAddress } from "../utils/helperFn";
+import { useRouter } from "next/navigation";
+import { useNotification } from "../hooks/useNotification";
 
 export function CreateTokenModal() {
-
-  const [address,setAddress]=useState("")
+  const [address, setAddress] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     ticker: "",
@@ -25,54 +26,30 @@ export function CreateTokenModal() {
     website: "",
     percentage: "",
 
-
-    // name: "",
     tokenSymbol: "T",
     fee: "3000",
     salt: "randomSalt",
     pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
     fid: 122,
-    // image: "",
     castHash: "hash",
-    // tick: "300",
-    earthToken:"0",
+    earthToken: "0",
     devBuyFee: "300",
     allowed: false,
+
     tokenIn: "",
     tokenOut: "",
     recipient: "",
     deadline: "300",
-
     amountIn: "0.01",
     amountOutMin: "0.001",
     newOwner: "1",
     newLocker: "1",
   });
-  const [debugInfo, setDebugInfo] = useState("");
-  const [status, setStatus] = useState("");
-  const { apiFn , loading:imgLoading} = useImgApi();
+  const { apiFn, loading: imgLoading } = useImgApi();
   const [loading, setLoading] = useState(false);
-
-  const addDebugInfo = (info) => {
-    const timestamp = new Date().toISOString();
-    setDebugInfo((prev) => `${timestamp}: ${info}\n${prev}`);
-  };
-
-  const handleImageChange = async(event) => {
-    const file = event.target.files[0]; 
-
-    const { response, error: Error } = await apiFn({
-      file: file,
-    });
-    setFormData((data) => ({ ...data, image: file }));
-    console.log(formData?.image)
-    if (Error) {
-      console.log(Error);
-      setLoading(false);
-      setErrors((errors) => ({ ...errors, image: Error }));
-      return;
-    }
-  };
+  const [img, setImg] = useState("");
+  const router = useRouter();
+  const { showMessage } = useNotification();
 
   const [errors, setErrors] = useState({
     name: "",
@@ -83,7 +60,7 @@ export function CreateTokenModal() {
     twitter: "",
     website: "",
     percentage: "",
-    percentage:"",
+    percentage: "",
     // name: "",
     tokenSymbol: "",
     // percentage: "",
@@ -94,7 +71,7 @@ export function CreateTokenModal() {
     // image: "",
     castHash: "",
     ticker: "",
-    earthToken:"",
+    earthToken: "",
     devBuyFee: "",
     allowed: false,
     tokenIn: "",
@@ -129,7 +106,6 @@ export function CreateTokenModal() {
     return Object.keys(newErrors).length === 0;
   };
 
-
   const ERC20_ABI = [
     "function decimals() view returns (uint8)",
     "function symbol() view returns (string)",
@@ -139,56 +115,71 @@ export function CreateTokenModal() {
   ];
 
   useEffect(() => {
-    setAddress(getAddress())
-  },[])
+    setAddress(getAddress());
+  }, []);
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+
+    setImg({ file });
+    const { response, error: Error } = await apiFn({
+      file: file,
+    });
+    setFormData((data) => ({ ...data, image: response }));
+    console.log(formData?.image);
+    if (Error) {
+      console.log(Error);
+      setLoading(false);
+      setErrors((errors) => ({ ...errors, image: Error }));
+      return;
+    }
+  };
 
   const approveDeployToken = async () => {
-
-
     const { pairedToken } = formData;
     const pairedAddress = ethers.getAddress(pairedToken);
     try {
       const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
       const signer = await provider.getSigner();
-      const earthTokenAdd = new ethers.Contract(pairedAddress, ERC20_ABI, signer);
-      console.log(`Approved Earth Token successfully to account: ${contractAddress}`);
-      setStatus("Approved Earth Token successfully!");
-      return await earthTokenAdd.approve(contractAddress, ethers.parseEther("1000"));
+      const earthTokenAdd = new ethers.Contract(
+        pairedAddress,
+        ERC20_ABI,
+        signer
+      );
+      console.log(
+        `Approved Earth Token successfully to account: ${contractAddress}`
+      );
+      return await earthTokenAdd.approve(
+        contractAddress,
+        ethers.parseEther("1000")
+      );
     } catch (error) {
-      setStatus("Failed to approve Earth Token!");
       console.log(`Failed to approve Earth Token: ${error.message}`);
     }
   };
 
- 
-
-
-  
-
   const deployToken = async () => {
+    const approveToken = await approveDeployToken();
 
-    const approveToken = await approveDeployToken()
-
-    if (!approveToken)
-    {
-      return
+    if (!approveToken) {
+      setLoading(false);
+      return;
     }
     console.log(approveToken);
-    
+
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
-  const signer = await provider.getSigner();
-  const contract = new ethers.Contract(contractAddress, abi,signer);
-    
-  console.log(signer)
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    console.log(signer);
 
     if (!signer) {
       console.log("Please connect wallet first");
-
+      setLoading(false);
       return;
     }
 
     try {
-      setLoading(true);
       console.log("Validating deployment parameters...");
 
       const {
@@ -209,36 +200,49 @@ export function CreateTokenModal() {
       // Enhanced input validation
       if (!name?.trim()) {
         console.log("Token name is required");
-       
+
+        setLoading(false);
+
         return;
       }
       if (!tokenSymbol?.trim()) {
         console.log("Token symbol is required");
+        setLoading(false);
+
         return;
       }
       if (!percentage || Number(percentage) <= 0) {
         console.log("Valid token supply is required");
+        setLoading(false);
+
         return;
       }
       if (!fee || Number(fee) <= 0) {
         console.log("Valid fee is required");
+        setLoading(false);
+
         return;
       }
       if (!salt?.trim()) {
         console.log("Salt is required");
+        setLoading(false);
+
         return;
       }
       if (!pairedToken?.trim() || !ethers.isAddress(pairedToken)) {
         console.log("Valid paired token address is required");
+        setLoading(false);
+
         return;
       }
       if (!earthToken?.trim()) {
         console.log("Earth Token Amount is required");
+        setLoading(false);
+
         return;
       }
 
-      console.log(signer)
-      
+      console.log(signer);
 
       // Format parameters
       const parsedSupply = BigInt(percentage);
@@ -246,7 +250,7 @@ export function CreateTokenModal() {
       const hashedSalt = ethers.encodeBytes32String(salt);
       const pairedAddress = ethers.getAddress(pairedToken);
       const parsedEarth = ethers.parseUnits(earthToken, 18);
-      console.log(pairedAddress)
+      console.log(pairedAddress);
 
       // Prepare deployment parameters
       const deploymentParams = {
@@ -255,7 +259,6 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        address,
         fid,
         image,
         castHash,
@@ -267,20 +270,11 @@ export function CreateTokenModal() {
         parsedEarth,
       };
       console.log(deploymentParams);
-      
-
-      addDebugInfo(
-        `Deploying token with parameters: ${JSON.stringify(
-          deploymentParams,
-          (_, v) => (typeof v === "bigint" ? v.toString() : v),
-          2
-        )}`
-      );
 
       // Execute deployment
       console.log("Deploying token...");
       console.log(contract);
-      
+
       const tx = await contract.deployToken(
         name,
         tokenSymbol,
@@ -298,9 +292,8 @@ export function CreateTokenModal() {
         parsedEarth
       );
 
-      console.log(tx)
+      console.log(tx);
 
-      addDebugInfo(`Deployment transaction sent: ${tx.hash}`);
       console.log("Waiting for deployment confirmation...");
 
       const receipt = await tx.wait();
@@ -311,23 +304,26 @@ export function CreateTokenModal() {
           try {
             return contract.interface.parseLog(log);
           } catch (e) {
+            setLoading(false);
             return null;
           }
         })
         .find((event) => event?.name === "TokenCreated");
 
       if (tokenCreatedEvent) {
-        const [tokenAddress, positionId, deployer, fidValue, name, symbol, supply, lockerAddress, castHashValue] =
-          tokenCreatedEvent.args;
+        const [
+          tokenAddress,
+          positionId,
+          deployer,
+          fidValue,
+          name,
+          symbol,
+          supply,
+          lockerAddress,
+          castHashValue,
+        ] = tokenCreatedEvent.args;
 
         console.log(`Token deployed successfully!`);
-        addDebugInfo(
-          `Deployment details:\n` +
-            `- Token Address: ${tokenAddress}\n` +
-            `- Position ID: ${positionId}\n` +
-            `- Deployer: ${deployer}\n` +
-            `- Locker Address: ${lockerAddress}`
-        );
 
         // Store deployment info in state if needed
         console.log({
@@ -335,6 +331,11 @@ export function CreateTokenModal() {
           positionId: positionId.toString(),
           lockerAddress,
         });
+        return {
+          tokenAddress,
+          positionId: positionId.toString(),
+          lockerAddress,
+        };
       } else {
         console.log("Token deployed but event not found in logs");
       }
@@ -352,7 +353,6 @@ export function CreateTokenModal() {
       }
 
       console.log(`Deployment failed: ${errorMessage}`);
-      addDebugInfo(`Deployment error: ${error.message}\n${error.stack}`);
     } finally {
       setLoading(false);
     }
@@ -367,15 +367,57 @@ export function CreateTokenModal() {
         return;
       }
       setLoading(true);
+
+      const { data: fetchData, fetchDataError } = await supabase
+        .from("token")
+        .select("*")
+        .eq("name", formData?.name);
+      console.log(fetchData);
+      if (fetchDataError) {
+        setErrors((errors) => ({
+          ...errors,
+          name: "Error verifying the token name",
+        }));
+        setLoading(false);
+        return;
+      }
+      if (fetchData.length) {
+        setLoading(false);
+        setErrors((errors) => ({
+          ...errors,
+          name: "Token Name should be unique",
+        }));
+        return;
+      }
+
+      const deploy = await deployToken();
+
+      if (!deploy) {
+        setLoading(false);
+        return;
+      }
+      console.log(deploy);
       const { data, error } = await supabase.from("token").insert([
         {
-          ...formData,
-          image: response,
+          name: formData?.name,
+          ticker: formData?.ticker,
+          description: formData?.description,
+          image: formData?.image,
+          address,
+          telegram: formData?.telegram,
+          twitter: formData?.twitter,
+          website: formData?.website,
+          percentage: formData?.percentage,
         },
       ]);
       console.log(data);
-      if (error) throw new console.log(error);
+      if (error) throw new Error(error);
       setLoading(false);
+
+      showMessage({
+        type: "success",
+        value: "Token Deployed Successfully",
+      });
       setFormData({
         name: "",
         ticker: "",
@@ -386,8 +428,7 @@ export function CreateTokenModal() {
         website: "",
         percentage: "",
       });
-      const deploy = await deployToken();
-      console.log(deploy)
+      router.push("/");
     } catch (error) {
       console.log("Error inserting data:", error);
     }
@@ -475,22 +516,24 @@ export function CreateTokenModal() {
               ) : (
                 <p className="text-gray-600">IMAGE</p>
               )} */}
-              {formData?.image && (
-                <div className='absolute bottom-2 flex items-center justify-between w-[90%]'>
-                  <p className=' text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden'>
-                    {formData?.image?.name}
-                  </p>
-                  { imgLoading ? <BtnLoader /> :
-                  <Image
-                    className='w-5 h-5 '
-                    width={40}
-                    height={40}
-                    alt='upload'
-                    src={URL.createObjectURL(formData?.image)}
-                  />
-}
-                </div>
-              )}
+              <div className='absolute bottom-2 flex items-center justify-between w-[90%]'>
+                <p className=' text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden'>
+                  {formData?.image ? img?.name : ""}
+                </p>
+                {imgLoading ? (
+                  <BtnLoader />
+                ) : (
+                  formData?.image && (
+                    <Image
+                      className='w-5 h-5 '
+                      width={40}
+                      height={40}
+                      alt='upload'
+                      src={formData?.image}
+                    />
+                  )
+                )}
+              </div>
 
               <label
                 htmlFor='upload'
