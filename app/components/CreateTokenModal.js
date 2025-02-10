@@ -468,7 +468,7 @@ export function CreateTokenModal() {
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              TICKER
+              TICKER (eg: 300)
             </label>
             <input
               type='text'
@@ -573,7 +573,7 @@ export function CreateTokenModal() {
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              Buy Dev Fee
+              Buy Dev Fee (eg: 300)
             </label>
             <input
               type='text'
@@ -590,7 +590,7 @@ export function CreateTokenModal() {
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              Earth Token
+              Earth Token (eg: 0)
             </label>
             <input
               type='text'
