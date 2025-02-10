@@ -32,8 +32,8 @@ export function CreateTokenModal() {
     pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
     fid: 122,
     castHash: "hash",
-    earthToken: "0",
-    devBuyFee: "300",
+    earthToken: "",
+    devBuyFee: "",
     allowed: false,
 
     tokenIn: "",
@@ -95,6 +95,8 @@ export function CreateTokenModal() {
     if (!formData.image) newErrors.image = "Image is required";
     if (!formData.telegram) newErrors.telegram = "Telegram is required";
     if (!formData.twitter) newErrors.twitter = "Twitter is required";
+    if (!formData.earthToken) newErrors.earthToken = "Earth Token is required";
+    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy is required";
     if (!formData.website) newErrors.website = "Website URL is required";
     if (!formData.percentage) newErrors.percentage = "Percentage is required";
     if (formData.percentage && isNaN(Number(formData.percentage))) {
@@ -412,6 +414,8 @@ export function CreateTokenModal() {
           twitter: formData?.twitter,
           website: formData?.website,
           percentage: formData?.percentage,
+          earthToken: formData?.earthToken,
+          devBuyFee: formData?.devBuyFee,
         },
       ]);
       console.log(data);
@@ -431,6 +435,8 @@ export function CreateTokenModal() {
         twitter: "",
         website: "",
         percentage: "",
+        earthToken: "",
+        devBuyFee: "",
       });
       router.push("/");
     } catch (error) {
@@ -562,6 +568,40 @@ export function CreateTokenModal() {
             </div>
             {errors.image && (
               <p className='text-red-500 text-sm '>{errors.image}</p>
+            )}
+          </div>
+
+          <div>
+            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
+              Buy Dev Fee
+            </label>
+            <input
+              type='text'
+              value={formData.devBuyFee}
+              onChange={(e) =>
+                setFormData({ ...formData, devBuyFee: e.target.value })
+              }
+              className='  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+            />
+            {errors.devBuyFee && (
+              <p className='text-red-500 text-sm '>{errors.devBuyFee}</p>
+            )}
+          </div>
+
+          <div>
+            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
+              Earth Token
+            </label>
+            <input
+              type='text'
+              value={formData.earthToken}
+              onChange={(e) =>
+                setFormData({ ...formData, earthToken: e.target.value })
+              }
+              className='  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+            />
+            {errors.earthToken && (
+              <p className='text-red-500 text-sm '>{errors.earthToken}</p>
             )}
           </div>
 

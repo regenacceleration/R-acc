@@ -52,10 +52,11 @@ export default function Home() {
   };
 
   const handleInputChange = (e) => {
-    setSearchQuery(e.target.value);
-    if (e.target.value === "") {
-      fetchToken(); // If input is cleared, fetch all data
-    }
+    const newValue = e.target.value;
+    setSearchQuery(newValue);
+    if (newValue === "") {
+        fetchToken(); // If input is cleared, fetch all data
+      }
   };
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function Home() {
     observer.observe(container);
 
     return () => observer.disconnect();
-  }, [hasMore, loading]);
+  }, [hasMore, loading, page]);
 
   // const fetchToken = async () => {
   //   if (loading || !hasMore) return;
