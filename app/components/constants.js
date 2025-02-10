@@ -1,4 +1,4 @@
-export const contractAddress = "0x23A77631CB711f7737c8E3C333a9fFF9CD583F13";
+export const contractAddress = "0xddb5e9d90a3e9f48dedd4a75b04e78156b9241ef";
 export const abi = [
   {
     inputs: [
@@ -467,3 +467,16 @@ export const abi = [
     type: "function",
   },
 ];
+
+
+
+export const chain = {
+  chainName: "Base Mainnet",
+  chainId: "0x2105",
+  rpcUrls: ["https://developer-access-mainnet.base.org"],
+  blockExplorerUrls: ["https://basescan.org"],
+  nativeCurrency: {
+    symbol: "ETH",
+    decimals: 18,
+  },
+}

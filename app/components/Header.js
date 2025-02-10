@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { formatAddress, getAddress } from "../utils/helperFn";
+import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
+import { chain } from "./constants";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
@@ -11,6 +12,8 @@ export default function Header() {
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
+        const networkResult = await VerifyNetwork(chain);
+        if (!networkResult) return
         const address = await window.ethereum.request({ method: "eth_requestAccounts" });
         localStorage.setItem('address', address[0])
         setAccount(address[0]);

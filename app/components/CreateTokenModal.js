@@ -7,9 +7,9 @@ import images from "../constants/images";
 import { supabase } from "../services/supabase.js";
 import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
-import { abi, contractAddress } from "./constants";
+import { abi, chain, contractAddress } from "./constants";
 import { ethers } from "ethers";
-import { getAddress } from "../utils/helperFn";
+import { getAddress, VerifyNetwork } from "../utils/helperFn";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
 
@@ -361,13 +361,17 @@ export function CreateTokenModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData.image);
-
-      if (!validateForm() || !formData?.image) {
-        return;
+      if (!address)
+      {
+        return
       }
-      setLoading(true);
+      const network=await VerifyNetwork(chain)
+      if (!network) {
+        return
+      }
+      if (!validateForm()) return
 
+      setLoading(true);
       const { data: fetchData, fetchDataError } = await supabase
         .from("token")
         .select("*")
