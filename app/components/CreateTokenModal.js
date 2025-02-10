@@ -96,7 +96,7 @@ export function CreateTokenModal() {
     if (!formData.telegram) newErrors.telegram = "Telegram is required";
     if (!formData.twitter) newErrors.twitter = "Twitter is required";
     if (!formData.earthToken) newErrors.earthToken = "Earth Token is required";
-    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy is required";
+    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy Fee is required";
     if (!formData.website) newErrors.website = "Website URL is required";
     if (!formData.percentage) newErrors.percentage = "Percentage is required";
     if (formData.percentage && isNaN(Number(formData.percentage))) {
