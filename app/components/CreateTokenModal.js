@@ -29,7 +29,7 @@ export function CreateTokenModal() {
     tokenSymbol: "T",
     fee: "3000",
     salt: "randomSalt",
-    pairedToken: "0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279",
+    pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
     fid: 122,
     castHash: "hash",
     earthToken: "",
@@ -96,7 +96,7 @@ export function CreateTokenModal() {
     if (!formData.telegram) newErrors.telegram = "Telegram is required";
     if (!formData.twitter) newErrors.twitter = "Twitter is required";
     if (!formData.earthToken) newErrors.earthToken = "Earth Token is required";
-    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy is required";
+    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy Fee is required";
     if (!formData.website) newErrors.website = "Website URL is required";
     if (!formData.percentage) newErrors.percentage = "Percentage is required";
     if (formData.percentage && isNaN(Number(formData.percentage))) {
