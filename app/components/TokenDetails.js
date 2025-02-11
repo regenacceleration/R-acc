@@ -293,7 +293,7 @@ export function TokenDetails() {
               <div className='flex items-center  justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >AGE</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>22 days</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>{Math.floor((new Date() - new Date(pairData?.pair?.pairCreatedAt)) / (1000 * 60 * 60 * 24))} days</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >FDV</p>
