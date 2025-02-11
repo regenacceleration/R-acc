@@ -239,7 +239,7 @@ export default function Home() {
 
       <div
         ref={containerRef}
-        className="h-20 flex items-center justify-center"
+        className="h-full flex items-center justify-center"
       >
         {loading ?
           <div className="flex items-center justify-center h-64">

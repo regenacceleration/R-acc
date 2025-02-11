@@ -18,28 +18,6 @@ export function TokenDetails() {
   const theme = "light"
 
   useEffect(() => {
-    const fetchPairData = async () => {
-      try {
-        const response = await fetch(
-          'https://api.dexscreener.com/latest/dex/pairs/base/0xe31c372a7af875b3b5e0f3713b17ef51556da667'
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setPairData(data);
-        console.log(data)
-      } catch (err) {
-        console.log(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPairData();
-  }, []);
-
-  useEffect(() => {
     const fetchToken = async () => {
       const { data, error } = await supabase.from("token").select("*").eq("id", id).single();
       if (error) {
@@ -53,6 +31,34 @@ export function TokenDetails() {
 
     fetchToken();
   }, [id]);
+
+  useEffect(() => {
+    const fetchPairData = async () => {
+      if (token) {
+        console.log(token?.tokenAddress)
+        try {
+          const response = await fetch(
+            `https://api.dexscreener.com/latest/dex/pairs/base/${token?.tokenAddress}`
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          setPairData(data);
+          console.log(data)
+        } catch (err) {
+          console.log(err.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPairData();
+  }, [token]);
+
+  console.log(token?.tokenAddress)
+  console.log(token?.earthToken)
 
   return (
 
@@ -76,7 +82,7 @@ export function TokenDetails() {
                 <p className="text-[#000000] font-primary font-semibold text-[36px]">{token?.name}</p>
               </div>
               <div className='flex items-end mt-3 gap-3'>
-                <p className="text-[#7C7C7C] font-normal text-[12px]">{`${token?.address?.substring(0, 6)}...${token?.address?.substring(pairData?.pair?.baseToken?.address?.length - 4)}`}</p>
+                <p className="text-[#7C7C7C] font-normal text-[12px]">{`${token?.address?.substring(0, 6)}...${token?.address?.substring(token?.address?.length - 4)}`}</p>
                 <div className="flex gap-6 items-end ">
                   <div className="flex gap-2 justify-center items-center">
                     <Image style={{ color: "#7C7C7C" }} width={40} alt="Token" height={40} src={images.website} className="w-[10px] h-[10px] flex items-center justify-center text-[#C7C7C7]" />
@@ -106,7 +112,7 @@ export function TokenDetails() {
               <div className="w-full rounded-lg  ">
                 <iframe
                   className="w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg"
-                  src="https://www.geckoterminal.com/base/pools/0xe31c372a7af875b3b5e0f3713b17ef51556da667?embed=1&info=0&swaps=0&chart=1"
+                  src={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress}?embed=1&info=0&swaps=0&chart=1`}
                   frameBorder="0"
                 ></iframe>
               </div>
@@ -183,7 +189,7 @@ export function TokenDetails() {
           :
           <div className='flex w-[50%] mt-10 flex-col'>
             <iframe
-              src="https://app.uniswap.org/#/swap?exactField=input&exactAmount=10&inputCurrency=0x6b175474e89094c44da98b954eedeac495271d0f&theme=light"
+              src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken}&inputCurrency=${token?.tokenAddress}&theme=light`}
               width="100%"
               style={{
                 height: "500px"
@@ -269,7 +275,7 @@ export function TokenDetails() {
             </div>
 
             <div className='flex flex-col p-2  mt-4  border-[1px] border-[#D5D5D5]'>
-              <div className='flex justify-between'>
+              <div className='flex items-center justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H VOL</p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.volume?.h24 / 1000000).toFixed(2)}M</p>
@@ -284,7 +290,7 @@ export function TokenDetails() {
                 </div>
               </div>
 
-              <div className='flex  justify-between'>
+              <div className='flex items-center  justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >AGE</p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>22 days</p>
