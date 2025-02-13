@@ -85,7 +85,7 @@ function IndToken({token})
 
             {/* Holders */}
             <div className="flex flex-col justify-start items-start">
-                <p className="text-[#000000] font-secondary font-normal text-[13px]">{count}</p>
+                <p className="text-[#000000]   font-secondary font-normal text-[13px]">{count || 0}</p>
                 <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Holders</p>
             </div>
         </div>
