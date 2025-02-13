@@ -470,25 +470,26 @@ export const abi = [
 
 
 
-// export const chain = {
-//   chainName: "Base Mainnet",
-//   chainId: "0x2105",
-//   rpcUrls: ["https://developer-access-mainnet.base.org"],
-//   blockExplorerUrls: ["https://basescan.org"],
-//   nativeCurrency: {
-//     symbol: "ETH",
-//     decimals: 18,
-//   },
-// }
-
-export const chain={
+export const chain = {
   chainName: "Base Mainnet",
-  chainId: "0x14a34",
-  rpcUrls: ["https://sepolia.base.org"],
-    blockExplorerUrls: ["https://sepolia.basescan.org"],
-          nativeCurrency: {
+  chainId: "0x2105",
+  rpcUrls: ["https://developer-access-mainnet.base.org"],
+  blockExplorerUrls: ["https://basescan.org"],
+  nativeCurrency: {
     symbol: "ETH",
-      decimals: 18,
+    decimals: 18,
   },
-  // 0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279
+// 0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18
 }
+
+// export const chain={
+//   chainName: "Base Mainnet",
+//   chainId: "0x14a34",
+//   rpcUrls: ["https://sepolia.base.org"],
+//     blockExplorerUrls: ["https://sepolia.basescan.org"],
+//           nativeCurrency: {
+//     symbol: "ETH",
+//       decimals: 18,
+//   },
+//   // 0xF5561b9cE91092f60323a54Dd21Dd66F8f0A9279
+// }

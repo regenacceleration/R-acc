@@ -425,7 +425,6 @@ function HolderData({ holdersData, holdersAmount }) {
       const address = formatAddress(holder?.wallet_address);
       const percentage =
         ((holder.original_amount / holdersAmount) * 100).toFixed(2) || 0;
-
       return (
         <div key={index} className='flex p-4 justify-between'>
           <div>
@@ -433,12 +432,9 @@ function HolderData({ holdersData, holdersAmount }) {
               {address}
             </p>
           </div>
-          {console.log(
-            ((holder.original_amount / holdersAmount) * 100).toFixed(2)
-          )}
           <div>
             <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>
-              {isNaN(percentage) ? 0 : { percentage }}%
+              {isNaN(percentage) ? 0 :  percentage }%
             </p>
           </div>
         </div>
