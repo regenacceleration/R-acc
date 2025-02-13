@@ -18,6 +18,22 @@ export function TokenDetails() {
   const [activeTab, setActiveTab] = useState("description");
   const theme = "light"
 
+  const formatNumber = (value) => {
+    if (value === undefined || value === null || isNaN(value)) {
+      return "0"; // Default fallback for undefined, null, or NaN values
+    }
+
+    if (value >= 1_000_000_000) {
+      return (value / 1_000_000_000).toFixed(2) + "B"; // Convert to Billions
+    } else if (value >= 1_000_000) {
+      return (value / 1_000_000).toFixed(2) + "M"; // Convert to Millions
+    } else if (value >= 1_000) {
+      return (value / 1_000).toFixed(2) + "K"; // Convert to Thousands
+    } else {
+      return value.toFixed(2); // Show exact value for smaller numbers
+    }
+  };
+
   useEffect(() => {
     const fetchToken = async () => {
       const { data, error } = await supabase.from("token").select("*").eq("id", id).single();
@@ -68,7 +84,7 @@ export function TokenDetails() {
         const response = await fetch('https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=0x98730ea1372cac37d593bdd1067fda983f1c7138&limit=10', {
           method: 'GET',
           headers: {
-            'x-api-key': '2swI96hfyNUss1weS43VJeBFp6e'
+            'x-api-key': '2syikWKlAOSUjNJQpqYCvaqLUlj'
           }
         });
         if (!response.ok) {
@@ -93,7 +109,7 @@ export function TokenDetails() {
       const response = await fetch('https://api.chainbase.online/v1/token/metadata?contract_address=0x98730ea1372cac37d593bdd1067fda983f1c7138&chain_id=8453', {
         method: 'GET',
         headers: {
-          'x-api-key': '2svftdQxjMPksrIm19ixZ8f0EwF',
+          'x-api-key': '2syikWKlAOSUjNJQpqYCvaqLUlj',
         },
       });
       if (!response.ok) {
@@ -331,11 +347,11 @@ export function TokenDetails() {
               <div className='flex items-center justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H VOL</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.volume?.h24 / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.volume?.h24)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >LIQUITITY</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.liquidity?.usd / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.liquidity?.usd)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >HOLDERS</p>
@@ -350,11 +366,11 @@ export function TokenDetails() {
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >FDV</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.fdv / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.fdv)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >MARKET CAP</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.marketCap / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.marketCap)}</p>
                 </div>
               </div>
 
