@@ -10,7 +10,7 @@ import { formatAddress, formatNumber } from "../utils/helperFn";
 export default function TokenCard({ tokens }) {
     return (
         <div
-            className="grid grid-cols-1 md:grid-cols-3 p-8 gap-x-4 gap-y-16">
+            className="grid w-full grid-cols-1 md:grid-cols-3 p-8 gap-x-4 gap-y-16">
             {tokens && tokens.length  ?
                 tokens.map((token) => (
                     <IndToken token={token} key={token?.id}  />
@@ -62,9 +62,11 @@ function IndToken({token})
         fetchData();
     }, [token.id]);
 
-    return <div
-        style={{ borderRadius: "5px", cursor: "pointer" }}
-        className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
+    return (
+        
+    <div
+       style={{ borderRadius: "5px", cursor: "pointer" }}
+                        className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
         onClick={() => router.push(`/token/${token?.id}`)}
     >
         <div className="flex justify-between items-center text-center">
@@ -77,7 +79,7 @@ function IndToken({token})
             {/* Image and Main Info */}
             <div className="flex">
                 <img
-                    className="w-[80px] h-[80px]  rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute top-0 left-1/2 transform -translate-x-1/2"
+                    className="w-[80px] h-[80px]  rounded-full border-[1px] border-[#D5D5D5] mb-4 absolute -top-10 left-1/2 transform -translate-x-1/2"
                     src={token?.image} />
             </div>
 
@@ -112,4 +114,5 @@ function IndToken({token})
         </div>
 
     </div>
+    )
 }
