@@ -14,8 +14,25 @@ export function TokenDetails() {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pairData, setPairData] = useState(null);
+
   const [activeTab, setActiveTab] = useState("description");
   const theme = "light"
+
+  const formatNumber = (value) => {
+    if (value === undefined || value === null || isNaN(value)) {
+      return "0"; // Default fallback for undefined, null, or NaN values
+    }
+
+    if (value >= 1_000_000_000) {
+      return (value / 1_000_000_000).toFixed(2) + "B"; // Convert to Billions
+    } else if (value >= 1_000_000) {
+      return (value / 1_000_000).toFixed(2) + "M"; // Convert to Millions
+    } else if (value >= 1_000) {
+      return (value / 1_000).toFixed(2) + "K"; // Convert to Thousands
+    } else {
+      return value.toFixed(2); // Show exact value for smaller numbers
+    }
+  };
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -57,6 +74,61 @@ export function TokenDetails() {
     fetchPairData();
   }, [token]);
 
+  const [holdersData, setHoldersData] = useState(null);
+  const [count, setCount] = useState(null);
+  const [holdersAmount, setHoldersAmount] = useState(null);
+
+  useEffect(() => {
+    const fetchDataHolders = async () => {
+      try {
+        const response = await fetch('https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=0x98730ea1372cac37d593bdd1067fda983f1c7138&limit=10', {
+          method: 'GET',
+          headers: {
+            'x-api-key': '2syikWKlAOSUjNJQpqYCvaqLUlj'
+          }
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setCount(data.count)
+        setHoldersData(data.data);
+        console.log(data.data); // Corrected to log the actual fetched data
+      } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+      }
+    };
+
+    fetchDataHolders()
+  }, [token]);
+
+
+
+  const fetchDataHoldersAmount = async () => {
+    try {
+      const response = await fetch('https://api.chainbase.online/v1/token/metadata?contract_address=0x98730ea1372cac37d593bdd1067fda983f1c7138&chain_id=8453', {
+        method: 'GET',
+        headers: {
+          'x-api-key': '2syikWKlAOSUjNJQpqYCvaqLUlj',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setHoldersAmount(data?.data?.total_supply)
+      console.log(holdersAmount);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchDataHoldersAmount();
+  }, []);
+
+
   console.log(token?.tokenAddress)
   console.log(token?.earthToken)
 
@@ -72,7 +144,6 @@ export function TokenDetails() {
         {loading ?
           <div className="flex w-[50%] items-center justify-center h-64">
             <Loader className="text-[#7C7C7C]" size="text-7xl" />
-
           </div>
           :
           <div className='flex w-full flex-col'>
@@ -138,7 +209,7 @@ export function TokenDetails() {
                         }`}
                       onClick={() => setActiveTab("holders")}
                     >
-                      HOLDER DITRIBUTION (136)
+                      HOLDER DITRIBUTION ({count})
                     </button>
                   </div>
                 </div>
@@ -150,26 +221,24 @@ export function TokenDetails() {
                       {token?.description}
                     </p>
                   ) : (
-                    <div className='flex p-4 justify-between'>
+                    <div >
 
-                      <div className='  '>
+                      {holdersData?.length > 0 ?
+                        holdersData.map((holder, index) => (
+                          <div key={index} className='flex p-4 justify-between'>
+                            <div>
+                              <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{`${holder?.wallet_address?.substring(0, 6)}...${holder?.wallet_address?.substring(holder?.wallet_address?.length - 4)}`}</p>
+                            </div>
+                            <div>
+                              <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{((holder.original_amount / holdersAmount) * 100).toFixed(2)}%</p>
+                            </div>
+                          </div>
+                        )) :
+                        (<div className="flex col-start-2 justify-center items-center w-full py-4">
+                          <p className="text-[#000000] font-primary font-normal text-[13px]">No Holders Available</p>
+                        </div>
+                        )}
 
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >Cb2rttt</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >73dggy</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >9332BH7UNN (dev)</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >Cb2rttt</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >73dggy</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >9332BH7UNN (dev)</p>
-                      </div>
-                      <div className='  '>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-
-                      </div>
 
                     </div>
                   )}
@@ -278,11 +347,11 @@ export function TokenDetails() {
               <div className='flex items-center justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H VOL</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.volume?.h24 / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.volume?.h24)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >LIQUITITY</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.liquidity?.usd / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.liquidity?.usd)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >HOLDERS</p>
@@ -297,11 +366,11 @@ export function TokenDetails() {
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >FDV</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.fdv / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.fdv)}</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >MARKET CAP</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${(pairData?.pair?.marketCap / 1000000).toFixed(2)}M</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>${formatNumber(pairData?.pair?.marketCap)}</p>
                 </div>
               </div>
 
@@ -310,29 +379,25 @@ export function TokenDetails() {
 
             <div className='flex flex-col p-4 gap-4 mt-4 border-[1px] border-[#D5D5D5]'>
               <div>
-                <p className='w-full text-left font-secondary text-[#7C7C7C] font-normal text-[12px] ' >HOLDER DITRIBUTION (136)</p>
+                <p className='w-full text-left font-secondary text-[#7C7C7C] font-normal text-[12px] ' >HOLDER DITRIBUTION ({count})</p>
               </div>
-              <div className='flex justify-between'>
+              <div >
 
-                <div className='  '>
-
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >Cb2rttt</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >73dggy</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >9332BH7UNN (dev)</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >Cb2rttt</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >73dggy</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >9332BH7UNN (dev)</p>
-                </div>
-                <div className='  '>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-                  <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px] ' >5.12%</p>
-
-                </div>
-
+                {holdersData?.length > 0 ?
+                  holdersData.map((holder, index) => (
+                    <div key={index} className='flex p-4 justify-between'>
+                      <div>
+                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{`${holder?.wallet_address?.substring(0, 6)}...${holder?.wallet_address?.substring(holder?.wallet_address?.length - 4)}`}</p>
+                      </div>
+                      <div>
+                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{((holder.original_amount / holdersAmount) * 100).toFixed(2)}%</p>
+                      </div>
+                    </div>
+                  )) :
+                  (<div className="flex col-start-2 justify-center items-center w-full py-4">
+                    <p className="text-[#000000] font-primary font-normal text-[13px]">No Holders Available</p>
+                  </div>
+                  )}
               </div>
             </div>
           </div>
