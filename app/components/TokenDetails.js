@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { X, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import Header from './Header';
 import images from '../constants/images';
@@ -8,6 +7,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '../services/supabase.js';
 import { Loader } from './Loader';
 import Link from 'next/link';
+import { formatAddress } from '../utils/helperFn';
+import env from '../constants/env';
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -81,10 +82,10 @@ export function TokenDetails() {
   useEffect(() => {
     const fetchDataHolders = async () => {
       try {
-        const response = await fetch('https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=0x98730ea1372cac37d593bdd1067fda983f1c7138&limit=10', {
+        const response = await fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${token?.tokenAddress || env.tempContract}&limit=10`, {
           method: 'GET',
           headers: {
-            'x-api-key': '2syikWKlAOSUjNJQpqYCvaqLUlj'
+            'x-api-key': env.coinBaseApiKey
           }
         });
         if (!response.ok) {
@@ -227,7 +228,7 @@ export function TokenDetails() {
                         holdersData.map((holder, index) => (
                           <div key={index} className='flex p-4 justify-between'>
                             <div>
-                              <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{`${holder?.wallet_address?.substring(0, 6)}...${holder?.wallet_address?.substring(holder?.wallet_address?.length - 4)}`}</p>
+                              <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{formatAddress(holder?.wallet_address)}</p>
                             </div>
                             <div>
                               <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{((holder.original_amount / holdersAmount) * 100).toFixed(2)}%</p>
@@ -324,19 +325,19 @@ export function TokenDetails() {
             <div className='flex justify-between gap-0 mt-4  border-[1px] border-[#D5D5D5]'>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >5M</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.m5}%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.m5 || 0}%`}</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >1H</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h1}%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h1 || 0}%`}</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >6H</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h6}%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h6 || 0}%`}</p>
               </div>
               <div className=' px-4 py-1 '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >24H</p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h24}%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${pairData?.pair?.priceChange?.h24 || 0}%`}</p>
               </div>
               {/* <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Basescan</p>
             <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Dexscreener</p>
@@ -362,7 +363,7 @@ export function TokenDetails() {
               <div className='flex items-center  justify-between'>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >AGE</p>
-                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>{Math.floor((new Date() - new Date(pairData?.pair?.pairCreatedAt)) / (1000 * 60 * 60 * 24))} days</p>
+                  <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>{Math.floor((new Date() - new Date(pairData?.pair?.pairCreatedAt)) / (1000 * 60 * 60 * 24)) || 0}days</p>
                 </div>
                 <div className=' px-4 py-1  '>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] ' >FDV</p>
@@ -387,7 +388,7 @@ export function TokenDetails() {
                   holdersData.map((holder, index) => (
                     <div key={index} className='flex p-4 justify-between'>
                       <div>
-                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{`${holder?.wallet_address?.substring(0, 6)}...${holder?.wallet_address?.substring(holder?.wallet_address?.length - 4)}`}</p>
+                        <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{formatAddress(holder?.wallet_address)}</p>
                       </div>
                       <div>
                         <p className='w-full text-left font-secondary text-[#7C7C7C] text-[18px]'>{((holder.original_amount / holdersAmount) * 100).toFixed(2)}%</p>

@@ -1,4 +1,4 @@
-export const contractAddress = "0x2fe1E2B4f12Fa65Ad9102120cA437F5088c19897";
+export const contractAddress = "0x23A77631CB711f7737c8E3C333a9fFF9CD583F13";
 export const abi = [
   {
     inputs: [
@@ -470,13 +470,24 @@ export const abi = [
 
 
 
-export const chain = {
+// export const chain = {
+//   chainName: "Base Mainnet",
+//   chainId: "0x2105",
+//   rpcUrls: ["https://developer-access-mainnet.base.org"],
+//   blockExplorerUrls: ["https://basescan.org"],
+//   nativeCurrency: {
+//     symbol: "ETH",
+//     decimals: 18,
+//   },
+// }
+
+export const chain={
   chainName: "Base Mainnet",
-  chainId: "0x2105",
-  rpcUrls: ["https://developer-access-mainnet.base.org"],
-  blockExplorerUrls: ["https://basescan.org"],
-  nativeCurrency: {
+  chainId: "0x14a34",
+  rpcUrls: ["https://sepolia.base.org"],
+    blockExplorerUrls: ["https://sepolia.basescan.org"],
+          nativeCurrency: {
     symbol: "ETH",
-    decimals: 18,
+      decimals: 18,
   },
 }
