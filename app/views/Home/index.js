@@ -4,6 +4,7 @@ import { Loader } from "@/app/components/Loader";
 import TokenCard from "@/app/components/TokenCard";
 import { supabase } from "@/app/services/supabase.js";
 import React, { useEffect, useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 
@@ -11,56 +12,110 @@ export default function Home() {
   const [tokens, setTokens] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const containerRef = useRef(null);
-  const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalDataCount, setTotalDataCount] = useState(null);
+  // const containerRef = useRef(null);
+  // const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const POSTS_PER_PAGE = 3
+  const rowsPerPage = 3
 
-  const fetchToken = async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
+  const fetchToken = async (page, search = "") => {
+    try {
+      if (tokens.length === 0) setLoading(true);
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage - 1;
 
-    let query = supabase.from('token')
-      .select('*')
-      // .range(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE - 1)
-      .order('created_at', { ascending: false });
+      let query = supabase
+        .from("token")
+        .select("*", { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(start, end);
 
-    if (searchQuery) {
-      query = query.ilike('name', `%${searchQuery}%`);
+      if (search.trim() !== "") {
+        query = query.ilike("name", `%${search}%`); // Case-insensitive search
+      }
+
+      const { data, error, count } = await query;
+      if (error) {
+        console.log("Error fetching data:", error);
+        setLoading(false);
+        return;
+      }
+
+      setTotalDataCount(count);
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        setTokens((prevTokens) => (page === 1 ? data : [...prevTokens, ...data]));
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error: ", error);
     }
-
-    const { data, error } = await query;
-
-    if (error) console.error('Error fetching data:', error);
-
-    if (!data || data.length < POSTS_PER_PAGE) {
-      setHasMore(false);
-    }
-
-    if (page === 0) {
-      setTokens(data || []);
-    } else {
-      setTokens(prev => [...prev, ...(data || [])]);
-    }
-
-    setPage(prev => prev + 1);
-    setLoading(false);
   };
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     setSearchQuery(newValue);
-    if (newValue === "") {
-      fetchToken(); // If input is cleared, fetch all data
-    }
+    setTokens([]); // Clear previous tokens
+    setCurrentPage(1); // Reset pagination
+    fetchToken(1, newValue);
   };
 
   useEffect(() => {
-    setPage(0);
-    setHasMore(true);
-    setTokens([]);
-    fetchToken();
-  }, [searchQuery]);
+    fetchToken(currentPage, searchQuery);
+  }, [currentPage, searchQuery]);
+
+  const fetchMoreToken = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // const fetchToken = async () => {
+  //   if (loading || !hasMore) return;
+  //   setLoading(true);
+
+  //   let query = supabase.from('token')
+  //     .select('*')
+  //     // .range(page * POSTS_PER_PAGE, (page + 1) * POSTS_PER_PAGE - 1)
+  //     .order('created_at', { ascending: false });
+
+  //   if (searchQuery) {
+  //     query = query.ilike('name', `%${searchQuery}%`);
+  //   }
+
+  //   const { data, error } = await query;
+
+  //   if (error) console.error('Error fetching data:', error);
+
+  //   if (!data || data.length < POSTS_PER_PAGE) {
+  //     setHasMore(false);
+  //   }
+
+  //   if (page === 0) {
+  //     setTokens(data || []);
+  //   } else {
+  //     setTokens(prev => [...prev, ...(data || [])]);
+  //   }
+
+  //   setPage(prev => prev + 1);
+  //   setLoading(false);
+  // };
+
+  // const handleInputChange = (e) => {
+  //   const newValue = e.target.value;
+  //   setSearchQuery(newValue);
+  //   if (newValue === "") {
+  //     fetchToken(); // If input is cleared, fetch all data
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   setPage(0);
+  //   setHasMore(true);
+  //   setTokens([]);
+  //   fetchToken();
+  // }, [searchQuery]);
 
   // useEffect(() => {
   //   const container = containerRef.current;
@@ -85,9 +140,9 @@ export default function Home() {
   //   return () => observer.disconnect();
   // }, [hasMore, loading, page]);
 
-  
 
- 
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 ">
@@ -138,18 +193,28 @@ export default function Home() {
         </InfiniteScroll>
       } */}
 
-      <div
-        ref={containerRef}
-        className="h-full flex items-center justify-center"
+
+      <InfiniteScroll
+        dataLength={tokens.length}
+        next={fetchMoreToken}
+        hasMore={tokens.length < totalDataCount}
+        scrollableTarget='scrollableDiv'
       >
-        {loading ?
-          <div className="flex items-center justify-center h-64">
-            <Loader className="text-[#7C7C7C]" size="text-6xl" />
-          </div>
-          :
-          <TokenCard tokens={tokens} />
-        }
-      </div>
+        <div
+          className="h-full flex items-center justify-center"
+        >
+          {loading ?
+            <div className="flex items-center justify-center h-64">
+              <Loader className="text-[#7C7C7C]" size="text-6xl" />
+            </div>
+            :
+            <TokenCard tokens={tokens} />
+          }
+
+        </div>
+      </InfiniteScroll>
+
+
     </div>
   );
 }

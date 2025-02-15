@@ -30,37 +30,37 @@ function IndToken({token})
     const [count, setCount] = useState(null);
     const router = useRouter();
    
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const headers = { 'x-api-key': env.coinBaseApiKey };
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const headers = { 'x-api-key': env.coinBaseApiKey };
 
-                const [holdersResponse, pairResponse] = await Promise.all([
-                    fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
-                    fetch(`https://api.dexscreener.com/latest/dex/pairs/base/${token.tokenAddress || env.tempContract}`)
-                ]);
+    //             const [holdersResponse, pairResponse] = await Promise.all([
+    //                 fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
+    //                 fetch(`https://api.dexscreener.com/latest/dex/pairs/base/${token.tokenAddress || env.tempContract}`)
+    //             ]);
 
-                if (!holdersResponse.ok || !pairResponse.ok) {
-                    throw new Error('One or both network requests failed');
-                }
+    //             if (!holdersResponse.ok || !pairResponse.ok) {
+    //                 throw new Error('One or both network requests failed');
+    //             }
 
-                const [holdersData, pairData] = await Promise.all([
-                    holdersResponse.json(),
-                    pairResponse.json()
-                ]);
+    //             const [holdersData, pairData] = await Promise.all([
+    //                 holdersResponse.json(),
+    //                 pairResponse.json()
+    //             ]);
 
-                setCount(holdersData.count);
-                setPairData(pairData);
+    //             setCount(holdersData.count);
+    //             setPairData(pairData);
 
-                console.log('Holders count:', holdersData.count);
-                console.log('Pair data:', pairData);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+    //             console.log('Holders count:', holdersData.count);
+    //             console.log('Pair data:', pairData);
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
 
-        fetchData();
-    }, [token.id]);
+    //     fetchData();
+    // }, [token.id]);
 
     return (
         
