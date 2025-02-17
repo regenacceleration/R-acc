@@ -472,7 +472,7 @@ export function CreateTokenModal() {
               TICKER (eg: 300)
             </label>
             <input
-              type='text'
+              type='number'
               value={formData.ticker}
               onChange={(e) =>
                 setFormData({ ...formData, ticker: e.target.value })
@@ -577,7 +577,7 @@ export function CreateTokenModal() {
               Buy Dev Fee (eg: 300)
             </label>
             <input
-              type='text'
+              type='number'
               value={formData.devBuyFee}
               onChange={(e) =>
                 setFormData({ ...formData, devBuyFee: e.target.value })
@@ -594,7 +594,7 @@ export function CreateTokenModal() {
               Earth Token (eg: 0)
             </label>
             <input
-              type='text'
+              type='number'
               value={formData.earthToken}
               onChange={(e) =>
                 setFormData({ ...formData, earthToken: e.target.value })
@@ -662,7 +662,7 @@ export function CreateTokenModal() {
               % OF SUPPLY YOU WANT TO RETAIN
             </label>
             <input
-              type='text'
+              type='number'
               value={formData.percentage}
               onChange={(e) =>
                 setFormData({ ...formData, percentage: e.target.value })
