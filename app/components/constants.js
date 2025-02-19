@@ -479,8 +479,8 @@ export const chain = {
     symbol: "ETH",
     decimals: 18,
   },
-// 0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18
-}
+  // 0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18
+};
 
 // export const chain={
 //   chainName: "Base Mainnet",

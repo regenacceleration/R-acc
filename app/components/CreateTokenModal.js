@@ -30,7 +30,7 @@ export function CreateTokenModal() {
     fee: "3000",
     salt: "randomSalt",
     pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
-    fid: 122,
+    fid: '122',
     castHash: "hash",
     earthToken: "",
     devBuyFee: "",
@@ -252,6 +252,7 @@ export function CreateTokenModal() {
       const hashedSalt = ethers.encodeBytes32String(salt);
       const pairedAddress = ethers.getAddress(pairedToken);
       const parsedEarth = ethers.parseUnits(earthToken, 18);
+      const parsedFid = ethers.parseUnits(fid, 18)
       console.log(pairedAddress);
 
       // Prepare deployment parameters
@@ -261,7 +262,7 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        fid,
+        fid: parsedFid,
         image,
         castHash,
         poolConfig: {
@@ -283,7 +284,7 @@ export function CreateTokenModal() {
         parsedSupply,
         parsedFee,
         hashedSalt,
-        fid,
+        parsedFid,
         image,
         castHash,
         {
