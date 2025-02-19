@@ -213,7 +213,7 @@ export function CreateTokenModal() {
 
         return;
       }
-      if (!percentage || Number(percentage)) {
+      if (!percentage || Number(percentage) < 0) {
         console.log("Valid token supply is required");
         setLoading(false);
 
