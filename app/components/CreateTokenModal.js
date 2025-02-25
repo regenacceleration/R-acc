@@ -24,26 +24,17 @@ export function CreateTokenModal() {
     telegram: "",
     twitter: "",
     website: "",
-    totalSupply:"",
+    totalSupply: "",
 
     tokenSymbol: "T",
     fee: "10000",
-    salt: "randomSalt",
+    salt: "morerandomSalt",
     pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
-    fid: '122',
+    fid: "125",
     castHash: "hash",
     earthToken: "0",
     devBuyFee: "",
     allowed: false,
-
-    tokenIn: "",
-    tokenOut: "",
-    recipient: "",
-    deadline: "300",
-    amountIn: "0.01",
-    amountOutMin: "0.001",
-    newOwner: "1",
-    newLocker: "1",
   });
   const { apiFn, loading: imgLoading } = useImgApi();
   const [loading, setLoading] = useState(false);
@@ -72,15 +63,6 @@ export function CreateTokenModal() {
     ticker: "",
     earthToken: "",
     devBuyFee: "",
-    allowed: false,
-    tokenIn: "",
-    tokenOut: "",
-    recipient: "",
-    deadline: "",
-    amountIn: "",
-    amountOutMin: "",
-    newOwner: "",
-    newLocker: "",
   });
 
   const validateForm = () => {
@@ -89,8 +71,7 @@ export function CreateTokenModal() {
 
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.ticker) newErrors.ticker = "Ticker is required";
-    if (!formData.description)
-      newErrors.description = "Description is required";
+    if (!formData.description) newErrors.description = "Description is required";
     if (!formData.image) newErrors.image = "Image is required";
     if (!formData.telegram) newErrors.telegram = "Telegram is required";
     if (!formData.twitter) newErrors.twitter = "Twitter is required";
@@ -122,7 +103,7 @@ export function CreateTokenModal() {
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
 
-    setImg( file );
+    setImg(file);
     const { response, error: Error } = await apiFn({
       file: file,
     });
@@ -136,38 +117,7 @@ export function CreateTokenModal() {
     }
   };
 
-  const approveDeployToken = async () => {
-    const { pairedToken } = formData;
-    const pairedAddress = ethers.getAddress(pairedToken);
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
-      const signer = await provider.getSigner();
-      const earthTokenAdd = new ethers.Contract(
-        pairedAddress,
-        ERC20_ABI,
-        signer
-      );
-      console.log(
-        `Approved Earth Token successfully to account: ${contractAddress}`
-      );
-      return await earthTokenAdd.approve(
-        contractAddress,
-        ethers.parseEther(formData.earthToken)
-      );
-    } catch (error) {
-      console.log(`Failed to approve Earth Token: ${error.message}`);
-    }
-  };
-
   const deployToken = async () => {
-    const approveToken = await approveDeployToken();
-
-    if (!approveToken) {
-      setLoading(false);
-      return;
-    }
-    console.log(approveToken);
-
     const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
     const signer = await provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
@@ -183,20 +133,7 @@ export function CreateTokenModal() {
     try {
       console.log("Validating deployment parameters...");
 
-      const {
-        name,
-        tokenSymbol,
-        totalSupply,
-        fee,
-        salt,
-        pairedToken,
-        fid,
-        image,
-        castHash,
-        ticker,
-        devBuyFee,
-        earthToken,
-      } = formData;
+      const { name, tokenSymbol, totalSupply, fee, salt, pairedToken, fid, image, castHash, ticker, devBuyFee, earthToken } = formData;
 
       // Enhanced input validation
       if (!name?.trim()) {
@@ -247,12 +184,12 @@ export function CreateTokenModal() {
 
       // Format parameters
       // const parsedSupply = BigInt(percentage);
-      const parsedSupply = ethers.parseUnits(totalSupply, 18)
+      const parsedSupply = BigInt(totalSupply);
       const parsedFee = Number(fee);
       const hashedSalt = ethers.encodeBytes32String(salt);
       const pairedAddress = ethers.getAddress(pairedToken);
       const parsedEarth = ethers.parseUnits(earthToken, 18);
-      const parsedFid = ethers.parseUnits(fid, 18)
+      const parsedFid = Number(fid);
       console.log(pairedAddress);
 
       // Prepare deployment parameters
@@ -314,17 +251,7 @@ export function CreateTokenModal() {
         .find((event) => event?.name === "TokenCreated");
 
       if (tokenCreatedEvent) {
-        const [
-          tokenAddress,
-          positionId,
-          deployer,
-          fidValue,
-          name,
-          symbol,
-          supply,
-          lockerAddress,
-          castHashValue,
-        ] = tokenCreatedEvent.args;
+        const [tokenAddress, positionId, deployer, fidValue, name, symbol, supply, lockerAddress, castHashValue] = tokenCreatedEvent.args;
 
         console.log(`Token deployed successfully!`);
 
@@ -364,21 +291,17 @@ export function CreateTokenModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (!address)
-      {
-        return
+      if (!address) {
+        return;
       }
-      const network=await VerifyNetwork(chain)
+      const network = await VerifyNetwork(chain);
       if (!network) {
-        return
+        return;
       }
-      if (!validateForm()) return
+      if (!validateForm()) return;
 
       setLoading(true);
-      const { data: fetchData, fetchDataError } = await supabase
-        .from("token")
-        .select("*")
-        .eq("name", formData?.name);
+      const { data: fetchData, fetchDataError } = await supabase.from("token").select("*").eq("name", formData?.name);
       console.log(fetchData);
       if (fetchDataError) {
         setErrors((errors) => ({
@@ -417,7 +340,7 @@ export function CreateTokenModal() {
           totalSupply: formData?.totalSupply,
           earthToken: formData?.earthToken,
           devBuyFee: formData?.devBuyFee,
-          ...deploy
+          ...deploy,
         },
       ]);
       console.log(data);
@@ -447,25 +370,19 @@ export function CreateTokenModal() {
   };
 
   return (
-    <div className='min-h- pb-6 bg-gray-50 '>
+    <div className="min-h- pb-6 bg-gray-50 ">
       <Header />
-      <div className='flex w-full justify-center mt-5 items-center'>
-        <form onSubmit={handleSubmit} className='space-y-4 text-black'>
-          <div className='w-full'>
-            <label className=' font-normal font-primary text-[13px]  text-[#000000]'>
-              NAME
-            </label>
+      <div className="flex w-full justify-center mt-5 items-center">
+        <form onSubmit={handleSubmit} className="space-y-4 text-black">
+          <div className="w-full">
+            <label className=" font-normal font-primary text-[13px]  text-[#000000]">NAME</label>
             <input
-              type='text'
+              type="text"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              className='w-full bg-gray-50 outline-none font-primary border-[#D5D5D5]  border-b-[1px]    '
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full bg-gray-50 outline-none font-primary border-[#D5D5D5]  border-b-[1px]    "
             />
-            {errors.name && (
-              <p className='text-red-500 text-sm '>{errors.name}</p>
-            )}
+            {errors.name && <p className="text-red-500 text-sm ">{errors.name}</p>}
           </div>
 
           {/* <div>
@@ -486,20 +403,14 @@ export function CreateTokenModal() {
           </div> */}
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              DESCRIPTION
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">DESCRIPTION</label>
             <textarea
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className='outline-none font-primary px-2  w-full  resize-none  border-[1px] bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="outline-none font-primary px-2  w-full  resize-none  border-[1px] bg-gray-50 border-[#D5D5D5]  "
               rows={3}
             />
-            {errors.description && (
-              <p className='text-red-500 text-sm '>{errors.description}</p>
-            )}
+            {errors.description && <p className="text-red-500 text-sm ">{errors.description}</p>}
           </div>
 
           {/* <div>
@@ -519,77 +430,37 @@ export function CreateTokenModal() {
             {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
           </div> */}
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              IMAGE
-            </label>
-            <div className='relative flex flex-col  w-full   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]'>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">IMAGE</label>
+            <div className="relative flex flex-col  w-full   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]">
               {/* {selectedImage ? (
                 <img src={selectedImage} alt="Uploaded Preview" className="w-full h-40 object-cover rounded-md" />
               ) : (
                 <p className="text-gray-600">IMAGE</p>
               )} */}
-              <div className='absolute bottom-2 flex items-center justify-between w-[90%]'>
-                <p className=' text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden'>
-                  {formData?.image ? img?.name : ""}
-                </p>
-                {imgLoading ? (
-                  <BtnLoader />
-                ) : (
-                  formData?.image && (
-                    <Image
-                      className='w-5 h-5 '
-                      width={40}
-                      height={40}
-                      alt='upload'
-                      src={formData?.image}
-                    />
-                  )
-                )}
+              <div className="absolute bottom-2 flex items-center justify-between w-[90%]">
+                <p className=" text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden">{formData?.image ? img?.name : ""}</p>
+                {imgLoading ? <BtnLoader /> : formData?.image && <Image className="w-5 h-5 " width={40} height={40} alt="upload" src={formData?.image} />}
               </div>
 
-              <label
-                htmlFor='upload'
-                type='button'
-                className='absolute right-2 cursor-pointer bottom-2  transition'
-              >
-                <Image
-                  className='w-[22px] h-[22px]'
-                  width={40}
-                  height={40}
-                  alt='upload'
-                  src={images.upload}
-                />
+              <label htmlFor="upload" type="button" className="absolute right-2 cursor-pointer bottom-2  transition">
+                <Image className="w-[22px] h-[22px]" width={40} height={40} alt="upload" src={images.upload} />
               </label>
-              <input
-                id='upload'
-                type='file'
-                accept='image/*'
-                className='opacity-0 cursor-pointer'
-                onChange={handleImageChange}
-              />
+              <input id="upload" type="file" accept="image/*" className="opacity-0 cursor-pointer" onChange={handleImageChange} />
             </div>
-            {errors.image && (
-              <p className='text-red-500 text-sm '>{errors.image}</p>
-            )}
+            {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
           </div>
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              Buy Dev Fee (eg: 300)
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">Buy Dev Fee (eg: 300)</label>
             <input
-              type='number'
+              type="number"
               value={formData.devBuyFee}
-              onChange={(e) =>
-                setFormData({ ...formData, devBuyFee: e.target.value })
-              }
-              className='  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, devBuyFee: e.target.value })}
+              className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.devBuyFee && (
-              <p className='text-red-500 text-sm '>{errors.devBuyFee}</p>
-            )}
+            {errors.devBuyFee && <p className="text-red-500 text-sm ">{errors.devBuyFee}</p>}
           </div>
-{/* 
+          {/* 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
               Earth Token (eg: 0)
@@ -608,83 +479,53 @@ export function CreateTokenModal() {
           </div> */}
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              TELEGRAM
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">TELEGRAM</label>
             <input
-              type='text'
+              type="text"
               value={formData.telegram}
-              onChange={(e) =>
-                setFormData({ ...formData, telegram: e.target.value })
-              }
-              className='  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
+              className="  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.telegram && (
-              <p className='text-red-500 text-sm '>{errors.telegram}</p>
-            )}
+            {errors.telegram && <p className="text-red-500 text-sm ">{errors.telegram}</p>}
           </div>
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              TWITTER
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">TWITTER</label>
             <input
-              type='text'
+              type="text"
               value={formData.twitter}
-              onChange={(e) =>
-                setFormData({ ...formData, twitter: e.target.value })
-              }
-              className='  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+              className="  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.twitter && (
-              <p className='text-red-500 text-sm '>{errors.twitter}</p>
-            )}
+            {errors.twitter && <p className="text-red-500 text-sm ">{errors.twitter}</p>}
           </div>
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              WEBSITE
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">WEBSITE</label>
             <input
-              type='text'
+              type="text"
               value={formData.website}
-              onChange={(e) =>
-                setFormData({ ...formData, website: e.target.value })
-              }
-              className='  w-full outline-none font-primary   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              className="  w-full outline-none font-primary   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.website && (
-              <p className='text-red-500 text-sm '>{errors.website}</p>
-            )}
+            {errors.website && <p className="text-red-500 text-sm ">{errors.website}</p>}
           </div>
 
           <div>
-            <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              Total Supply you want to create
-            </label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">Total Supply you want to create</label>
             <input
-              type='number'
+              type="number"
               value={formData.totalSupply}
-              onChange={(e) =>
-                setFormData({ ...formData, totalSupply: e.target.value })
-              }
-              className='  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
+              onChange={(e) => setFormData({ ...formData, totalSupply: e.target.value })}
+              className="  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.totalSupply && (
-              <p className='text-red-500 text-sm '>{errors.totalSupply}</p>
-            )}
+            {errors.totalSupply && <p className="text-red-500 text-sm ">{errors.totalSupply}</p>}
           </div>
-          <div className='flex w-full py-4  gap-8 justify-center items-center'>
-            <Link href='/'>
-              <button className='text-[#000000] font-normal font-primary text-[13px]'>
-                GO BACK
-              </button>
+          <div className="flex w-full py-4  gap-8 justify-center items-center">
+            <Link href="/">
+              <button className="text-[#000000] font-normal font-primary text-[13px]">GO BACK</button>
             </Link>
-            <button
-              type='submit'
-              disabled={loading}
-              className='text-[#FF0000] flex items-center justify-center gap-3 font-normal font-primary text-[13px]'
-            >
+            <button type="submit" disabled={loading} className="text-[#FF0000] flex items-center justify-center gap-3 font-normal font-primary text-[13px]">
               CREATE TOKEN {loading ? <BtnLoader /> : null}
             </button>
           </div>
