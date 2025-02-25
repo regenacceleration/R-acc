@@ -17,22 +17,22 @@ export function CreateTokenModal() {
   const [address, setAddress] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    ticker: "",
+    ticker: "-138000",
     description: "",
     image: "",
     address,
     telegram: "",
     twitter: "",
     website: "",
-    percentage: "",
+    totalSupply:"",
 
     tokenSymbol: "T",
-    fee: "3000",
+    fee: "10000",
     salt: "randomSalt",
     pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
     fid: '122',
     castHash: "hash",
-    earthToken: "",
+    earthToken: "0",
     devBuyFee: "",
     allowed: false,
 
@@ -59,8 +59,7 @@ export function CreateTokenModal() {
     telegram: "",
     twitter: "",
     website: "",
-    percentage: "",
-    percentage: "",
+    totalSupply: "",
     // name: "",
     tokenSymbol: "",
     // percentage: "",
@@ -98,9 +97,9 @@ export function CreateTokenModal() {
     if (!formData.earthToken) newErrors.earthToken = "Earth Token is required";
     if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy Fee is required";
     if (!formData.website) newErrors.website = "Website URL is required";
-    if (!formData.percentage) newErrors.percentage = "Percentage is required";
-    if (formData.percentage && isNaN(Number(formData.percentage))) {
-      newErrors.percentage = "Percentage must be a number";
+    if (!formData.totalSupply) newErrors.totalSupply = "totalSupply is required";
+    if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
+      newErrors.totalSupply = "totalSupply must be a number";
     }
     console.log(newErrors);
 
@@ -153,7 +152,7 @@ export function CreateTokenModal() {
       );
       return await earthTokenAdd.approve(
         contractAddress,
-        ethers.parseEther("1000")
+        ethers.parseEther(formData.earthToken)
       );
     } catch (error) {
       console.log(`Failed to approve Earth Token: ${error.message}`);
@@ -187,7 +186,7 @@ export function CreateTokenModal() {
       const {
         name,
         tokenSymbol,
-        percentage,
+        totalSupply,
         fee,
         salt,
         pairedToken,
@@ -213,7 +212,7 @@ export function CreateTokenModal() {
 
         return;
       }
-      if (!percentage || Number(percentage) < 0) {
+      if (!totalSupply || Number(totalSupply) < 0) {
         console.log("Valid token supply is required");
         setLoading(false);
 
@@ -247,7 +246,8 @@ export function CreateTokenModal() {
       console.log(signer);
 
       // Format parameters
-      const parsedSupply = BigInt(percentage);
+      // const parsedSupply = BigInt(percentage);
+      const parsedSupply = ethers.parseUnits(totalSupply, 18)
       const parsedFee = Number(fee);
       const hashedSalt = ethers.encodeBytes32String(salt);
       const pairedAddress = ethers.getAddress(pairedToken);
@@ -414,7 +414,7 @@ export function CreateTokenModal() {
           telegram: formData?.telegram,
           twitter: formData?.twitter,
           website: formData?.website,
-          percentage: formData?.percentage,
+          totalSupply: formData?.totalSupply,
           earthToken: formData?.earthToken,
           devBuyFee: formData?.devBuyFee,
           ...deploy
@@ -436,7 +436,7 @@ export function CreateTokenModal() {
         telegram: "",
         twitter: "",
         website: "",
-        percentage: "",
+        totalSupply: "",
         earthToken: "",
         devBuyFee: "",
       });
@@ -468,7 +468,7 @@ export function CreateTokenModal() {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
               TICKER (eg: 300)
             </label>
@@ -483,7 +483,7 @@ export function CreateTokenModal() {
             {errors.ticker && (
               <p className='text-red-500 text-sm '>{errors.ticker}</p>
             )}
-          </div>
+          </div> */}
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
@@ -589,7 +589,7 @@ export function CreateTokenModal() {
               <p className='text-red-500 text-sm '>{errors.devBuyFee}</p>
             )}
           </div>
-
+{/* 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
               Earth Token (eg: 0)
@@ -605,7 +605,7 @@ export function CreateTokenModal() {
             {errors.earthToken && (
               <p className='text-red-500 text-sm '>{errors.earthToken}</p>
             )}
-          </div>
+          </div> */}
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
@@ -660,18 +660,18 @@ export function CreateTokenModal() {
 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
-              % OF SUPPLY YOU WANT TO RETAIN
+              Total Supply you want to create
             </label>
             <input
               type='number'
-              value={formData.percentage}
+              value={formData.totalSupply}
               onChange={(e) =>
-                setFormData({ ...formData, percentage: e.target.value })
+                setFormData({ ...formData, totalSupply: e.target.value })
               }
               className='  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  '
             />
-            {errors.percentage && (
-              <p className='text-red-500 text-sm '>{errors.percentage}</p>
+            {errors.totalSupply && (
+              <p className='text-red-500 text-sm '>{errors.totalSupply}</p>
             )}
           </div>
           <div className='flex w-full py-4  gap-8 justify-center items-center'>
