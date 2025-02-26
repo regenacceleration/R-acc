@@ -2,47 +2,125 @@ export const contractAddress = "0xe75195E92A075A9f33b7bacb66e528a2D5DadbcB";
 export const abi = [
   {
     inputs: [
-      { internalType: "address", name: "locker_", type: "address" },
-      { internalType: "address", name: "uniswapV3Factory_", type: "address" },
-      { internalType: "address", name: "positionManager_", type: "address" },
-      { internalType: "address", name: "swapRouter_", type: "address" },
-      { internalType: "address", name: "owner_", type: "address" },
+      {
+        internalType: "address",
+        name: "locker_",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "uniswapV3Factory_",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "positionManager_",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "swapRouter_",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "owner_",
+        type: "address",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
   },
-  { inputs: [], name: "Deprecated", type: "error" },
-  { inputs: [], name: "InsufficientEARTH", type: "error" },
-  { inputs: [], name: "InvalidConfig", type: "error" },
-  { inputs: [], name: "InvalidTickSpacing", type: "error" },
   {
-    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    inputs: [],
+    name: "Deprecated",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InsufficientEARTH",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidConfig",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidTickSpacing",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+    ],
     name: "NotAdmin",
     type: "error",
   },
   {
-    inputs: [{ internalType: "address", name: "token", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
     name: "NotAllowedPairedToken",
     type: "error",
   },
   {
-    inputs: [{ internalType: "address", name: "owner", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
     name: "OwnableInvalidOwner",
     type: "error",
   },
   {
-    inputs: [{ internalType: "address", name: "account", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
     name: "OwnableUnauthorizedAccount",
     type: "error",
   },
-  { inputs: [], name: "PoolCreationFailed", type: "error" },
-  { inputs: [], name: "SwapFailed", type: "error" },
   {
-    inputs: [{ internalType: "address", name: "token", type: "address" }],
+    inputs: [],
+    name: "PoolCreationFailed",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "SwapFailed",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
     name: "TokenNotFound",
     type: "error",
   },
-  { inputs: [], name: "TransferFailed", type: "error" },
+  {
+    inputs: [],
+    name: "TransferFailed",
+    type: "error",
+  },
   {
     anonymous: false,
     inputs: [
@@ -52,7 +130,12 @@ export const abi = [
         name: "admin",
         type: "address",
       },
-      { indexed: false, internalType: "bool", name: "status", type: "bool" },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "status",
+        type: "bool",
+      },
     ],
     name: "AdminUpdated",
     type: "event",
@@ -60,7 +143,12 @@ export const abi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: "bool", name: "status", type: "bool" },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "status",
+        type: "bool",
+      },
     ],
     name: "DeprecatedStatusUpdated",
     type: "event",
@@ -106,7 +194,12 @@ export const abi = [
         name: "token",
         type: "address",
       },
-      { indexed: false, internalType: "bool", name: "allowed", type: "bool" },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "allowed",
+        type: "bool",
+      },
     ],
     name: "PairedTokenUpdated",
     type: "event",
@@ -188,8 +281,18 @@ export const abi = [
         name: "deployer",
         type: "address",
       },
-      { indexed: false, internalType: "uint256", name: "fid", type: "uint256" },
-      { indexed: false, internalType: "string", name: "name", type: "string" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "fid",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
       {
         indexed: false,
         internalType: "string",
@@ -250,23 +353,55 @@ export const abi = [
     type: "event",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     name: "admins",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "allowedPairedTokens",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "address", name: "token", type: "address" },
-      { internalType: "uint256", name: "amount", type: "uint256" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    name: "allowedPairedTokens",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
     ],
     name: "approveToken",
     outputs: [],
@@ -274,7 +409,13 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "token", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+    ],
     name: "claimRewards",
     outputs: [],
     stateMutability: "nonpayable",
@@ -282,41 +423,115 @@ export const abi = [
   },
   {
     inputs: [
-      { internalType: "string", name: "_name", type: "string" },
-      { internalType: "string", name: "_symbol", type: "string" },
-      { internalType: "uint256", name: "_supply", type: "uint256" },
-      { internalType: "uint24", name: "_fee", type: "uint24" },
-      { internalType: "bytes32", name: "_salt", type: "bytes32" },
-      { internalType: "uint256", name: "_fid", type: "uint256" },
-      { internalType: "string", name: "_image", type: "string" },
-      { internalType: "string", name: "_castHash", type: "string" },
+      {
+        internalType: "string",
+        name: "_name",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_symbol",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "_supply",
+        type: "uint256",
+      },
+      {
+        internalType: "uint24",
+        name: "_fee",
+        type: "uint24",
+      },
+      {
+        internalType: "bytes32",
+        name: "_salt",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_fid",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "_image",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "_castHash",
+        type: "string",
+      },
       {
         components: [
-          { internalType: "int24", name: "tick", type: "int24" },
-          { internalType: "address", name: "pairedToken", type: "address" },
-          { internalType: "uint24", name: "devBuyFee", type: "uint24" },
+          {
+            internalType: "int24",
+            name: "tick",
+            type: "int24",
+          },
+          {
+            internalType: "address",
+            name: "pairedToken",
+            type: "address",
+          },
+          {
+            internalType: "uint24",
+            name: "devBuyFee",
+            type: "uint24",
+          },
         ],
         internalType: "struct Clanker.PoolConfig",
         name: "_poolConfig",
         type: "tuple",
       },
-      { internalType: "uint256", name: "earthAmount", type: "uint256" },
+      {
+        internalType: "uint256",
+        name: "earthAmount",
+        type: "uint256",
+      },
     ],
     name: "deployToken",
     outputs: [
-      { internalType: "contract ClankerToken", name: "token", type: "address" },
-      { internalType: "uint256", name: "positionId", type: "uint256" },
+      {
+        internalType: "contract ClankerToken",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "positionId",
+        type: "uint256",
+      },
     ],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     name: "deploymentInfoForToken",
     outputs: [
-      { internalType: "address", name: "token", type: "address" },
-      { internalType: "uint256", name: "positionId", type: "uint256" },
-      { internalType: "address", name: "locker", type: "address" },
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "positionId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "locker",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -324,14 +539,26 @@ export const abi = [
   {
     inputs: [],
     name: "deprecated",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [],
     name: "earth",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
@@ -339,7 +566,11 @@ export const abi = [
     inputs: [],
     name: "liquidityLocker",
     outputs: [
-      { internalType: "contract LpLockerv2", name: "", type: "address" },
+      {
+        internalType: "contract LpLockerv2",
+        name: "",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -347,7 +578,13 @@ export const abi = [
   {
     inputs: [],
     name: "owner",
-    outputs: [{ internalType: "address", name: "", type: "address" }],
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
@@ -373,8 +610,16 @@ export const abi = [
   },
   {
     inputs: [
-      { internalType: "address", name: "admin", type: "address" },
-      { internalType: "bool", name: "isAdmin", type: "bool" },
+      {
+        internalType: "address",
+        name: "admin",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "isAdmin",
+        type: "bool",
+      },
     ],
     name: "setAdmin",
     outputs: [],
@@ -382,7 +627,13 @@ export const abi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "bool", name: "_deprecated", type: "bool" }],
+    inputs: [
+      {
+        internalType: "bool",
+        name: "_deprecated",
+        type: "bool",
+      },
+    ],
     name: "setDeprecated",
     outputs: [],
     stateMutability: "nonpayable",
@@ -390,16 +641,50 @@ export const abi = [
   },
   {
     inputs: [
-      { internalType: "address", name: "tokenIn", type: "address" },
-      { internalType: "address", name: "tokenOut", type: "address" },
-      { internalType: "uint24", name: "fee", type: "uint24" },
-      { internalType: "address", name: "recipient", type: "address" },
-      { internalType: "uint256", name: "deadline", type: "uint256" },
-      { internalType: "uint256", name: "amountIn", type: "uint256" },
-      { internalType: "uint256", name: "amountOutMinimum", type: "uint256" },
+      {
+        internalType: "address",
+        name: "tokenIn",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "tokenOut",
+        type: "address",
+      },
+      {
+        internalType: "uint24",
+        name: "fee",
+        type: "uint24",
+      },
+      {
+        internalType: "address",
+        name: "recipient",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amountIn",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amountOutMinimum",
+        type: "uint256",
+      },
     ],
     name: "swapExactInputSingle",
-    outputs: [{ internalType: "uint256", name: "amountOut", type: "uint256" }],
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "amountOut",
+        type: "uint256",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },
@@ -407,15 +692,27 @@ export const abi = [
     inputs: [],
     name: "swapRouter",
     outputs: [
-      { internalType: "contract ISwapRouter", name: "", type: "address" },
+      {
+        internalType: "contract ISwapRouter",
+        name: "",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      { internalType: "address", name: "token", type: "address" },
-      { internalType: "bool", name: "allowed", type: "bool" },
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "bool",
+        name: "allowed",
+        type: "bool",
+      },
     ],
     name: "toggleAllowedPairedToken",
     outputs: [],
@@ -424,20 +721,46 @@ export const abi = [
   },
   {
     inputs: [
-      { internalType: "address", name: "", type: "address" },
-      { internalType: "uint256", name: "", type: "uint256" },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
     ],
     name: "tokensDeployedByUsers",
     outputs: [
-      { internalType: "address", name: "token", type: "address" },
-      { internalType: "uint256", name: "positionId", type: "uint256" },
-      { internalType: "address", name: "locker", type: "address" },
+      {
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "positionId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "locker",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
     name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
@@ -447,13 +770,23 @@ export const abi = [
     inputs: [],
     name: "uniswapV3Factory",
     outputs: [
-      { internalType: "contract IUniswapV3Factory", name: "", type: "address" },
+      {
+        internalType: "contract IUniswapV3Factory",
+        name: "",
+        type: "address",
+      },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [{ internalType: "address", name: "newLocker", type: "address" }],
+    inputs: [
+      {
+        internalType: "address",
+        name: "newLocker",
+        type: "address",
+      },
+    ],
     name: "updateLiquidityLocker",
     outputs: [],
     stateMutability: "nonpayable",
@@ -462,11 +795,18 @@ export const abi = [
   {
     inputs: [],
     name: "version",
-    outputs: [{ internalType: "string", name: "", type: "string" }],
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
 ];
+
 
 
 
