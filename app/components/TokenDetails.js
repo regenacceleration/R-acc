@@ -43,7 +43,7 @@ export function TokenDetails() {
         const [pairResponse, holdersResponse, holdersAmountResponse] =
           await Promise.all([
             fetch(
-              `https://api.dexscreener.com/latest/dex/pairs/base/${
+              `https://api.dexscreener.com/tokens/v1/base/${
                 token?.tokenAddress || env.tempContract
               }`
             ),
@@ -78,7 +78,7 @@ export function TokenDetails() {
         ]);
 
         // Update state
-        setPairData(pairData);
+        setPairData(pairData?.[0]);
         setHoldersData(holdersData);
         setHoldersAmount(holdersAmountData?.data?.total_supply);
 
@@ -94,6 +94,15 @@ export function TokenDetails() {
 
     fetchData();
   }, [id]);
+
+
+  const calculateAge = (date) => {
+    const difference = Math.floor(
+      (new Date() - new Date(date)) /
+      (1000 * 60 * 60 * 24)
+    ) 
+    return difference > 1 ?`${difference} days`: difference<1 ? difference : `${difference} day` 
+  }
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -308,33 +317,33 @@ export function TokenDetails() {
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] '>
                   5M
                 </p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${
-                  pairData?.pair?.priceChange?.m5 || 0
-                }%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{
+                    pairData?.priceChange?.m5 ? pairData?.priceChange?.m5 + "%" :"N/A"
+                }</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] '>
                   1H
                 </p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${
-                  pairData?.pair?.priceChange?.h1 || 0
-                }%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{
+                  pairData?.priceChange?.h1 ? pairData?.priceChange?.h1 + "%" :"N/A"
+                }</p>
               </div>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] '>
                   6H
                 </p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${
-                  pairData?.pair?.priceChange?.h6 || 0
-                }%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{
+                    pairData?.priceChange?.h6 ? pairData?.priceChange?.h6 + "%" :"N/A"
+                }</p>
               </div>
               <div className=' px-4 py-1 '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] '>
                   24H
                 </p>
-                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{`${
-                  pairData?.pair?.priceChange?.h24 || 0
-                }%`}</p>
+                <p className='w-full text-center font-secondary text-[#DD4425] text-[18px]'>{
+                    pairData?.priceChange?.h24 ? pairData?.priceChange?.h24 + "%": "N/A"
+                }</p>
               </div>
               {/* <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Basescan</p>
             <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 border-r-[1px]'>Dexscreener</p>
@@ -348,7 +357,7 @@ export function TokenDetails() {
                     24H VOL
                   </p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>
-                    ${formatNumber(pairData?.pair?.volume?.h24)}
+                    ${formatNumber(pairData?.volume?.h24)}
                   </p>
                 </div>
                 <div className=' px-4 py-1  '>
@@ -356,7 +365,7 @@ export function TokenDetails() {
                     LIQUITITY
                   </p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>
-                    ${formatNumber(pairData?.pair?.liquidity?.usd)}
+                    ${formatNumber(pairData?.liquidity?.usd)}
                   </p>
                 </div>
                 <div className=' px-4 py-1  '>
@@ -375,11 +384,7 @@ export function TokenDetails() {
                     AGE
                   </p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>
-                    {Math.floor(
-                      (new Date() - new Date(pairData?.pair?.pairCreatedAt)) /
-                        (1000 * 60 * 60 * 24)
-                    ) || 0}
-                    days
+                      {calculateAge(pairData?.pairCreatedAt)}
                   </p>
                 </div>
                 <div className=' px-4 py-1  '>
@@ -387,7 +392,7 @@ export function TokenDetails() {
                     FDV
                   </p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>
-                    ${formatNumber(pairData?.pair?.fdv)}
+                      {pairData?.fdv ? "$" + pairData?.fdv : "N/A"}
                   </p>
                 </div>
                 <div className=' px-4 py-1  '>
@@ -395,7 +400,7 @@ export function TokenDetails() {
                     MARKET CAP
                   </p>
                   <p className='w-full text-center font-secondary text-[#000000] text-[18px]'>
-                    ${formatNumber(pairData?.pair?.marketCap)}
+                      {pairData?.marketCap ? "$" + pairData?.marketCap :"N/A"}
                   </p>
                 </div>
               </div>
