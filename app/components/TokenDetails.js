@@ -101,6 +101,7 @@ export function TokenDetails() {
 
 
   const calculateAge = (date) => {
+    if(!date) return 'N/A'
     const difference = Math.floor(
       (new Date() - new Date(date)) /
       (1000 * 60 * 60 * 24)
@@ -205,7 +206,7 @@ export function TokenDetails() {
                         }`}
                       onClick={() => setActiveTab("description")}
                     >
-                      DESCRIPTION
+                      UPDATES
                     </button>
                   </div>
                   {/* <div>
@@ -318,7 +319,7 @@ export function TokenDetails() {
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
                   {formatAddress(token?.tokenAddress || env.tempContract)}
                 </p>
-                <CopyToClipboard onCopy={onCopy} text={(token?.tokenAddress || env.tempContract)}>
+                <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
                   <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
                 </CopyToClipboard>
               </div>

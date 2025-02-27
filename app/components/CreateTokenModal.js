@@ -9,7 +9,7 @@ import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
 import { abi, chain, contractAddress } from "./constants";
 import { ethers } from "ethers";
-import { getAddress, VerifyNetwork } from "../utils/helperFn";
+import { getAddress, validateUrl, VerifyNetwork } from "../utils/helperFn";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
 
@@ -26,7 +26,7 @@ export function CreateTokenModal() {
     website: "",
     totalSupply: "",
 
-    tokenSymbol: "T",
+    tokenSymbol: "",
     fee: "10000",
     salt: "morerandomSalt",
     pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
@@ -79,9 +79,13 @@ export function CreateTokenModal() {
     if (!formData.tokenSymbol) newErrors.tokenSymbol = "Dev Buy Fee is required";
     if (!formData.website) newErrors.website = "Website URL is required";
     if (!formData.totalSupply) newErrors.totalSupply = "totalSupply is required";
-    if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
-      newErrors.totalSupply = "totalSupply must be a number";
-    }
+    if (formData.telegram && !validateUrl(formData.telegram)) newErrors.telegram = "Invalid Url";
+    if (formData.twitter && !validateUrl(formData.twitter)) newErrors.twitter = "Invalid Url";
+    if (formData.website && !validateUrl(formData.website)) newErrors.website = "Invalid Url";
+
+    // if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
+    //   newErrors.totalSupply = "totalSupply must be a number";
+    // }
     console.log(newErrors);
 
     setErrors(newErrors);
@@ -205,7 +209,7 @@ export function CreateTokenModal() {
         poolConfig: {
           ticker: Number(ticker),
           pairedToken: pairedAddress,
-          devBuyFee: Number(devBuyFee),
+          // devBuyFee: Number(devBuyFee),
         },
         parsedEarth,
       };
@@ -227,7 +231,7 @@ export function CreateTokenModal() {
         {
           tick: Number(ticker),
           pairedToken: pairedAddress,
-          devBuyFee: Number(devBuyFee),
+          // devBuyFee: Number(devBuyFee),
         },
         parsedEarth
       );
