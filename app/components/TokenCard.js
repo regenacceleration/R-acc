@@ -64,11 +64,13 @@ function IndToken({token})
 
     return (
         
-    <div
+    <Link
        style={{ borderRadius: "5px", cursor: "pointer" }}
                         className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
-        onClick={() => router.push(`/token/${token?.id}`)}
+      
+        href={`/token/${token?.id}`} target="_blank"
     >
+        
         <div className="flex justify-between items-center text-center">
             {/* Market Cap */}
             <div className="flex flex-col justify-start items-start">
@@ -113,6 +115,6 @@ function IndToken({token})
             </p>
         </div>
 
-    </div>
+    </Link>
     )
 }

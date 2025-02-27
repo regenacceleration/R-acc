@@ -7,7 +7,13 @@ import { chain } from "./constants";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
+  // const [buyEarth, setBuyEarth] = useState(null);
   const pathname = usePathname();
+
+  const jsonRpcUrlMap = {
+    1: ['https://mainnet.infura.io/v3/<YOUR_INFURA_PROJECT_ID>'],
+    3: ['https://ropsten.infura.io/v3/<YOUR_INFURA_PROJECT_ID>']
+  }
 
   const connectWallet = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -29,7 +35,7 @@ export default function Header() {
     const address = getAddress();
     setAccount(address)
   }, [])
-  
+
   const disconnectWallet = () => {
     localStorage.clear();
     setAccount('')
@@ -51,11 +57,40 @@ export default function Header() {
           </div>
         }
 
-        <div className="flex gap-10">
+        <div className="flex gap-8">
 
           <Link href="/form">
             <button className="text-[#FF0000] font-normal font-primary text-[13px]">CREATE TOKEN</button>
           </Link>
+          <div >
+            <button
+              // onClick={() => setBuyEarth(true)}
+              className="text-[#FF0000] font-normal font-primary text-[13px]"> Buy $EARTH</button>
+          </div>
+          {/* {buyEarth && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <div
+                className="absolute Uniswap w-[19rem] sm:w-[22rem] flex flex-col  border border-[#EAECF0]  shadow-lg gap-8 p-6  rounded-lg bg-white"
+              >
+                <SwapWidget
+                  width={360}
+                />
+              </div>
+            </div>
+          )} */}
+
           <button className="text-[#000000] font-normal font-primary text-[13px]"
             onClick={account ? disconnectWallet : connectWallet}
           > {account ? formatAddress(account) : "CONNECT WALLET"}</button>
