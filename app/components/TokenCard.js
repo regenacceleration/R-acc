@@ -71,11 +71,11 @@ function IndToken({token})
 
     return (
         
-    <Link
+    <div
        style={{ borderRadius: "5px", cursor: "pointer" }}
                         className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
-      
-        href={`/token/${token?.id}`} target="_blank"
+            onClick={() => window.open(`/token/${token?.id}`,'_blank')}
+        
     >
         
         <div className="flex justify-between items-center text-center">
@@ -122,6 +122,6 @@ function IndToken({token})
             </p>
         </div>
 
-    </Link>
+    </div>
     )
 }
