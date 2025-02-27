@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import images from "../constants/images";
 import { useEffect, useState } from "react";
 import env from "../constants/env";
-import { formatAddress, formatNumber } from "../utils/helperFn";
+import { explorer, formatAddress, formatNumber, validateAndFormatUrl } from "../utils/helperFn";
 
 export default function TokenCard({ tokens }) {
     return (
@@ -29,6 +29,13 @@ function IndToken({token})
     const [pairData, setPairData] = useState(null);
     const [count, setCount] = useState(null);
     const router = useRouter();
+
+    const urlObj = {
+        twitter: validateAndFormatUrl(token?.twitter),
+        telegram: validateAndFormatUrl(token?.telegram),
+        website: validateAndFormatUrl(token?.website),
+    }
+
    
     useEffect(() => {
         const fetchData = async () => {
@@ -67,8 +74,10 @@ function IndToken({token})
     <div
        style={{ borderRadius: "5px", cursor: "pointer" }}
                         className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
-        onClick={() => router.push(`/token/${token?.id}`)}
+            onClick={() => window.open(`/token/${token?.id}`,'_blank')}
+        
     >
+        
         <div className="flex justify-between items-center text-center">
             {/* Market Cap */}
             <div className="flex flex-col justify-start items-start">
@@ -93,20 +102,20 @@ function IndToken({token})
         {/* Description */}
         <div className="mt-6 text-center">
             <h2 className="text-[#000000] font-primary font-semibold text-[24px]">{token?.name}</h2>
-            <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">{formatAddress(token.tokenAddress || env.tempContract)}</p>
+            <Link href={explorer(token.tokenAddress)} target="_blank" className="text-[#7C7C7C] font-secondary font-normal text-[13px] hover:text-black">{formatAddress(token.tokenAddress || env.tempContract)}</Link>
             {/* Action Icons */}
             <div className="flex gap-4 mt-2 items-center justify-center ">
-                <Link href={token?.website} target='_blank'>
+               {urlObj.website? <Link href={urlObj.website} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>
+                </Link>:null}
 
-                <Link href={token?.twitter} target='_blank'>
+                {urlObj.twitter?<Link href={urlObj?.twitter} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>
+                </Link>:null}
 
-                <Link href={token?.telegram} target='_blank'>
+                {urlObj.telegram?<Link href={urlObj?.telegram} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>
+                </Link>:null}
             </div>
             <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
                 {token?.description}

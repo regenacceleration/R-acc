@@ -9,7 +9,7 @@ import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
 import { abi, chain, contractAddress } from "./constants";
 import { ethers } from "ethers";
-import { getAddress, VerifyNetwork } from "../utils/helperFn";
+import { getAddress, validateUrl, VerifyNetwork } from "../utils/helperFn";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
 
@@ -26,14 +26,14 @@ export function CreateTokenModal() {
     website: "",
     totalSupply: "",
 
-    tokenSymbol: "T",
+    tokenSymbol: "",
     fee: "10000",
     salt: "morerandomSalt",
     pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
     fid: "125",
     castHash: "hash",
     earthToken: "0",
-    devBuyFee: "",
+    // devBuyFee: "",
     allowed: false,
   });
   const { apiFn, loading: imgLoading } = useImgApi();
@@ -62,7 +62,7 @@ export function CreateTokenModal() {
     castHash: "",
     ticker: "",
     earthToken: "",
-    devBuyFee: "",
+    // devBuyFee: "",
   });
 
   const validateForm = () => {
@@ -76,12 +76,16 @@ export function CreateTokenModal() {
     if (!formData.telegram) newErrors.telegram = "Telegram is required";
     if (!formData.twitter) newErrors.twitter = "Twitter is required";
     if (!formData.earthToken) newErrors.earthToken = "Earth Token is required";
-    if (!formData.devBuyFee) newErrors.devBuyFee = "Dev Buy Fee is required";
+    if (!formData.tokenSymbol) newErrors.tokenSymbol = "Dev Buy Fee is required";
     if (!formData.website) newErrors.website = "Website URL is required";
     if (!formData.totalSupply) newErrors.totalSupply = "totalSupply is required";
-    if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
-      newErrors.totalSupply = "totalSupply must be a number";
-    }
+    if (formData.telegram && !validateUrl(formData.telegram)) newErrors.telegram = "Invalid Url";
+    if (formData.twitter && !validateUrl(formData.twitter)) newErrors.twitter = "Invalid Url";
+    if (formData.website && !validateUrl(formData.website)) newErrors.website = "Invalid Url";
+
+    // if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
+    //   newErrors.totalSupply = "totalSupply must be a number";
+    // }
     console.log(newErrors);
 
     setErrors(newErrors);
@@ -205,7 +209,7 @@ export function CreateTokenModal() {
         poolConfig: {
           ticker: Number(ticker),
           pairedToken: pairedAddress,
-          devBuyFee: Number(devBuyFee),
+          // devBuyFee: Number(devBuyFee),
         },
         parsedEarth,
       };
@@ -227,7 +231,7 @@ export function CreateTokenModal() {
         {
           tick: Number(ticker),
           pairedToken: pairedAddress,
-          devBuyFee: Number(devBuyFee),
+          // devBuyFee: Number(devBuyFee),
         },
         parsedEarth
       );
@@ -339,7 +343,8 @@ export function CreateTokenModal() {
           website: formData?.website,
           totalSupply: formData?.totalSupply,
           earthToken: formData?.earthToken,
-          devBuyFee: formData?.devBuyFee,
+          tokenSymbol:formData?.tokenSymbol,
+          // devBuyFee: formData?.devBuyFee,
           ...deploy,
         },
       ]);
@@ -361,7 +366,8 @@ export function CreateTokenModal() {
         website: "",
         totalSupply: "",
         earthToken: "",
-        devBuyFee: "",
+        tokenSymbol:""
+        // devBuyFee: "",
       });
       router.push("/");
     } catch (error) {
@@ -451,14 +457,14 @@ export function CreateTokenModal() {
           </div>
 
           <div>
-            <label className=" font-normal font-primary text-[13px] text-[#000000]">Buy Dev Fee (eg: 300)</label>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">Symbol</label>
             <input
-              type="number"
-              value={formData.devBuyFee}
-              onChange={(e) => setFormData({ ...formData, devBuyFee: e.target.value })}
+              type="text"
+              value={formData.tokenSymbol}
+              onChange={(e) => setFormData({ ...formData, tokenSymbol: e.target.value })}
               className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
-            {errors.devBuyFee && <p className="text-red-500 text-sm ">{errors.devBuyFee}</p>}
+            {errors.tokenSymbol && <p className="text-red-500 text-sm ">{errors.tokenSymbol}</p>}
           </div>
           {/* 
           <div>
