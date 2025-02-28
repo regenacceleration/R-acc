@@ -1,21 +1,31 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain } from "./constants";
+import { connectors } from "../connectors";
+import { Uniswap } from "./Uniswap";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
   // const [buyEarth, setBuyEarth] = useState(null);
   const pathname = usePathname();
 
-  const jsonRpcUrlMap = {
-    1: ['https://mainnet.infura.io/v3/<YOUR_INFURA_PROJECT_ID>'],
-    3: ['https://ropsten.infura.io/v3/<YOUR_INFURA_PROJECT_ID>']
+  const [connector, hooks] = connectors[0]
+  const isActive = hooks.useIsActive()
+  console.log(connector, hooks);
+
+  const connectWallet =async () => {
+    if (isActive) {
+     await connector.deactivate()
+    } else {
+      // connector.deactivate()
+     await connector.activate()
+    }
   }
 
-  const connectWallet = async () => {
+  const connectWalletw = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
         const networkResult = await VerifyNetwork(chain);
@@ -67,6 +77,7 @@ export default function Header() {
               // onClick={() => setBuyEarth(true)}
               className="text-[#FF0000] font-normal font-primary text-[13px]"> Buy $EARTH</button>
           </div>
+       <Uniswap/>
           {/* {buyEarth && (
             <div
               style={{
@@ -90,6 +101,8 @@ export default function Header() {
               </div>
             </div>
           )} */}
+
+          
 
           <button className="text-[#000000] font-normal font-primary text-[13px]"
             onClick={account ? disconnectWallet : connectWallet}
