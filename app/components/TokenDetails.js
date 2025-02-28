@@ -11,6 +11,7 @@ import { formatAddress, formatNumber } from "../utils/helperFn";
 import env from "../constants/env";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FaCopy } from "react-icons/fa";
+import { Uniswap } from "./Uniswap";
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -247,7 +248,8 @@ export function TokenDetails() {
           </div>
         ) : (
           <div className='flex w-[50%] mt-10 flex-col'>
-            <iframe
+            <Uniswap />
+            {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
                 }&inputCurrency=${token?.tokenAddress || env.tempContract
                 }&theme=light`}
@@ -255,16 +257,7 @@ export function TokenDetails() {
               style={{
                 height: "500px",
               }}
-            // style="
-            //   border: 0;
-            //   margin: 0 auto;
-            //   margin-bottom: .5rem;
-            //   display: block;
-            //   border-radius: 10px;
-            //   max-width: 960px;
-            //   min-width: 300px;
-            // "
-            />
+            /> */}
             {/* <div
               style={{ borderRadius: "5px", cursor: "pointer" }}
               className="border-[1px] mt-6 border-[#D5D5D5] text-center bg-white relative"
