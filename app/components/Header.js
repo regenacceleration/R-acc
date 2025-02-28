@@ -1,21 +1,32 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain } from "./constants";
+import { connectors } from "../connectors";
+import { Uniswap } from "./Uniswap";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
-  // const [buyEarth, setBuyEarth] = useState(null);
+  const [buyEarth, setBuyEarth] = useState(null);
   const pathname = usePathname();
+  const modalRef = useRef(null);
 
-  const jsonRpcUrlMap = {
-    1: ['https://mainnet.infura.io/v3/<YOUR_INFURA_PROJECT_ID>'],
-    3: ['https://ropsten.infura.io/v3/<YOUR_INFURA_PROJECT_ID>']
+  const [connector, hooks] = connectors[0]
+  const isActive = hooks.useIsActive()
+  console.log(connector, hooks);
+
+  const connectWallet =async () => {
+    if (isActive) {
+     await connector.deactivate()
+    } else {
+      // connector.deactivate()
+     await connector.activate()
+    }
   }
 
-  const connectWallet = async () => {
+  const connectWalletw = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
         const networkResult = await VerifyNetwork(chain);
@@ -41,6 +52,25 @@ export default function Header() {
     setAccount('')
   }
 
+    // Close buyEarth modal when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+          setBuyEarth(false);
+        }
+      };
+  
+      if (buyEarth) {
+        document.addEventListener("mousedown", handleClickOutside);
+      } else {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [buyEarth]);
+
   return (
     <div>
       {/* Header */}
@@ -64,32 +94,25 @@ export default function Header() {
           </Link>
           <div >
             <button
-              // onClick={() => setBuyEarth(true)}
+              onClick={() => setBuyEarth(true)}
               className="text-[#FF0000] font-normal font-primary text-[13px]"> Buy $EARTH</button>
           </div>
-          {/* {buyEarth && (
+       
+          {buyEarth && (
             <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50"
             >
               <div
-                className="absolute Uniswap w-[19rem] sm:w-[22rem] flex flex-col  border border-[#EAECF0]  shadow-lg gap-8 p-6  rounded-lg bg-white"
+               ref={modalRef}
+                className="absolute z-50 Uniswap w-[19rem]"
               >
-                <SwapWidget
-                  width={360}
-                />
+                <Uniswap/>
+               
               </div>
             </div>
-          )} */}
+          )}
+
+          
 
           <button className="text-[#000000] font-normal font-primary text-[13px]"
             onClick={account ? disconnectWallet : connectWallet}

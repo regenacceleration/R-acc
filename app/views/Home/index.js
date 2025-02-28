@@ -1,8 +1,8 @@
 "use client"
-import Header from "@/app/components/Header";
-import { Loader } from "@/app/components/Loader";
-import TokenCard from "@/app/components/TokenCard";
-import { supabase } from "@/app/services/supabase.js";
+import { supabase } from "../../services/supabase";
+import Header from "../../components/Header";
+import { Loader } from "../../components/Loader";
+import TokenCard from "../../components/TokenCard";
 import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
