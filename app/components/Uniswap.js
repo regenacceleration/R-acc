@@ -34,12 +34,33 @@ export function Uniswap(props) {
     };
   }
 
+  const tokenList = [
+    {
+      chainId: 1,
+      address: '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
+      symbol: 'ETH',
+      name: 'Ethereum',
+      decimals: 18,
+    },
+    {
+      chainId: 1,
+      address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+      symbol: 'UNI',
+      name: 'Uniswap',
+      decimals: 18,
+    },
+  ];
+
   return (
       <SwapWidget
         key={getAddress()}
         provider={useActiveProvider()}
-        tokenList={TOKEN_LIST}
-        hideConnectionUI
+      tokenList={tokenList}
+      
+      hideConnectionUI
+      isWalletConnectedOverride
+      defaultInputTokenAddress="0x2170Ed0880ac9A755fd29B2688956BD959F933F8"
+      defaultOutputTokenAddress='0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
       // defaultInputAmount={}
       // defaultOutputAmount={}
       // defaultInputTokenAddress={}

@@ -28,8 +28,8 @@ export default function Header() {
       //  await connector.deactivate()
     } else {
       // connector.deactivate()
-      connector.connectEagerly()
-      //  connector.activate()
+      // connector.connectEagerly()
+       connector.activate()
     }
   }
 
@@ -40,10 +40,11 @@ export default function Header() {
       localStorage.setItem('address', address);
       setAccount(address)
     }
-    const storedAddress = localStorage.getItem('address');
+    const storedAddress = getAddress();
     if (storedAddress && !isActive)
     {
-      connector.connectEagerly()
+      // connector.connectEagerly()
+      connector.activate()
     }
   },[address])
   
@@ -128,7 +129,7 @@ export default function Header() {
                ref={modalRef}
                 className="absolute z-50 Uniswap w-[19rem]"
               >
-                <Uniswap/>
+                <Uniswap />
                
               </div>
             </div>
