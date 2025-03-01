@@ -187,8 +187,8 @@ export function CreateTokenModal() {
       console.log(signer);
 
       // Format parameters
-      // const parsedSupply = BigInt(percentage);
-      const parsedSupply = ethers.utils.parseUnits(totalSupply, 18);
+      const parsedSupply = BigInt(totalSupply);
+      // const parsedSupply = ethers.utils.parseUnits(totalSupply.toString(), 18);
       const parsedFee = Number(fee);
       const hashedSalt = ethers.utils.formatBytes32String(salt);
       const pairedAddress = ethers.utils.getAddress(pairedToken);
