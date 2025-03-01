@@ -4,8 +4,9 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain } from "./constants";
-import { connectors } from "../connectors";
+import { connectors, useActiveProvider } from "../connectors";
 import { Uniswap } from "./Uniswap";
+import metaMask from "../connectors/metaMask";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
@@ -15,16 +16,37 @@ export default function Header() {
 
   const [connector, hooks] = connectors[0]
   const isActive = hooks.useIsActive()
-  console.log(connector, hooks);
+  const networkResult = hooks.useChainId()
+  const address = hooks.useAccount()
+  
+  console.log({isActive});
+  
 
   const connectWallet =async () => {
     if (isActive) {
-     await connector.deactivate()
+      //  connector.deactivate && connector.deactivate()
+      //  await connector.deactivate()
     } else {
       // connector.deactivate()
-     await connector.activate()
+      connector.connectEagerly()
+      //  connector.activate()
     }
   }
+
+  useEffect(() => {
+    if (address)
+    {
+      if (networkResult !== 8453) return
+      localStorage.setItem('address', address);
+      setAccount(address)
+    }
+    const storedAddress = localStorage.getItem('address');
+    if (storedAddress && !isActive)
+    {
+      connector.connectEagerly()
+    }
+  },[address])
+  
 
   const connectWalletw = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -115,7 +137,7 @@ export default function Header() {
           
 
           <button className="text-[#000000] font-normal font-primary text-[13px]"
-            onClick={account ? disconnectWallet : connectWallet}
+            onClick={ connectWallet}
           > {account ? formatAddress(account) : "CONNECT WALLET"}</button>
         </div>
       </header>

@@ -33,7 +33,7 @@ export function CreateTokenModal() {
     fid: "125",
     castHash: "hash",
     earthToken: "0",
-    // devBuyFee: "",
+    devBuyFee: "12000",
     allowed: false,
   });
   const { apiFn, loading: imgLoading } = useImgApi();
@@ -122,8 +122,8 @@ export function CreateTokenModal() {
   };
 
   const deployToken = async () => {
-    const provider = new ethers.BrowserProvider(window.ethereum); // Updated to BrowserProvider
-    const signer = await provider.getSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum); // Updated to BrowserProvider
+    const signer =  provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
     console.log(signer);
@@ -171,7 +171,7 @@ export function CreateTokenModal() {
 
         return;
       }
-      if (!pairedToken?.trim() || !ethers.isAddress(pairedToken)) {
+      if (!pairedToken?.trim() || !ethers.utils.isAddress(pairedToken)) {
         console.log("Valid paired token address is required");
         setLoading(false);
 
@@ -190,9 +190,9 @@ export function CreateTokenModal() {
       // const parsedSupply = BigInt(percentage);
       const parsedSupply = BigInt(totalSupply);
       const parsedFee = Number(fee);
-      const hashedSalt = ethers.encodeBytes32String(salt);
-      const pairedAddress = ethers.getAddress(pairedToken);
-      const parsedEarth = ethers.parseUnits(earthToken, 18);
+      const hashedSalt = ethers.utils.formatBytes32String(salt);
+      const pairedAddress = ethers.utils.getAddress(pairedToken);
+      const parsedEarth = ethers.utils.parseUnits(earthToken, 18);
       const parsedFid = Number(fid);
       console.log(pairedAddress);
 
@@ -209,7 +209,7 @@ export function CreateTokenModal() {
         poolConfig: {
           ticker: Number(ticker),
           pairedToken: pairedAddress,
-          // devBuyFee: Number(devBuyFee),
+          devBuyFee: Number(devBuyFee),
         },
         parsedEarth,
       };
@@ -231,7 +231,7 @@ export function CreateTokenModal() {
         {
           tick: Number(ticker),
           pairedToken: pairedAddress,
-          // devBuyFee: Number(devBuyFee),
+          devBuyFee: Number(devBuyFee),
         },
         parsedEarth
       );
@@ -366,8 +366,8 @@ export function CreateTokenModal() {
         website: "",
         totalSupply: "",
         earthToken: "",
-        tokenSymbol:""
-        // devBuyFee: "",
+        tokenSymbol:"",
+        devBuyFee: "",
       });
       router.push("/");
     } catch (error) {
