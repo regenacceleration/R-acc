@@ -1,15 +1,55 @@
 "use client"
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain } from "./constants";
+import { connectors, useActiveProvider } from "../connectors";
+import { Uniswap } from "./Uniswap";
+import metaMask from "../connectors/metaMask";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
+  const [buyEarth, setBuyEarth] = useState(null);
   const pathname = usePathname();
+  const modalRef = useRef(null);
 
-  const connectWallet = async () => {
+  const [connector, hooks] = connectors[0]
+  const isActive = hooks.useIsActive()
+  const networkResult = hooks.useChainId()
+  const address = hooks.useAccount()
+  
+  console.log({isActive});
+  
+
+  const connectWallet =async () => {
+    if (isActive) {
+      //  connector.deactivate && connector.deactivate()
+      //  await connector.deactivate()
+    } else {
+      // connector.deactivate()
+      // connector.connectEagerly()
+       connector.activate()
+    }
+  }
+
+  useEffect(() => {
+    if (address)
+    {
+      if (networkResult !== 8453) return
+      localStorage.setItem('address', address);
+      setAccount(address)
+    }
+    const storedAddress = getAddress();
+    if (storedAddress && !isActive)
+    {
+      // connector.connectEagerly()
+      connector.activate()
+    }
+  },[address])
+  
+
+  const connectWalletw = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
         const networkResult = await VerifyNetwork(chain);
@@ -29,11 +69,30 @@ export default function Header() {
     const address = getAddress();
     setAccount(address)
   }, [])
-  
+
   const disconnectWallet = () => {
     localStorage.clear();
     setAccount('')
   }
+
+    // Close buyEarth modal when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (modalRef.current && !modalRef.current.contains(event.target)) {
+          setBuyEarth(false);
+        }
+      };
+  
+      if (buyEarth) {
+        document.addEventListener("mousedown", handleClickOutside);
+      } else {
+        document.removeEventListener("mousedown", handleClickOutside);
+      }
+  
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [buyEarth]);
 
   return (
     <div>
@@ -51,13 +110,35 @@ export default function Header() {
           </div>
         }
 
-        <div className="flex gap-10">
+        <div className="flex gap-8">
 
           <Link href="/form">
             <button className="text-[#FF0000] font-normal font-primary text-[13px]">CREATE TOKEN</button>
           </Link>
+          <div >
+            <button
+              onClick={() => setBuyEarth(true)}
+              className="text-[#FF0000] font-normal font-primary text-[13px]"> Buy $EARTH</button>
+          </div>
+       
+          {buyEarth && (
+            <div
+              className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50"
+            >
+              <div
+               ref={modalRef}
+                className="absolute z-50 Uniswap w-[19rem]"
+              >
+                <Uniswap />
+               
+              </div>
+            </div>
+          )}
+
+          
+
           <button className="text-[#000000] font-normal font-primary text-[13px]"
-            onClick={account ? disconnectWallet : connectWallet}
+            onClick={ connectWallet}
           > {account ? formatAddress(account) : "CONNECT WALLET"}</button>
         </div>
       </header>

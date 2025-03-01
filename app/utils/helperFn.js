@@ -88,3 +88,32 @@ export const VerifyNetwork = async (obj) => {
     console.error(error);
   }
 };
+
+
+export const explorer = (address) => `https://basescan.org/address/${address}`;
+
+export const validateUrl=(inputUrl)=> {
+  try {
+    let url = new URL(inputUrl);
+
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      throw new Error("Invalid URL");
+    }
+    return true; 
+  } catch (error) {
+    return false;
+  }
+}
+
+
+export function validateAndFormatUrl(inputUrl) {
+  try {
+    let url = new URL(inputUrl.includes("://") ? inputUrl : `https://${inputUrl}`);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      throw new Error("Invalid URL: Only HTTP and HTTPS protocols are allowed.");
+    }
+    return url.href;
+  } catch (error) {
+    return false;
+  }
+}

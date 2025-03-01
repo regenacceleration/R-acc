@@ -1,8 +1,8 @@
 "use client"
-import Header from "@/app/components/Header";
-import { Loader } from "@/app/components/Loader";
-import TokenCard from "@/app/components/TokenCard";
-import { supabase } from "@/app/services/supabase.js";
+import { supabase } from "../../services/supabase";
+import Header from "../../components/Header";
+import { Loader } from "../../components/Loader";
+import TokenCard from "../../components/TokenCard";
 import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -151,20 +151,20 @@ export default function Home() {
         <h1 className="text-[#000000] font-primary font-black text-[68px]">r/acc</h1>
         <p className="text-[#7F7F7F] font-normal text-[17px] font-primary ">degen to regen pipeline</p>
         <div className="flex justify-center mt-[2rem] gap-3 w-full items-end">
-          <input
+          {/* <input
             type="text"
             value={searchQuery}
             onChange={handleInputChange}
             className="border-b-[1px] outline-none text-black font-primary w-[28%] bg-gray-50 border-[#D5D5D5] rounded px-4 py-2"
           />
-          <button className="text-[#000000] font-normal font-primary text-[13px]">SEARCH</button>
+          <button className="text-[#000000] font-normal font-primary text-[13px]">SEARCH</button> */}
         </div>
 
       </div>
 
 
       {/* Navigation */}
-      <div className="flex mt-[3rem]  mb-10 justify-center items-center">
+      {/* <div className="flex mt-[3rem]  mb-10 justify-center items-center">
         <nav className="flex justify-center items-center w-[95%] border-y-[1px] border-gray-300 px-8 py-4">
           <button className="text-[#FF0000] font-normal font-primary text-[13px] px-4">FEATURED</button>
           <button className="text-[#000000] font-normal font-primary text-[13px] px-4">MARKET CAP</button>
@@ -172,7 +172,7 @@ export default function Home() {
           <button className="text-[#000000] font-normal font-primary text-[13px] px-4">DATE</button>
           <button className="text-[#000000] font-normal font-primary text-[13px] px-4">TRENDING</button>
         </nav>
-      </div>
+      </div> */}
 
 
       {/* Token Cards */}
@@ -201,7 +201,7 @@ export default function Home() {
         scrollableTarget='scrollableDiv'
       >
         <div
-          className="h-full flex items-center justify-center"
+          className="h-full mt-5 flex items-center justify-center"
         >
           {loading ?
             <div className="flex items-center justify-center h-64">

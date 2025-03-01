@@ -1,4 +1,4 @@
-import { TokenDetails } from "@/app/components/TokenDetails";
+import { TokenDetails } from "../../components/TokenDetails";
 
 
 export default function TokenDetailsPage() {
