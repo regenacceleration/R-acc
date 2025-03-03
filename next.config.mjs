@@ -16,8 +16,8 @@ const nextConfig = {
             "@dex-swap/widgets"
         ],
     },
-    webpack: (config) => {
-        config.resolve.fallback = { fs: false };
+    webpack: (config, { isServer }) => {
+        config.resolve.fallback = { fs: false,ws:false };
         return config;
     },
 };
