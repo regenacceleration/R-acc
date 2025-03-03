@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
-import { chain } from "./constants";
+import { chain, pairedTokenAddress } from "./constants";
 import { connectors,  } from "../connectors";
 import { Uniswap } from "./Uniswap";
 
@@ -128,7 +128,10 @@ export default function Header() {
                ref={modalRef}
                 className="absolute z-50 Uniswap w-[19rem]"
               >
-                <Uniswap />
+                <Uniswap
+                  defaultInputTokenAddress="NATIVE"
+                  defaultOutputTokenAddress={pairedTokenAddress}
+                />
                
               </div>
             </div>

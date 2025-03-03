@@ -12,6 +12,7 @@ import env from "../constants/env";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FaCopy } from "react-icons/fa";
 import { Uniswap } from "./Uniswap";
+import { pairedTokenAddress } from "./constants";
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -248,7 +249,18 @@ export function TokenDetails() {
           </div>
         ) : (
           <div className='flex w-[50%] mt-10 flex-col'>
-            <Uniswap />
+              <Uniswap
+                defaultInputTokenAddress={pairedTokenAddress}
+                defaultOutputTokenAddress={token?.tokenAddress}
+                token={{
+                        "name": token?.name,
+                        "address": token?.tokenAddress,
+                        "symbol": token.tokenSymbol,
+                        "decimals": 18,
+                        "chainId": 8453,
+                        "logoURI": token?.image
+                }}
+                />
             {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
                 }&inputCurrency=${token?.tokenAddress || env.tempContract

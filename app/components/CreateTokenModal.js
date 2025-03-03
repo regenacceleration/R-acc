@@ -7,7 +7,7 @@ import images from "../constants/images";
 import { supabase } from "../services/supabase.js";
 import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
-import { abi, chain, contractAddress } from "./constants";
+import { abi, chain, contractAddress, pairedTokenAddress } from "./constants";
 import { ethers } from "ethers";
 import { getAddress, validateUrl, VerifyNetwork } from "../utils/helperFn";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ export function CreateTokenModal() {
     tokenSymbol: "",
     fee: "10000",
     salt: "morerandomSalt",
-    pairedToken: "0x9d6501275e91c0b2b0845c2c5334dea1ec6a3c18",
+    pairedToken: pairedTokenAddress,
     fid: "125",
     castHash: "hash",
     earthToken: "0",

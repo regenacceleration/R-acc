@@ -4,6 +4,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import dynamic from "next/dynamic"
 import { useActiveProvider } from "../connectors";
 import { getAddress } from "../utils/helperFn";
+import { pairedTokenAddress } from "./constants";
 
 
 const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
@@ -33,72 +34,33 @@ export function Uniswap(props) {
       T: () => { }
     };
   }
-  const MY_TOKEN_LIST = {
-    name: "My Token List",
-    timestamp: new Date().toISOString(),
-    version: { major: 1, minor: 0, patch: 0 },
-    tokens: [
-      {
-        "chainId": 1,
-        "address": "0xB98d4C97425d9908E66E53A6fDf673ACcA0BE986",
-        "name": "Arcblock",
-        "symbol": "ABT",
-        "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/2341/thumb/arcblock.png?1547036543",
-        "extensions": {
-          "bridgeInfo": {
-            "130": {
-              "tokenAddress": "0xDDCe42b89215548beCaA160048460747Fe5675bC"
-            },
-            "8453": {
-              "tokenAddress": "0xe2A8cCB00E328a0EC2204CB0c736309D7c1fa556"
-            }
-          }
-        }
-      },
-      {
-        "chainId": 1,
-        "address": "0xADE00C28244d5CE17D72E40330B1c318cD12B7c3",
-        "name": "Ambire AdEx",
-        "symbol": "ADX",
-        "decimals": 18,
-        "logoURI": "https://assets.coingecko.com/coins/images/847/thumb/Ambire_AdEx_Symbol_color.png?1655432540",
-        "extensions": {
-          "bridgeInfo": {
-            "56": {
-              "tokenAddress": "0x6bfF4Fb161347ad7de4A625AE5aa3A1CA7077819"
-            },
-            "130": {
-              "tokenAddress": "0x3e1C572d8b069fc2f14ac4f8bdCE6e8eA299A500"
-            },
-            "137": {
-              "tokenAddress": "0xdDa7b23D2D72746663E7939743f929a3d85FC975"
-            },
-            "8453": {
-              "tokenAddress": "0x3c87e7AF3cDBAe5bB56b4936325Ea95CA3E0EfD9"
-            }
-          }
-        }
-      },
-    ],
-  };
+
+  const MY_TOKEN= [
+    {
+      "name": "EARTH",
+      "address": pairedTokenAddress,
+      "symbol": "ETH",
+      "decimals": 18,
+      "chainId": 8453,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+    },
+  ]
+
+  if (props.token)
+  {
+    MY_TOKEN.push(props.token)
+  }
+
+
+
   return (
       <SwapWidget
-        key={getAddress()}
-        provider={useActiveProvider()}
-      tokenList={'https://tokens.uniswap.org/'}
-      // tokenList={{ tokens: MY_TOKEN_LIST }}
-      // tokenList={{ token: MY_TOKEN_LIST }}
-      // jsonRpcUrlMap={{ 8453: ['https://base-mainnet.infura.io/v3/4102c7bb5d0848bea41573a3aa7148b5']}}
+      key={getAddress()}
+      provider={useActiveProvider()}
+      tokenList={MY_TOKEN}
       defaultChainId={8453}
       hideConnectionUI
       isWalletConnectedOverride
-      defaultInputTokenAddress="NATIVE"
-      defaultOutputTokenAddress="0x9d6501275e91c0b2b0845C2c5334dEa1EC6a3c18"
-      // defaultInputAmount={}
-      // defaultOutputAmount={}
-      // defaultInputTokenAddress={}
-    // defaultOutputTokenAddress={}
        {...props}
       />
   )
