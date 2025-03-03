@@ -10,7 +10,7 @@ import { explorer, formatAddress, formatNumber, validateAndFormatUrl } from "../
 export default function TokenCard({ tokens }) {
     return (
         <div
-            className="grid w-full grid-cols-1 md:grid-cols-3 p-8 gap-x-4 gap-y-16">
+            className="grid w-full grid-cols-1 md:grid-cols-3 p-8 gap-x-4 gap-y-16 mt-10">
             {tokens && tokens.length  ?
                 tokens.map((token) => (
                     <IndToken token={token} key={token?.id}  />

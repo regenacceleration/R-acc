@@ -17,7 +17,7 @@ export default function Home() {
   // const containerRef = useRef(null);
   // const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const rowsPerPage = 3
+  const rowsPerPage = 4
 
   const fetchToken = async (page, search = "") => {
     try {
@@ -197,12 +197,16 @@ export default function Home() {
       <InfiniteScroll
         dataLength={tokens.length}
         next={fetchMoreToken}
-        hasMore={tokens.length < totalDataCount}
-        scrollableTarget='scrollableDiv'
+        hasMore={tokens.length < totalDataCount ||0}
+        scrollThreshold={'50%'}
+        // endMessage={
+        //  <div className="h-10"></div>
+        // }
+        // loader={<Loader className="text-[#7C7C7C] mx-auto w-full text-lg"  />}
       >
-        <div
-          className="h-full mt-5 flex items-center justify-center"
-        >
+        {/* <div
+          className="h-auto mt-5 flex items-center justify-center "
+        > */}
           {loading ?
             <div className="flex items-center justify-center h-64">
               <Loader className="text-[#7C7C7C]" size="text-6xl" />
@@ -211,7 +215,7 @@ export default function Home() {
             <TokenCard tokens={tokens} />
           }
 
-        </div>
+        {/* </div> */}
       </InfiniteScroll>
 
 

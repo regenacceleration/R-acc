@@ -323,10 +323,10 @@ export function TokenDetails() {
 
             <div className="flex flex-col gap-2 py-2 p-4 mt-5 border border-[#D5D5D5]">
               <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
-              <p >$EARTH token address</p>
+              <p >$EARTH address</p>
               <div className="flex gap-2">
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
-                  {formatAddress(token?.tokenAddress || env.tempContract)}
+                  {formatAddress(pairedTokenAddress || env.tempContract)}
                 </p>
                 <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
                   <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
@@ -334,10 +334,10 @@ export function TokenDetails() {
               </div>
               </div>
               <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
-              <p >$EARTH address</p>
+                  <p >{ token?.name} address</p>
               <div className="flex gap-2">
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
-                  {formatAddress(pairedTokenAddress || env.tempContract)}
+                  {formatAddress(token?.tokenAddress || env.tempContract)}
                 </p>
                 <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
                   <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
