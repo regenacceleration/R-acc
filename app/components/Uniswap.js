@@ -94,7 +94,7 @@ export function Uniswap(props) {
       hideConnectionUI
       isWalletConnectedOverride
       defaultInputTokenAddress="NATIVE"
-      defaultOutputTokenAddress="0x3c87e7AF3cDBAe5bB56b4936325Ea95CA3E0EfD9"
+      defaultOutputTokenAddress="0x9d6501275e91c0b2b0845C2c5334dEa1EC6a3c18"
       // defaultInputAmount={}
       // defaultOutputAmount={}
       // defaultInputTokenAddress={}
