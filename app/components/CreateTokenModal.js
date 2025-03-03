@@ -391,6 +391,17 @@ export function CreateTokenModal() {
             {errors.name && <p className="text-red-500 text-sm ">{errors.name}</p>}
           </div>
 
+          <div>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">Symbol</label>
+            <input
+              type="text"
+              value={formData.tokenSymbol}
+              onChange={(e) => setFormData({ ...formData, tokenSymbol: e.target.value })}
+              className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
+            />
+            {errors.tokenSymbol && <p className="text-red-500 text-sm ">{errors.tokenSymbol}</p>}
+          </div>
+
           {/* <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>
               TICKER (eg: 300)
@@ -456,16 +467,7 @@ export function CreateTokenModal() {
             {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
           </div>
 
-          <div>
-            <label className=" font-normal font-primary text-[13px] text-[#000000]">Symbol</label>
-            <input
-              type="text"
-              value={formData.tokenSymbol}
-              onChange={(e) => setFormData({ ...formData, tokenSymbol: e.target.value })}
-              className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
-            />
-            {errors.tokenSymbol && <p className="text-red-500 text-sm ">{errors.tokenSymbol}</p>}
-          </div>
+         
           {/* 
           <div>
             <label className=' font-normal font-primary text-[13px] text-[#000000]'>

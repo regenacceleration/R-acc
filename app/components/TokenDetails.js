@@ -208,21 +208,21 @@ export function TokenDetails() {
                         }`}
                       onClick={() => setActiveTab("description")}
                     >
-                      UPDATES
+                      DESCRIPTION
                     </button>
                   </div>
-                  {/* <div>
+                  <div>
                     <button
                       className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
-                        activeTab === "holders"
+                        activeTab === "updates"
                           ? "  text-[18px] text-[#000000]"
                           : "text-[#D5D5D5] text-[18px]"
                       }`}
-                      onClick={() => setActiveTab("holders")}
+                      onClick={() => setActiveTab("updates")}
                     >
-                      HOLDER DITRIBUTION ({holdersData?.count})
+                       UPDATES
                     </button>
-                  </div> */}
+                  </div>
                 </div>
 
                 <div className=''>
@@ -231,10 +231,13 @@ export function TokenDetails() {
                       {token?.description}
                     </p>
                   ) : (
-                    <HolderData
-                      holdersData={holdersData}
-                      holdersAmount={holdersAmount}
-                    />
+                    <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'>
+                     
+                    </p>
+                    // <HolderData
+                    //   holdersData={holdersData}
+                    //   holdersAmount={holdersAmount}
+                    // />
                   )}
                 </div>
               </div>
@@ -318,7 +321,8 @@ export function TokenDetails() {
               </div>
             </div> */}
 
-            <div className="flex items-center justify-between gap-2 mt-5 w-full py-2 text-left font-secondary  p-4  border border-[#D5D5D5] font-normal text-[16px] text-[#000000]">
+            <div className="flex flex-col gap-2 py-2 p-4 mt-5 border border-[#D5D5D5]">
+              <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
               <p >$EARTH token address</p>
               <div className="flex gap-2">
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
@@ -327,6 +331,18 @@ export function TokenDetails() {
                 <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
                   <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
                 </CopyToClipboard>
+              </div>
+              </div>
+              <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
+              <p >$EARTH address</p>
+              <div className="flex gap-2">
+                <p className='text-[#7C7C7C] font-normal text-[12px]'>
+                  {formatAddress(pairedTokenAddress || env.tempContract)}
+                </p>
+                <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
+                  <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
+                </CopyToClipboard>
+              </div>
               </div>
 
             </div>
