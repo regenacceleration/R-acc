@@ -4,9 +4,8 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain } from "./constants";
-import { connectors, useActiveProvider } from "../connectors";
+import { connectors,  } from "../connectors";
 import { Uniswap } from "./Uniswap";
-import metaMask from "../connectors/metaMask";
 
 export default function Header() {
   const [account, setAccount] = useState(null);

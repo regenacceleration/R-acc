@@ -17,7 +17,8 @@ const nextConfig = {
     //     ],
     // },
     webpack: (config) => {
-        config.resolve.fallback = { fs: false };
+        config.resolve.fallback = { fs: false,ws:false };
+        config.externals.push('pino-pretty', 'encoding');
         return config;
     },
 };
