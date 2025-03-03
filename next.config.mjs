@@ -10,26 +10,15 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        optimizePackageImports: [
-            "@uniswap/widgets",
-            "@dex-swap/widgets"
-        ],
-    },
-    webpack: (config, { isServer }) => {
-        if (!isServer) {
-            config.resolve.fallback = {
-                fs: false,
-                ws: false // Prevents WebSocket issues in client-side code
-            };
-        }
+    // experimental: {
+    //     optimizePackageImports: [
+    //         "@uniswap/widgets",
+    //         "@dex-swap/widgets"
+    //     ],
+    // },
+    webpack: (config) => {
+        config.resolve.fallback = { fs: false };
         return config;
-    },
-    eslint: {
-        ignoreDuringBuilds: true, // Prevents ESLint from failing the build on Vercel
-    },
-    typescript: {
-        ignoreBuildErrors: true, // Prevents TypeScript errors from failing the build
     },
 };
 
