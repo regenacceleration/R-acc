@@ -137,9 +137,9 @@ export function TokenDetails() {
                 </p>
               </div>
               <div className='flex items-end mt-3 gap-3'>
-                <p className='text-[#7C7C7C] font-normal text-[12px]'>
+                  <Link   href={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress}`} target="_blank" className='text-[#7C7C7C] font-normal text-[12px] hover:text-black '>
                   {formatAddress(token?.tokenAddress || env.tempContract)}
-                </p>
+                </Link>
                 <div className='flex gap-6 items-end '>
                   <div className='flex gap-2 justify-center items-center'>
                     <Image

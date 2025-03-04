@@ -102,20 +102,20 @@ function IndToken({token})
         {/* Description */}
         <div className="mt-6 text-center">
             <h2 className="text-[#000000] font-primary font-semibold text-[24px]">{token?.name}</h2>
-            <Link href={explorer(token.tokenAddress)} target="_blank" className="text-[#7C7C7C] font-secondary font-normal text-[13px] hover:text-black">{formatAddress(token.tokenAddress || env.tempContract)}</Link>
+            <a onClick={(e)=>e.stopPropagation()} href={explorer(token.tokenAddress)} target="_blank" className="text-[#7C7C7C] font-secondary font-normal text-[13px] hover:text-black">{formatAddress(token.tokenAddress || env.tempContract)}</a>
             {/* Action Icons */}
             <div className="flex gap-4 mt-2 items-center justify-center ">
-               {urlObj.website? <Link href={urlObj.website} target='_blank'>
+               {urlObj.website? <a onClick={(e)=>e.stopPropagation()} href={urlObj.website} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.website} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>:null}
+                </a>:null}
 
-                {urlObj.twitter?<Link href={urlObj?.twitter} target='_blank'>
+                {urlObj.twitter?<a onClick={(e)=>e.stopPropagation()} href={urlObj?.twitter} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.twitter} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>:null}
+                </a>:null}
 
-                {urlObj.telegram?<Link href={urlObj?.telegram} target='_blank'>
+                {urlObj.telegram?<a onClick={(e)=>e.stopPropagation()} href={urlObj?.telegram} target='_blank'>
                     <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
-                </Link>:null}
+                </a>:null}
             </div>
             <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
                 {token?.description}
