@@ -65,7 +65,7 @@ export function Uniswap(props) {
 
   return (
       <SwapWidget
-      key={getAddress() || props.token}
+      key={getAddress() + JSON.stringify(props?.token)}
       provider={useActiveProvider()}
       tokenList={MY_TOKEN}
       defaultChainId={8453}
