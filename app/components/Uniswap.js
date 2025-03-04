@@ -36,9 +36,6 @@ export function Uniswap(props) {
     };
   }
 
-
-  
-  
   const MY_TOKEN= [
     {
       "name": "EARTH",
@@ -68,7 +65,7 @@ export function Uniswap(props) {
 
   return (
       <SwapWidget
-      key={getAddress()}
+      key={getAddress() || props}
       provider={useActiveProvider()}
       tokenList={MY_TOKEN}
       defaultChainId={8453}
