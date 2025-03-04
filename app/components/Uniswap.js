@@ -51,11 +51,11 @@ export function Uniswap(props) {
   
  
   useEffect(() => {
-    if (props.token) {
+    if (props?.token) {
       MY_TOKEN.push(props?.token)
       setOutputToken(props?.token?.address)
     }
-  },[props.token])
+  },[props.token,getAddress()])
     
     useEffect(() => {
       if (typeof window !== "undefined" && props.setIsLoaded) {

@@ -1,4 +1,4 @@
-export const contractAddress = "0xe75195E92A075A9f33b7bacb66e528a2D5DadbcB";
+export const contractAddress = "0x89D2Ee1626e139FdAC74A610fFB19066cA1851De";
 export const pairedTokenAddress ="0x9d6501275e91c0b2b0845C2c5334dEa1EC6a3c18"
 export const abi = [
   {
