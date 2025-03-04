@@ -57,7 +57,7 @@ function IndToken({token})
                 ]);
 
                 setCount(holdersData.count);
-                setPairData(pairData);
+                setPairData(pairData?.[0]);
 
                 console.log('Holders count:', holdersData.count);
                 console.log('Pair data:', pairData);
