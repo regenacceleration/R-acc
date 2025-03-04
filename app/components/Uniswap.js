@@ -5,7 +5,7 @@ import dynamic from "next/dynamic"
 import { useActiveProvider } from "../connectors";
 import { getAddress } from "../utils/helperFn";
 import { pairedTokenAddress } from "./constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
@@ -36,6 +36,8 @@ export function Uniswap(props) {
     };
   }
 
+  const [outputToken,setOutputToken]=useState('')
+
   const MY_TOKEN= [
     {
       "name": "EARTH",
@@ -51,6 +53,7 @@ export function Uniswap(props) {
   useEffect(() => {
     if (props.token) {
       MY_TOKEN.push(props?.token)
+      setOutputToken(props?.token?.address)
     }
   },[props.token])
     
@@ -71,6 +74,7 @@ export function Uniswap(props) {
       defaultChainId={8453}
       hideConnectionUI
       isWalletConnectedOverride
+      defaultOutputTokenAddress={props?.defaultOutputTokenAddress || outputToken }
       width="100%"
        {...props}
       />
