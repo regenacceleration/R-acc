@@ -65,6 +65,14 @@ export function Uniswap(props) {
       };
     }, []);
 
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      document.querySelectorAll("[class^='TokenOptions__OnHover']").forEach((el) => el.remove());
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
       <SwapWidget

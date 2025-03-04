@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Header from "./Header";
 import images from "../constants/images";
@@ -7,12 +7,13 @@ import { useParams } from "next/navigation";
 import { supabase } from "../services/supabase.js";
 import { Loader } from "./Loader";
 import Link from "next/link";
-import { formatAddress, formatNumber } from "../utils/helperFn";
+import { formatAddress, formatNumber, getAddress } from "../utils/helperFn";
 import env from "../constants/env";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FaCopy } from "react-icons/fa";
 import { Uniswap } from "./Uniswap";
 import { pairedTokenAddress } from "./constants";
+import { useNotification } from "../hooks/useNotification";
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -24,6 +25,8 @@ export function TokenDetails() {
   const [activeTab, setActiveTab] = useState("description");
   const [copied, setCopied] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
+  const address = getAddress();
+  const { showMessage } = useNotification();
 
   const onCopy = () => {
     setCopied(true);
@@ -116,6 +119,21 @@ export function TokenDetails() {
       ? difference
       : `${difference} day`;
   };
+
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (!hasRun.current) {
+      hasRun.current = true;
+      if (!address) {
+        setTimeout(() => {
+          showMessage({
+            type: "error",
+            value: "Connect the wallet with BASE Network",
+          });
+        }, 1000);
+      }
+    }
+  }, []);
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -267,20 +285,22 @@ export function TokenDetails() {
         {/* Right Section */}
 
         <div className='flex w-[50%] mt-10 flex-col'>
-          {token?.tokenAddress  && <Uniswap
-            defaultInputTokenAddress={pairedTokenAddress}
-            defaultOutputTokenAddress={token?.tokenAddress}
-            setIsLoaded={setIsLoaded}
-            token={{
-              name: token?.name,
-              address: token?.tokenAddress,
-              symbol: token?.tokenSymbol,
-              decimals: 18,
-              chainId: 8453,
-              logoURI: token?.image,
-            }}
-            className='w-full'
-          />}
+          {token?.tokenAddress && (
+            <Uniswap
+              defaultInputTokenAddress={pairedTokenAddress}
+              defaultOutputTokenAddress={token?.tokenAddress}
+              setIsLoaded={setIsLoaded}
+              token={{
+                name: token?.name,
+                address: token?.tokenAddress,
+                symbol: token?.tokenSymbol,
+                decimals: 18,
+                chainId: 8453,
+                logoURI: token?.image,
+              }}
+              className='w-full'
+            />
+          )}
           {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
                 }&inputCurrency=${token?.tokenAddress || env.tempContract

@@ -1,5 +1,6 @@
 import {Source_Code_Pro,Courier_Prime } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const sourceCodePro = Source_Code_Pro({
   variable: "--primary-font",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${sourceCodePro.variable} ${courierPrime.variable} antialiased`}
       >
+        <Toaster position="top-center" />
         {children}
         {/* <PrelineScript /> */}
        

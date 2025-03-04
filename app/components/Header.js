@@ -1,60 +1,62 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
 import { chain, pairedTokenAddress } from "./constants";
-import { connectors,  } from "../connectors";
+import { connectors } from "../connectors";
 import { Uniswap } from "./Uniswap";
+import ConnectWallet from "./ConnectWalletPopup";
+import { useNotification } from "../hooks/useNotification";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
   const [buyEarth, setBuyEarth] = useState(null);
   const pathname = usePathname();
   const modalRef = useRef(null);
+  const [connectwallet, setConnectWallet] = useState(false);
+  const [connector, hooks] = connectors[0];
+  const isActive = hooks.useIsActive();
+  const networkResult = hooks.useChainId();
+  const address = hooks.useAccount();
+  const {showMessage}=useNotification()
 
-  const [connector, hooks] = connectors[0]
-  const isActive = hooks.useIsActive()
-  const networkResult = hooks.useChainId()
-  const address = hooks.useAccount()
-  
-  console.log({isActive});
-  
+  console.log({ isActive });
 
-  const connectWallet =async () => {
+  const connectWallet = async () => {
     if (isActive) {
       //  connector.deactivate && connector.deactivate()
       //  await connector.deactivate()
     } else {
       // connector.deactivate()
       // connector.connectEagerly()
-       connector.activate()
+      connector.activate();
+      setConnectWallet(false)
     }
-  }
+  };
 
   useEffect(() => {
-    if (address)
-    {
-      if (networkResult !== 8453) return
-      localStorage.setItem('address', address);
-      setAccount(address)
+    if (address) {
+      if (networkResult !== 8453) return;
+      localStorage.setItem("address", address);
+      setAccount(address);
     }
     const storedAddress = getAddress();
-    if (storedAddress && !isActive)
-    {
+    if (storedAddress && !isActive) {
       // connector.connectEagerly()
-      connector.activate()
+      connector.activate();
     }
-  },[address])
-  
+  }, [address]);
 
   const connectWalletw = async () => {
     if (typeof window.ethereum !== "undefined") {
       try {
         const networkResult = await VerifyNetwork(chain);
-        if (!networkResult) return
-        const address = await window.ethereum.request({ method: "eth_requestAccounts" });
-        localStorage.setItem('address', address[0])
+        if (!networkResult) return;
+        const address = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        localStorage.setItem("address", address[0]);
         setAccount(address[0]);
       } catch (error) {
         console.log(error);
@@ -66,84 +68,107 @@ export default function Header() {
 
   useEffect(() => {
     const address = getAddress();
-    setAccount(address)
-  }, [])
+    setAccount(address);
+  }, []);
 
   const disconnectWallet = () => {
     localStorage.clear();
-    setAccount('')
-  }
+    setAccount("");
+  };
 
-    // Close buyEarth modal when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (modalRef.current && !modalRef.current.contains(event.target)) {
-          setBuyEarth(false);
-        }
-      };
-  
-      if (buyEarth) {
-        document.addEventListener("mousedown", handleClickOutside);
-      } else {
-        document.removeEventListener("mousedown", handleClickOutside);
+  // Close buyEarth modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setBuyEarth(false);
       }
-  
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [buyEarth]);
+    };
+
+    if (buyEarth) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [buyEarth]);
+
+  const handleBuy = () => {
+    const storedAddress = getAddress();
+    if (!storedAddress || !isActive) {
+      // setConnectWallet(true);
+      showMessage({type:'error',value:'Connect the wallet with BASE Network'})
+      return;
+    }
+    setBuyEarth(true);
+  };
 
   return (
     <div>
       {/* Header */}
-      <header className="flex items-center w-full justify-between px-8 py-4">
-        {pathname === "/" ?
-
-          <button className="text-[#000000] font-primary font-normal text-[13px]">HOW IT WORKS?</button>
-          :
-          <div className="flex justify-center items-center gap-5">
-            <Link href="/">
-              <button className="text-[#000000] font-normal font-primary text-[13px]">GO BACK</button>
+      <header className='flex items-center w-full justify-between px-8 py-4'>
+        {pathname === "/" ? (
+          <button className='text-[#000000] font-primary font-normal text-[13px]'>
+            HOW IT WORKS?
+          </button>
+        ) : (
+          <div className='flex justify-center items-center gap-5'>
+            <Link href='/'>
+              <button className='text-[#000000] font-normal font-primary text-[13px]'>
+                GO BACK
+              </button>
             </Link>
-            <button className="text-[#000000] font-normal font-primary text-[13px]">HOW IT WORKS?</button>
+            <button className='text-[#000000] font-normal font-primary text-[13px]'>
+              HOW IT WORKS?
+            </button>
           </div>
-        }
+        )}
 
-        <div className="flex gap-8">
-
-          <Link href="/form">
-            <button className="text-[#FF0000] font-normal font-primary text-[13px]">CREATE TOKEN</button>
+        <div className='flex gap-8'>
+          <Link href='/form'>
+            <button className='text-[#FF0000] font-normal font-primary text-[13px]'>
+              CREATE TOKEN
+            </button>
           </Link>
-          <div >
+          <div>
             <button
-              onClick={() => setBuyEarth(true)}
-              className="text-[#FF0000] font-normal font-primary text-[13px]"> Buy $EARTH</button>
-          </div>
-       
-          {buyEarth && (
-            <div
-              className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50"
+              onClick={handleBuy}
+              className='text-[#FF0000] font-normal font-primary text-[13px]'
             >
-              <div
-               ref={modalRef}
-                className="absolute z-50 Uniswap sm:w-[30%]"
-              >
+              {" "}
+              Buy $EARTH
+            </button>
+          </div>
+
+          {buyEarth && (
+            <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'>
+              <div ref={modalRef} className='absolute z-50 Uniswap sm:w-[30%]'>
                 <Uniswap
-                  defaultInputTokenAddress="NATIVE"
+                  defaultInputTokenAddress='NATIVE'
                   defaultOutputTokenAddress={pairedTokenAddress}
                 />
-               
               </div>
             </div>
           )}
 
-          
-
-          <button className="text-[#000000] font-normal font-primary text-[13px]"
-            onClick={ connectWallet}
-          > {account ? formatAddress(account) : "CONNECT WALLET"}</button>
+          <button
+            className='text-[#000000] font-normal font-primary text-[13px]'
+            onClick={connectWallet}
+          >
+            {" "}
+            {account ? formatAddress(account) : "CONNECT WALLET"}
+          </button>
         </div>
       </header>
+      {connectwallet ? (
+        <ConnectWallet
+          isOpen={connectwallet}
+          onClose={() => setConnectWallet(false)}
+          connectWallet={connectWallet}
+        />
+      ) : null}
     </div>
-  )
+  );
 }
