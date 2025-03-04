@@ -267,7 +267,7 @@ export function TokenDetails() {
         {/* Right Section */}
 
         <div className='flex w-[50%] mt-10 flex-col'>
-          <Uniswap
+          {token?.tokenAddress  && <Uniswap
             defaultInputTokenAddress={pairedTokenAddress}
             defaultOutputTokenAddress={token?.tokenAddress}
             setIsLoaded={setIsLoaded}
@@ -280,7 +280,7 @@ export function TokenDetails() {
               logoURI: token?.image,
             }}
             className='w-full'
-          />
+          />}
           {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
                 }&inputCurrency=${token?.tokenAddress || env.tempContract
