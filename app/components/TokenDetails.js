@@ -117,13 +117,14 @@ export function TokenDetails() {
       <Header />
 
       {/* Main Content */}
-      <div className='flex w-full p-6'>
-        {/* Left Section */}
-        {loading ? (
-          <div className='flex w-[50%] items-center justify-center h-64'>
+      {loading ? (
+          <div className='flex w-[100%] items-center justify-center h-screen'>
             <Loader className='text-[#7C7C7C]' size='text-7xl' />
           </div>
         ) : (
+      <div className='flex w-full p-6'>
+        {/* Left Section */}
+        
           <div className='flex w-full flex-col'>
             <div className='flex items-center px-4 gap-6'>
               <div className='flex gap-3'>
@@ -243,14 +244,10 @@ export function TokenDetails() {
               </div>
             </div>
           </div>
-        )}
+        
 
         {/* Right Section */}
-        {loading ? (
-          <div className='flex w-[50%] items-center justify-center h-64'>
-            <Loader className='text-[#7C7C7C]' size='text-7xl' />
-          </div>
-        ) : (
+       
           <div className='flex w-[50%] mt-10 flex-col'>
               <Uniswap
                 defaultInputTokenAddress={pairedTokenAddress}
@@ -263,6 +260,7 @@ export function TokenDetails() {
                         "chainId": 8453,
                         "logoURI": token?.image
                 }}
+                className="w-full"
                 />
             {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
@@ -485,8 +483,9 @@ export function TokenDetails() {
               />
             </div>
           </div>
-        )}
+      
       </div>
+       )}
     </div>
   );
 }

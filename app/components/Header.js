@@ -126,7 +126,7 @@ export default function Header() {
             >
               <div
                ref={modalRef}
-                className="absolute z-50 Uniswap w-[19rem]"
+                className="absolute z-50 Uniswap sm:w-[30%]"
               >
                 <Uniswap
                   defaultInputTokenAddress="NATIVE"
