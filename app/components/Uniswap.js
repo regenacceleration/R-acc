@@ -7,10 +7,7 @@ import { getAddress } from "../utils/helperFn";
 import { pairedTokenAddress } from "./constants";
 
 
-const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
-  ssr: true,
-  loading: () => <AiOutlineLoading3Quarters className="animate-spin" />,
-})
+
 
 const TOKEN_LIST = 'https://ipfs.io/ipns/tokens.uniswap.org'
 const UNI = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
@@ -34,6 +31,11 @@ export function Uniswap(props) {
       T: () => { }
     };
   }
+
+  const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
+    ssr: true,
+    loading: () => <AiOutlineLoading3Quarters className="animate-spin w-full flex items-center justify-center" />,
+  })
 
   const MY_TOKEN= [
     {
@@ -61,6 +63,7 @@ export function Uniswap(props) {
       defaultChainId={8453}
       hideConnectionUI
       isWalletConnectedOverride
+      width="100%"
        {...props}
       />
   )
