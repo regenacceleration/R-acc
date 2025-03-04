@@ -51,12 +51,14 @@ export function Uniswap(props) {
   ]
   
  
+  useEffect(() => {
+    if (props.token) {
+      MY_TOKEN.push(props?.token)
+    }
+  },[props.token])
     
     useEffect(() => {
       if (typeof window !== "undefined" && props.setIsLoaded) {
-        if (props.token) {
-          MY_TOKEN.push(props?.token)
-        }
         setTimeout(() => {
           props.setIsLoaded(false)
         },1000)
