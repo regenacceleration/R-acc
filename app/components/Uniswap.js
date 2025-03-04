@@ -37,15 +37,8 @@ export function Uniswap(props) {
   }
 
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && props.setIsLoaded) {
-      setTimeout(() => {
-        props.setIsLoaded(false)
-      },1000)
-    };
-  }, []);
-
-
+  
+  
   const MY_TOKEN= [
     {
       "name": "EARTH",
@@ -56,12 +49,19 @@ export function Uniswap(props) {
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
     },
   ]
-
-  if (props.token)
-  {
-    MY_TOKEN.push(props.token)
-  }
-
+  
+ 
+    
+    useEffect(() => {
+      if (typeof window !== "undefined" && props.setIsLoaded) {
+        if (props.token) {
+          MY_TOKEN.push(props?.token)
+        }
+        setTimeout(() => {
+          props.setIsLoaded(false)
+        },1000)
+      };
+    }, []);
 
 
   return (
