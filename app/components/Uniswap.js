@@ -5,12 +5,16 @@ import dynamic from "next/dynamic"
 import { useActiveProvider } from "../connectors";
 import { getAddress } from "../utils/helperFn";
 import { pairedTokenAddress } from "./constants";
+import { useEffect } from "react";
 
 
-
-
-const TOKEN_LIST = 'https://ipfs.io/ipns/tokens.uniswap.org'
-const UNI = '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'
+const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
+  ssr: true,
+  loading: () => {
+    
+    return <AiOutlineLoading3Quarters className="animate-spin w-full flex items-center justify-center" />
+  },
+})
 
 export const RPC_LIST_ETH = [
   "https://base-mainnet.infura.io/v3/4102c7bb5d0848bea41573a3aa7148b5",
@@ -32,10 +36,15 @@ export function Uniswap(props) {
     };
   }
 
-  const SwapWidget = dynamic(async () => (await import("@dex-swap/widgets")).SwapWidget, {
-    ssr: true,
-    loading: () => <AiOutlineLoading3Quarters className="animate-spin w-full flex items-center justify-center" />,
-  })
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && props.setIsLoaded) {
+      setTimeout(() => {
+        props.setIsLoaded(false)
+      },1000)
+    };
+  }, []);
+
 
   const MY_TOKEN= [
     {

@@ -23,6 +23,7 @@ export function TokenDetails() {
   const [holdersAmount, setHoldersAmount] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
   const [copied, setCopied] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   const onCopy = () => {
     setCopied(true);
@@ -52,16 +53,19 @@ export function TokenDetails() {
         const [pairResponse, holdersResponse, holdersAmountResponse] =
           await Promise.all([
             fetch(
-              `https://api.dexscreener.com/tokens/v1/base/${token?.tokenAddress || env.tempContract
+              `https://api.dexscreener.com/tokens/v1/base/${
+                token?.tokenAddress || env.tempContract
               }`
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${token?.tokenAddress || env.tempContract
+              `https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${
+                token?.tokenAddress || env.tempContract
               }&limit=10`,
               { method: "GET", headers }
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/metadata?contract_address=${token?.tokenAddress || env.tempContract
+              `https://api.chainbase.online/v1/token/metadata?contract_address=${
+                token?.tokenAddress || env.tempContract
               }&chain_id=8453`,
               { method: "GET", headers }
             ),
@@ -101,15 +105,17 @@ export function TokenDetails() {
     fetchData();
   }, [id]);
 
-
   const calculateAge = (date) => {
-    if(!date) return 'N/A'
+    if (!date) return "N/A";
     const difference = Math.floor(
-      (new Date() - new Date(date)) /
-      (1000 * 60 * 60 * 24)
-    )
-    return difference > 1 ? `${difference} days` : difference < 1 ? difference : `${difference} day`
-  }
+      (new Date() - new Date(date)) / (1000 * 60 * 60 * 24)
+    );
+    return difference > 1
+      ? `${difference} days`
+      : difference < 1
+      ? difference
+      : `${difference} day`;
+  };
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -117,31 +123,40 @@ export function TokenDetails() {
       <Header />
 
       {/* Main Content */}
-      {loading ? (
-          <div className='flex w-[100%] items-center justify-center h-screen'>
-            <Loader className='text-[#7C7C7C]' size='text-7xl' />
-          </div>
-        ) : (
-      <div className='flex w-full p-6'>
+
+      <div
+        className={`w-[100%] items-center justify-center h-screen ${
+          loading || isLoaded ? "flex" : "hidden"
+        }`}
+      >
+        <Loader className='text-[#7C7C7C]' size='text-7xl' />
+      </div>
+
+      <div className={`w-full p-6  ${loading || isLoaded ? "none" : "flex"}`}>
         {/* Left Section */}
-        
-          <div className='flex w-full flex-col'>
-            <div className='flex items-center px-4 gap-6'>
-              <div className='flex gap-3'>
-                <img
-                  className='w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]'
-                  src={token?.image}
-                  alt='racc'
-                />
-                <p className='text-[#000000] font-primary font-semibold text-[36px]'>
-                  {token?.name}
-                </p>
-              </div>
-              <div className='flex items-end mt-3 gap-3'>
-                  <Link   href={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress}`} target="_blank" className='text-[#7C7C7C] font-normal text-[12px] hover:text-black '>
-                  {formatAddress(token?.tokenAddress || env.tempContract)}
-                </Link>
-                <div className='flex gap-6 items-end '>
+
+        <div className='flex w-full flex-col'>
+          <div className='flex items-center px-4 gap-6'>
+            <div className='flex gap-3'>
+              <img
+                className='w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]'
+                src={token?.image}
+                alt='racc'
+              />
+              <p className='text-[#000000] font-primary font-semibold text-[36px]'>
+                {token?.name}
+              </p>
+            </div>
+            <div className='flex items-end mt-3 gap-3'>
+              <Link
+                href={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress}`}
+                target='_blank'
+                className='text-[#7C7C7C] font-normal text-[12px] hover:text-black '
+              >
+                {formatAddress(token?.tokenAddress || env.tempContract)}
+              </Link>
+              <div className='flex gap-6 items-end '>
+                {token?.website ? (
                   <div className='flex gap-2 justify-center items-center'>
                     <Image
                       style={{ color: "#7C7C7C" }}
@@ -157,6 +172,8 @@ export function TokenDetails() {
                       </p>
                     </Link>
                   </div>
+                ) : null}
+                {token?.twitter ? (
                   <div className='flex gap-2 justify-center items-center'>
                     <Image
                       style={{ color: "#7C7C7C" }}
@@ -172,6 +189,8 @@ export function TokenDetails() {
                       </p>
                     </Link>
                   </div>
+                ) : null}
+                {token?.telegram ? (
                   <div className='flex gap-2 justify-center items-center'>
                     <Image
                       style={{ color: "#7C7C7C" }}
@@ -187,82 +206,82 @@ export function TokenDetails() {
                       </p>
                     </Link>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div className='flex flex-col px-4  w-full'>
-              <div className='w-full rounded-lg  '>
-                <iframe
-                  className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
-                  src={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress || env.tempContract
-                    }?embed=1&info=0&swaps=0&chart=1`}
-                  frameBorder='0'
-                ></iframe>
-              </div>
-              <div className='border-[1px] mt-4 border-[#D5D5D5]'>
-                <div className=' flex justify-start items-start border-b border-[#D5D5D5] '>
-                  <div>
-                    <button
-                      className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${activeTab === "description"
-                          ? "  text-[18px] text-[#000000]"
-                          : "text-[#D5D5D5] text-[18px]"
-                        }`}
-                      onClick={() => setActiveTab("description")}
-                    >
-                      DESCRIPTION
-                    </button>
-                  </div>
-                  <div>
-                    <button
-                      className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
-                        activeTab === "updates"
-                          ? "  text-[18px] text-[#000000]"
-                          : "text-[#D5D5D5] text-[18px]"
-                      }`}
-                      onClick={() => setActiveTab("updates")}
-                    >
-                       UPDATES
-                    </button>
-                  </div>
-                </div>
-
-                <div className=''>
-                  {activeTab === "description" ? (
-                    <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'>
-                      {token?.description}
-                    </p>
-                  ) : (
-                    <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'>
-                     
-                    </p>
-                    // <HolderData
-                    //   holdersData={holdersData}
-                    //   holdersAmount={holdersAmount}
-                    // />
-                  )}
-                </div>
+                ) : null}
               </div>
             </div>
           </div>
-        
+          <div className='flex flex-col px-4  w-full'>
+            <div className='w-full rounded-lg  '>
+              <iframe
+                className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
+                src={`https://www.geckoterminal.com/base/pools/${
+                  token?.tokenAddress || env.tempContract
+                }?embed=1&info=0&swaps=0&chart=1`}
+              ></iframe>
+            </div>
+            <div className='border-[1px] mt-4 border-[#D5D5D5]'>
+              <div className=' flex justify-start items-start border-b border-[#D5D5D5] '>
+                <div>
+                  <button
+                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
+                      activeTab === "description"
+                        ? "  text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[18px]"
+                    }`}
+                    onClick={() => setActiveTab("description")}
+                  >
+                    DESCRIPTION
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
+                      activeTab === "updates"
+                        ? "  text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[18px]"
+                    }`}
+                    onClick={() => setActiveTab("updates")}
+                  >
+                    UPDATES
+                  </button>
+                </div>
+              </div>
+
+              <div className=''>
+                {activeTab === "description" ? (
+                  <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'>
+                    {token?.description}
+                  </p>
+                ) : (
+                  <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'></p>
+                  // <HolderData
+                  //   holdersData={holdersData}
+                  //   holdersAmount={holdersAmount}
+                  // />
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Right Section */}
-       
-          <div className='flex w-[50%] mt-10 flex-col'>
-              <Uniswap
-                defaultInputTokenAddress={pairedTokenAddress}
-                defaultOutputTokenAddress={token?.tokenAddress}
-                token={{
-                        "name": token?.name,
-                        "address": token?.tokenAddress,
-                        "symbol": token.tokenSymbol,
-                        "decimals": 18,
-                        "chainId": 8453,
-                        "logoURI": token?.image
-                }}
-                className="w-full"
-                />
-            {/* <iframe
+
+        <div className='flex w-[50%] mt-10 flex-col'>
+          <Uniswap
+            defaultInputTokenAddress={pairedTokenAddress}
+            defaultOutputTokenAddress={token?.tokenAddress}
+            setIsLoaded={setIsLoaded}
+            token={{
+              name: token?.name,
+              address: token?.tokenAddress,
+              symbol: token?.tokenSymbol,
+              decimals: 18,
+              chainId: 8453,
+              logoURI: token?.image,
+            }}
+            className='w-full'
+          />
+          {/* <iframe
               src={`https://app.uniswap.org/#/swap?exactField=input&exactAmount=${token?.earthToken
                 }&inputCurrency=${token?.tokenAddress || env.tempContract
                 }&theme=light`}
@@ -271,7 +290,7 @@ export function TokenDetails() {
                 height: "500px",
               }}
             /> */}
-            {/* <div
+          {/* <div
               style={{ borderRadius: "5px", cursor: "pointer" }}
               className="border-[1px] mt-6 border-[#D5D5D5] text-center bg-white relative"
             >
@@ -319,33 +338,46 @@ export function TokenDetails() {
               </div>
             </div> */}
 
-            <div className="flex flex-col gap-2 py-2 p-4 mt-5 border border-[#D5D5D5]">
-              <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
-              <p >$EARTH address</p>
-              <div className="flex gap-2">
+          <div className='flex flex-col gap-2 py-2 p-4 mt-5 border border-[#D5D5D5]'>
+            <div className='flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
+              <p>$EARTH address</p>
+              <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
                   {formatAddress(pairedTokenAddress || env.tempContract)}
                 </p>
-                <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
-                  <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
+                <CopyToClipboard
+                  onCopy={onCopy}
+                  className='cursor-pointer'
+                  text={token?.tokenAddress || env.tempContract}
+                >
+                  <FaCopy
+                    fontSize={12}
+                    style={{ color: copied ? "#000000" : "#7C7C7C" }}
+                  />
                 </CopyToClipboard>
               </div>
-              </div>
-              <div className="flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]">
-                  <p >{ token?.name} address</p>
-              <div className="flex gap-2">
+            </div>
+            <div className='flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
+              <p>{token?.name} address</p>
+              <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
                   {formatAddress(token?.tokenAddress || env.tempContract)}
                 </p>
-                <CopyToClipboard onCopy={onCopy} className='cursor-pointer' text={(token?.tokenAddress || env.tempContract)}>
-                  <FaCopy fontSize={12} style={{ color: copied ? "#000000" : "#7C7C7C" }} />
+                <CopyToClipboard
+                  onCopy={onCopy}
+                  className='cursor-pointer'
+                  text={token?.tokenAddress || env.tempContract}
+                >
+                  <FaCopy
+                    fontSize={12}
+                    style={{ color: copied ? "#000000" : "#7C7C7C" }}
+                  />
                 </CopyToClipboard>
               </div>
-              </div>
-
             </div>
+          </div>
 
-            {/* <div className='flex justify-between gap-0 mt-4  border-[1px] border-[#D5D5D5]'>
+          {/* <div className='flex justify-between gap-0 mt-4  border-[1px] border-[#D5D5D5]'>
               <div className=' px-4 py-1 border-r-[1px]  '>
                 <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px] '>
                   5M
@@ -383,39 +415,59 @@ export function TokenDetails() {
             <p className='w-full font-secondary text-[#7C7C7C] text-[12px] p-2 '>Uniswap</p>
             </div> */}
 
-
-            <div className="flex flex-col p-4 mt-4 border-[1px] border-[#D5D5D5]">
-              {/* Top Row */}
-              <div className="grid grid-cols-3 gap-4 text-center">
-                {[
-                  { label: "24H VOL", value: `$${formatNumber(pairData?.volume?.h24)}` },
-                  { label: "LIQUIDITY", value: `$${formatNumber(pairData?.liquidity?.usd)}` },
-                  { label: "HOLDERS", value: holdersData?.count },
-                ].map((item, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <p className="text-[#7C7C7C] font-secondary text-[12px]">{item.label}</p>
-                    <p className="text-[#DD4425] font-secondary text-[18px]">{item.value}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Row */}
-              <div className="grid grid-cols-3 gap-4 text-center mt-4">
-                {[
-                  { label: "AGE", value: calculateAge(pairData?.pairCreatedAt) },
-                  { label: "PRICE", value: pairData?.fdv ? `$${pairData?.fdv}` : "N/A" },
-                  { label: "MARKET CAP", value: pairData?.marketCap ? `$${pairData?.marketCap}` : "N/A" },
-                ].map((item, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <p className="text-[#7C7C7C] font-secondary text-[12px]">{item.label}</p>
-                    <p className="text-[#DD4425] font-secondary text-[18px]">{item.value}</p>
-                  </div>
-                ))}
-              </div>
+          <div className='flex flex-col p-4 mt-4 border-[1px] border-[#D5D5D5]'>
+            {/* Top Row */}
+            <div className='grid grid-cols-3 gap-4 text-center'>
+              {[
+                {
+                  label: "24H VOL",
+                  value: `$${formatNumber(pairData?.volume?.h24)}`,
+                },
+                {
+                  label: "LIQUIDITY",
+                  value: `$${formatNumber(pairData?.liquidity?.usd)}`,
+                },
+                { label: "HOLDERS", value: holdersData?.count },
+              ].map((item, index) => (
+                <div key={index} className='flex flex-col items-center'>
+                  <p className='text-[#7C7C7C] font-secondary text-[12px]'>
+                    {item.label}
+                  </p>
+                  <p className='text-[#DD4425] font-secondary text-[18px]'>
+                    {item.value}
+                  </p>
+                </div>
+              ))}
             </div>
 
+            {/* Bottom Row */}
+            <div className='grid grid-cols-3 gap-4 text-center mt-4'>
+              {[
+                { label: "AGE", value: calculateAge(pairData?.pairCreatedAt) },
+                {
+                  label: "PRICE",
+                  value: pairData?.fdv ? `$${pairData?.fdv}` : "N/A",
+                },
+                {
+                  label: "MARKET CAP",
+                  value: pairData?.marketCap
+                    ? `$${pairData?.marketCap}`
+                    : "N/A",
+                },
+              ].map((item, index) => (
+                <div key={index} className='flex flex-col items-center'>
+                  <p className='text-[#7C7C7C] font-secondary text-[12px]'>
+                    {item.label}
+                  </p>
+                  <p className='text-[#DD4425] font-secondary text-[18px]'>
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            {/* <div className='flex flex-col p-2 mt-4 border-[1px] border-[#D5D5D5]'>
+          {/* <div className='flex flex-col p-2 mt-4 border-[1px] border-[#D5D5D5]'>
               <div className='flex items-center justify-center'>
                 <div className='px-4 py-1'>
                   <p className='w-full text-center font-secondary text-[#7C7C7C] text-[12px]'>
@@ -471,21 +523,19 @@ export function TokenDetails() {
               </div>
             </div> */}
 
-            <div className='flex flex-col p-4 gap-4 mt-4 border-[1px] border-[#D5D5D5]'>
-              <div>
-                <p className='w-full text-left font-secondary text-[#7C7C7C] font-normal text-[12px] '>
-                  HOLDER DITRIBUTION ({holdersData?.count})
-                </p>
-              </div>
-              <HolderData
-                holdersData={holdersData}
-                holdersAmount={holdersAmount}
-              />
+          <div className='flex flex-col p-4 gap-4 mt-4 border-[1px] border-[#D5D5D5]'>
+            <div>
+              <p className='w-full text-left font-secondary text-[#7C7C7C] font-normal text-[12px] '>
+                HOLDER DITRIBUTION ({holdersData?.count})
+              </p>
             </div>
+            <HolderData
+              holdersData={holdersData}
+              holdersAmount={holdersAmount}
+            />
           </div>
-      
+        </div>
       </div>
-       )}
     </div>
   );
 }
