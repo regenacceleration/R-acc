@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 
 export function BtnLoader() {
-  return <LoadingOutlined spin delay={500} className='text-black' />;
+  return <LoadingOutlined spin delay={500} className='text-white' />;
 }
 
 export function Loader({ className }) {
