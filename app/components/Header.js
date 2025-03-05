@@ -21,7 +21,6 @@ export default function Header() {
   const address = hooks.useAccount();
   const {showMessage}=useNotification()
 
-  console.log({ isActive });
 
   const connectWallet = async () => {
     if (isActive) {

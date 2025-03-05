@@ -99,9 +99,9 @@ export function TokenDetails() {
         setHoldersData(holdersData);
         setHoldersAmount(holdersAmountData?.data?.total_supply);
 
-        console.log("Pair Data:", pairData);
-        console.log("Holders Data:", holdersData.data);
-        console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
+        // console.log("Pair Data:", pairData);
+        // console.log("Holders Data:", holdersData.data);
+        // console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

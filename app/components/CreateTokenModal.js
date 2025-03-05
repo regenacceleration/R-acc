@@ -67,7 +67,6 @@ export function CreateTokenModal() {
 
   const validateForm = () => {
     const newErrors = {};
-    console.log(formData.image);
 
     if (!formData.name) newErrors.name = "Name is required";
     if (!formData.ticker) newErrors.ticker = "Ticker is required";
@@ -86,7 +85,6 @@ export function CreateTokenModal() {
     // if (formData.totalSupply && isNaN(Number(formData.totalSupply))) {
     //   newErrors.totalSupply = "totalSupply must be a number";
     // }
-    console.log(newErrors);
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -112,7 +110,6 @@ export function CreateTokenModal() {
       file: file,
     });
     setFormData((data) => ({ ...data, image: response }));
-    console.log(formData?.image);
     if (Error) {
       console.log(Error);
       setLoading(false);
@@ -126,10 +123,8 @@ export function CreateTokenModal() {
     const signer =  provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
 
-    console.log(signer);
 
     if (!signer) {
-      console.log("Please connect wallet first");
       setLoading(false);
       return;
     }
@@ -184,7 +179,6 @@ export function CreateTokenModal() {
         return;
       }
 
-      console.log(signer);
 
       // Format parameters
       const parsedSupply = BigInt(totalSupply);
@@ -194,7 +188,6 @@ export function CreateTokenModal() {
       const pairedAddress = ethers.utils.getAddress(pairedToken);
       const parsedEarth = ethers.utils.parseUnits(earthToken, 18);
       const parsedFid = Number(fid);
-      console.log(pairedAddress);
 
       // Prepare deployment parameters
       const deploymentParams = {
@@ -213,11 +206,8 @@ export function CreateTokenModal() {
         },
         parsedEarth,
       };
-      console.log(deploymentParams);
 
       // Execute deployment
-      console.log("Deploying token...");
-      console.log(contract);
 
       const tx = await contract.deployToken(
         name,
@@ -306,7 +296,6 @@ export function CreateTokenModal() {
 
       setLoading(true);
       const { data: fetchData, fetchDataError } = await supabase.from("token").select("*").eq("name", formData?.name);
-      console.log(fetchData);
       if (fetchDataError) {
         setErrors((errors) => ({
           ...errors,
@@ -330,7 +319,6 @@ export function CreateTokenModal() {
         setLoading(false);
         return;
       }
-      console.log(deploy);
       const { data, error } = await supabase.from("token").insert([
         {
           name: formData?.name,
@@ -348,7 +336,6 @@ export function CreateTokenModal() {
           ...deploy,
         },
       ]);
-      console.log(data);
       if (error) throw new Error(error);
       setLoading(false);
 

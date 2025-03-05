@@ -36,7 +36,6 @@ export default function Updates({ token }) {
         setLoading(false);
         return;
       }
-      console.log(data);
       setTotalDataCount(count);
       if (data.length === 0) {
         setHasMore(false);
@@ -74,7 +73,6 @@ export default function Updates({ token }) {
         throw error; // Properly throw the error
       }
 
-      console.log("Inserted data:", data);
 
       // const updateObj = {
       //     tokenAddress:token?.tokenAddress,
@@ -176,7 +174,9 @@ export default function Updates({ token }) {
                   </p>
                 </div>
               </div>
-            )) : null}
+            )) : updates && !updates.length && <div className="flex items-center w-[100%] justify-center h-64">
+                <p className='text-[#000000] font-primary font-normal text-[16px]'>No Updates</p>
+            </div>}
           </div>
 
         }
