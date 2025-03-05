@@ -6,9 +6,9 @@ export const urlGeneration = (path) =>
 export const getAddress = () => localStorage.getItem("address");
 
 export const formatAddress = (address) =>
-  `${address.slice(0, 6)}....${address.slice(
-    address.length - 6,
-    address.length
+  `${address?.slice(0, 6)}....${address?.slice(
+    address?.length - 6,
+    address?.length
   )}`;
 
 export const formatNumber = (value) => {

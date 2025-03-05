@@ -74,7 +74,7 @@ function IndToken({token})
     <div
        style={{ borderRadius: "5px", cursor: "pointer" }}
                         className="border-[1px] border-[#D5D5D5] p-4 text-center bg-white relative"
-            onClick={() => window.open(`/token/${token?.id}`,'_blank')}
+            onClick={() => window.open(`/token/${token?.name?.split(' ').join('-')}`,'_blank')}
         
     >
         

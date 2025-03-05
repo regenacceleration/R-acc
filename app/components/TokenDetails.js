@@ -17,7 +17,7 @@ import { useNotification } from "../hooks/useNotification";
 import Updates from "./Updates";
 
 export function TokenDetails() {
-  const { id } = useParams();
+  const { id:name } = useParams();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pairData, setPairData] = useState(null);
@@ -29,8 +29,11 @@ export function TokenDetails() {
   const address = getAddress();
   const { showMessage } = useNotification();
 
-  const onCopy = () => {
-    setCopied(true);
+  const onCopy = (text) => {
+    setCopied(text);
+    setTimeout(() => {
+      setCopied('')
+    }, 500);
   };
 
   useEffect(() => {
@@ -43,7 +46,7 @@ export function TokenDetails() {
         const { data: token, error } = await supabase
           .from("token")
           .select("*")
-          .eq("id", id)
+          .eq("name", name?.split('-').join(' '))
           .single();
         if (error) {
           throw new Error(`Error fetching token details: ${error.message}`);
@@ -107,7 +110,7 @@ export function TokenDetails() {
     };
 
     fetchData();
-  }, [id]);
+  }, [name]);
 
   const calculateAge = (date) => {
     if (!date) return "N/A";
@@ -366,16 +369,16 @@ export function TokenDetails() {
               <p>$EARTH address</p>
               <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
-                  {formatAddress(pairedTokenAddress || env.tempContract)}
+                  {formatAddress(pairedTokenAddress)}
                 </p>
                 <CopyToClipboard
-                  onCopy={onCopy}
+                  onCopy={()=>onCopy('pairedTokenAddress')}
                   className='cursor-pointer'
-                  text={token?.tokenAddress || env.tempContract}
+                  text={pairedTokenAddress}
                 >
                   <FaCopy
                     fontSize={12}
-                    style={{ color: copied ? "#000000" : "#7C7C7C" }}
+                    style={{ color: copied ==='pairedTokenAddress' ? "#000000" : "#7C7C7C" }}
                   />
                 </CopyToClipboard>
               </div>
@@ -384,16 +387,16 @@ export function TokenDetails() {
               <p>{token?.name} address</p>
               <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
-                  {formatAddress(token?.tokenAddress || env.tempContract)}
+                  {formatAddress(token?.tokenAddress)}
                 </p>
                 <CopyToClipboard
-                  onCopy={onCopy}
+                  onCopy={() => onCopy('tokenAddress')}
                   className='cursor-pointer'
-                  text={token?.tokenAddress || env.tempContract}
+                  text={token?.tokenAddress}
                 >
                   <FaCopy
                     fontSize={12}
-                    style={{ color: copied ? "#000000" : "#7C7C7C" }}
+                    style={{ color: copied ==='tokenAddress' ? "#000000" : "#7C7C7C" }}
                   />
                 </CopyToClipboard>
               </div>
@@ -469,7 +472,7 @@ export function TokenDetails() {
                 { label: "AGE", value: calculateAge(pairData?.pairCreatedAt) },
                 {
                   label: "PRICE",
-                  value: pairData?.fdv ? `$${pairData?.fdv}` : "N/A",
+                  value: pairData?.priceNative ? `$${pairData?.priceNative}` : "N/A",
                 },
                 {
                   label: "MARKET CAP",

@@ -45,7 +45,7 @@ export function Uniswap(props) {
       "symbol": "ETH",
       "decimals": 18,
       "chainId": 8453,
-      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+      "logoURI": "https://polygonscan.com/token/images/solarpunkdao_32.png"
     },
   ]
   
