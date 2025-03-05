@@ -63,17 +63,44 @@ export default function Updates({token}) {
     if (comment === "") return; // Check if comment is empty and return if true
 
     try {
-      setLoading(true);
+        setLoading(true);
+        
 
-      const { data, error } = await supabase
-        .from("update") // Ensure "update" is your actual table name
-        .insert([{ update: comment }]);
+        const updateObj = {
+            tokenAddress:token?.tokenAddress,
+            description: [
+                {
+                    content: comment,
+                    updateAt: new Date(),
+                    id: new Date()
+                }
+            ]
+        }
 
-      if (error) {
-        throw error; // Properly throw the error
-      }
 
-      console.log("Inserted data:", data);
+        // const { data, error } = await supabase
+        //     .from("updates")
+        //     .upsert(
+        //         updateObj,
+        //         { onConflict: ["tokenAddress"] }
+        //     )
+        //     .select();
+
+        // if (!error && data.length > 0) {
+            // If the row already exists, update description by appending new data
+        // const { error: updateError } = await supabase.rpc("append", {
+        //         p_tokenaddress: token?.tokenAddress,
+        //         p_new_value: updateObj.description[0]
+        //     })
+
+        //     if (updateError) {
+        //         console.error("Error updating description:", updateError);
+        //     } else {
+        //         console.log("Description updated successfully");
+        //     }
+        // } else if (error) {
+        //     console.error("Error inserting/updating:", error);
+        // }
 
       setComment(""); // Clear input after success
     } catch (error) {
