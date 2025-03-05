@@ -14,6 +14,7 @@ import { FaCopy } from "react-icons/fa";
 import { Uniswap } from "./Uniswap";
 import { pairedTokenAddress } from "./constants";
 import { useNotification } from "../hooks/useNotification";
+import Updates from "./Updates";
 
 export function TokenDetails() {
   const { id } = useParams();
@@ -116,8 +117,8 @@ export function TokenDetails() {
     return difference > 1
       ? `${difference} days`
       : difference < 1
-      ? difference
-      : `${difference} day`;
+        ? difference
+        : `${difference} day`;
   };
 
   const hasRun = useRef(false);
@@ -145,7 +146,7 @@ export function TokenDetails() {
       <div
         className={`w-[100%] items-center justify-center h-screen ${
           loading || isLoaded ? "flex" : "hidden"
-        }`}
+          }`}
       >
         <Loader className='text-[#7C7C7C]' size='text-7xl' />
       </div>
@@ -234,7 +235,7 @@ export function TokenDetails() {
                 className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
                 src={`https://www.geckoterminal.com/base/pools/${
                   token?.tokenAddress || env.tempContract
-                }?embed=1&info=0&swaps=0&chart=1`}
+                  }?embed=1&info=0&swaps=0&chart=1`}
               ></iframe>
             </div>
             <div className='border-[1px] mt-4 border-[#D5D5D5]'>
@@ -243,9 +244,9 @@ export function TokenDetails() {
                   <button
                     className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
                       activeTab === "description"
-                        ? "  text-[18px] text-[#000000]"
-                        : "text-[#D5D5D5] text-[18px]"
-                    }`}
+                      ? "  text-[18px] text-[#000000]"
+                      : "text-[#D5D5D5] text-[18px]"
+                      }`}
                     onClick={() => setActiveTab("description")}
                   >
                     DESCRIPTION
@@ -255,9 +256,9 @@ export function TokenDetails() {
                   <button
                     className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
                       activeTab === "updates"
-                        ? "  text-[18px] text-[#000000]"
-                        : "text-[#D5D5D5] text-[18px]"
-                    }`}
+                      ? "  text-[18px] text-[#000000]"
+                      : "text-[#D5D5D5] text-[18px]"
+                      }`}
                     onClick={() => setActiveTab("updates")}
                   >
                     UPDATES
@@ -271,7 +272,9 @@ export function TokenDetails() {
                     {token?.description}
                   </p>
                 ) : (
-                  <p className='text-[#000000] p-4 mt-4 font-primary text-left font-normal text-[12px] w-full'></p>
+                  <div className="p-3">
+                    <Updates token={token} />
+                  </div>
                   // <HolderData
                   //   holdersData={holdersData}
                   //   holdersAmount={holdersAmount}
