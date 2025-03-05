@@ -25,6 +25,7 @@ export default function Updates({token}) {
       let query = supabase
         .from("update")
         .select("*", { count: "exact" })
+        .eq("tokenAddress", token?.tokenAddress) // Filter by tokenAddress
         .order("created_at", { ascending: false })
         .range(start, end);
 
@@ -64,18 +65,26 @@ export default function Updates({token}) {
 
     try {
         setLoading(true);
-        
+        const { data, error } = await supabase
+        .from("update") // Ensure "update" is your actual table name
+        .insert([{ update: comment,tokenAddress:token?.tokenAddress }]);
 
-        const updateObj = {
-            tokenAddress:token?.tokenAddress,
-            description: [
-                {
-                    content: comment,
-                    updateAt: new Date(),
-                    id: new Date()
-                }
-            ]
-        }
+    if (error) {
+        throw error; // Properly throw the error
+    }
+
+    console.log("Inserted data:", data);
+
+        // const updateObj = {
+        //     tokenAddress:token?.tokenAddress,
+        //     description: [
+        //         {
+        //             content: comment,
+        //             updateAt: new Date(),
+        //             id: new Date()
+        //         }
+        //     ]
+        // }
 
 
         // const { data, error } = await supabase
@@ -113,35 +122,6 @@ export default function Updates({token}) {
 
   return (
     <div>
-      <InfiniteScroll
-        dataLength={updates.length}
-        next={fetchMoreUpdate}
-        hasMore={updates.length < totalDataCount}
-              scrollThreshold={"50%"}
-              height={"62vh"}
-      >
-        {/* {loading ?
-                                     <div className="flex items-center w-[50%] justify-center h-64">
-                                       <Loader className="text-[#7C7C7C]" size="text-6xl" />
-                                     </div>
-                                     : */}
-                  {updates && updates.length ?updates.map((update, index) => (
-            <div key={index} className='w-[90%] py-4'>
-              <div className='flex flex-col items-start gap-3'>
-                {/* <p className="font-bold text-[#000000] font-primary text-[14px]">{update.name}</p> */}
-                <p className='text-[#000000] font-primary font-normal text-[16px]'>
-                  {update.update}
-                </p>
-                <p className='text-[#000000] font-primary font-normal text-[12px]'>
-                  Date: {new Date(update.created_at).toLocaleDateString()}
-                </p>
-              </div>
-            </div>
-          )):null}
-
-        {/* } */}
-      </InfiniteScroll>
-
       {getAddress()!==token?.address?<div className='flex mt-4 items-center gap-3 justify-between  rounded-lg w-full'>
         <div className='flex flex-col h-10 w-full'>
           <textarea
@@ -158,10 +138,40 @@ export default function Updates({token}) {
             type='button'
             onClick={handleSubmit}
           >
-            {loading ? <BtnLoader /> : "Submit"}
+            {loading ? <BtnLoader className="text-white" /> : "Submit"}
           </button>
         </div>
       </div>:null}
+      <InfiniteScroll
+        dataLength={updates.length}
+        next={fetchMoreUpdate}
+        hasMore={updates.length < totalDataCount}
+              scrollThreshold={"50%"}
+              height={"62vh"}
+      >
+         {loading ?
+                                     <div className="flex items-center w-[50%] justify-center h-64">
+                                       <Loader className="text-[#7C7C7C]" size="text-6xl" />
+                                     </div>
+                                     : 
+                                     <>
+                  {updates && updates.length ?updates.map((update, index) => (
+            <div key={index} className='w-[90%] py-4'>
+              <div className='flex flex-col items-start gap-3'>
+                {/* <p className="font-bold text-[#000000] font-primary text-[14px]">{update.name}</p> */}
+                <p className='text-[#000000] font-primary font-normal text-[16px]'>
+                  {update.update}
+                </p>
+                <p className='text-[#000000] font-primary font-normal text-[12px]'>
+                  Date: {new Date(update.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </div>
+          )):null}
+          </>
+
+        }
+      </InfiniteScroll>
     </div>
   );
 }
