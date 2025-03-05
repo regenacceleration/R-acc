@@ -453,7 +453,7 @@ export function TokenDetails() {
                   label: "LIQUIDITY",
                   value: `$${formatNumber(pairData?.liquidity?.usd)}`,
                 },
-                { label: "HOLDERS", value: holdersData?.count },
+                { label: "HOLDERS", value: holdersData?.count ? holdersData?.count : 0 },
               ].map((item, index) => (
                 <div key={index} className='flex flex-col items-center'>
                   <p className='text-[#7C7C7C] font-secondary text-[12px]'>
@@ -549,7 +549,7 @@ export function TokenDetails() {
               </div>
             </div> */}
 
-          <div className='flex flex-col p-4 gap-4 mt-4 border-[1px] border-[#D5D5D5]'>
+          {holdersData?.count ? <div className='flex flex-col p-4 gap-4 mt-4 border-[1px] border-[#D5D5D5]'>
             <div>
               <p className='w-full text-left font-secondary text-[#7C7C7C] font-normal text-[12px] '>
                 HOLDER DITRIBUTION ({holdersData?.count})
@@ -559,7 +559,7 @@ export function TokenDetails() {
               holdersData={holdersData}
               holdersAmount={holdersAmount}
             />
-          </div>
+          </div>:null}
         </div>
       </div>
     </div>

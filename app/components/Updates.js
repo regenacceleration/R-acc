@@ -13,8 +13,9 @@ export default function Updates({ token }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalDataCount, setTotalDataCount] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const rowsPerPage = 3;
+  const rowsPerPage = 10;
   const [errors, setErrors] = useState();
+  const [submit,setSubmit]=useState(false)
 
   const fetchUpdates = async (page, search = "") => {
     try {
@@ -64,7 +65,7 @@ export default function Updates({ token }) {
     if (comment === "") return; // Check if comment is empty and return if true
 
     try {
-      setLoading(true);
+      setSubmit(true);
       const { data, error } = await supabase
         .from("update") // Ensure "update" is your actual table name
         .insert([{ update: comment, tokenAddress: token?.tokenAddress }]);
@@ -117,45 +118,52 @@ export default function Updates({ token }) {
       setErrors(error.message); // Store error message
       console.error("Error inserting data:", error);
     } finally {
-      setLoading(false); // Ensure loading is stopped
+      setSubmit(false); // Ensure loading is stopped
     }
   };
 
   return (
-    <div>
-      {getAddress() !== token?.address ? <div className='flex mt-4  items-center gap-3 justify-between  rounded-lg w-full'>
-        <div className='flex flex-col w-full'>
-          <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder='Add a update...'
-            className='flex-1 text-black  bg-gray-200 w-full px-3 py-2 rounded-lg outline-none mb-0 resize-none'
-          />
-          {errors && <p className='text-red-500 text-sm '>{errors}</p>}
-        </div>
-        <div className=''>
-          <button
-            className='w-full px-4 py-2 bg-black text-white rounded-lg flex items-center justify-center gap-3 font-normal font-primary text-[16px]'
-            type='button'
-            onClick={handleSubmit}
-          >
-            {loading ? <BtnLoader className="text-white" /> : "Submit"}
-          </button>
-        </div>
-      </div> : null}
+    <div >
+        {getAddress() === token?.address ? (
+          <div className="flex mt-4 items-center gap-3 justify-between rounded-lg w-full">
+            <div className="flex flex-col flex-1">
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Add an update..."
+                className="flex-1 text-black bg-gray-200 w-full px-3 py-2 rounded-lg outline-none mb-0 resize-none"
+              />
+              {errors && <p className="text-red-500 text-sm">{errors}</p>}
+            </div>
+            <div >
+              <button
+                className="w-full px-4 py-2 bg-black text-white rounded-lg flex items-center justify-center gap-3 font-normal font-primary text-[16px] min-w-24 h-10"
+                type="button"
+                onClick={handleSubmit}
+              >
+                {submit ? (
+                  <BtnLoader className="text-white" />
+                ) : (
+                  <span className="inline-block w-[60px] text-center">Submit</span>
+                )}
+              </button>
+            </div>
+          </div>
+        ) : null}
       <InfiniteScroll
         dataLength={updates.length}
         next={fetchMoreUpdate}
         hasMore={updates.length < totalDataCount}
-        scrollThreshold={"50%"}
-        className="h-[62vh]"
+        // scrollThreshold={"50%"}
+        height={'40vh'}
+       
       >
         {loading ?
           <div className="flex items-center w-[100%] justify-center h-64">
             <Loader className="text-[#7C7C7C]" size="text-6xl" />
           </div>
           :
-          <>
+          <div >
             {updates && updates.length ? updates.map((update, index) => (
               <div key={index} className='w-[90%] py-4'>
                 <div className='flex flex-col items-start gap-3'>
@@ -169,7 +177,7 @@ export default function Updates({ token }) {
                 </div>
               </div>
             )) : null}
-          </>
+          </div>
 
         }
       </InfiniteScroll>
