@@ -42,7 +42,7 @@ export function Uniswap(props) {
     {
       "name": "EARTH",
       "address": pairedTokenAddress,
-      "symbol": "ETH",
+      "symbol": "EAR",
       "decimals": 18,
       "chainId": 8453,
       "logoURI": "https://polygonscan.com/token/images/solarpunkdao_32.png"

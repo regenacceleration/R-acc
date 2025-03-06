@@ -117,7 +117,7 @@ function IndToken({token})
                     <Image width={40} alt="Token" height={40} src={images.telegram} className="w-[12px] h-[12px] flex items-center justify-center text-[#C7C7C7]" />
                 </a>:null}
             </div>
-            <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full">
+                <p className="text-[#000000] font-primary mt-4 px-4 font-normal text-[13px] w-full line-clamp-2">
                 {token?.description}
             </p>
         </div>
