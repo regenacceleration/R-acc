@@ -4,7 +4,7 @@ import Header from "./Header";
 import Link from "next/link";
 import Image from "next/image";
 import images from "../constants/images";
-import { supabase } from "../services/supabase.js";
+import { supabase, supabaseTable } from "../services/supabase.js";
 import useImgApi from "../hooks/useImgApi";
 import { BtnLoader } from "./Loader";
 import { abi, chain, contractAddress, pairedTokenAddress } from "./constants";
@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import { getAddress, validateUrl, VerifyNetwork } from "../utils/helperFn";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
+import { createToken } from "../action";
 
 export function CreateTokenModal() {
   const [address, setAddress] = useState("");
@@ -295,7 +296,7 @@ export function CreateTokenModal() {
       if (!validateForm()) return;
 
       setLoading(true);
-      const { data: fetchData, fetchDataError } = await supabase.from("token").select("*").eq("name", formData?.name);
+      const { data: fetchData, fetchDataError } = await supabase.from(supabaseTable.token).select("*").eq("name", formData?.name);
       if (fetchDataError) {
         setErrors((errors) => ({
           ...errors,
@@ -319,8 +320,7 @@ export function CreateTokenModal() {
         setLoading(false);
         return;
       }
-      const { data, error } = await supabase.from("token").insert([
-        {
+      const { data, error } = await createToken({
           name: formData?.name,
           ticker: formData?.ticker,
           description: formData?.description,
@@ -334,8 +334,7 @@ export function CreateTokenModal() {
           tokenSymbol:formData?.tokenSymbol,
           // devBuyFee: formData?.devBuyFee,
           ...deploy,
-        },
-      ]);
+      });
       if (error) throw new Error(error);
       setLoading(false);
 

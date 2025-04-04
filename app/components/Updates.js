@@ -1,7 +1,7 @@
 "use client";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { BtnLoader, Loader } from "./Loader";
-import { supabase } from "../services/supabase";
+import { supabase, supabaseTable } from "../services/supabase";
 import { useEffect, useState } from "react";
 import { getAddress } from "../utils/helperFn";
 
@@ -24,7 +24,7 @@ export default function Updates({ token }) {
       const end = start + rowsPerPage - 1;
 
       let query = supabase
-        .from("update")
+        .from(supabaseTable.update)
         .select("*", { count: "exact" })
         .eq("tokenAddress", token?.tokenAddress) // Filter by tokenAddress
         .order("created_at", { ascending: false })
@@ -66,7 +66,7 @@ export default function Updates({ token }) {
     try {
       setSubmit(true);
       const { data, error } = await supabase
-        .from("update") // Ensure "update" is your actual table name
+        .from(supabaseTable.update) // Ensure "update" is your actual table name
         .insert([{ update: comment, tokenAddress: token?.tokenAddress }]);
 
       if (error) {

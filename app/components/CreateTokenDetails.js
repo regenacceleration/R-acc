@@ -7,6 +7,7 @@ import { BtnLoader } from "./Loader";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
 import { networks } from "../constants/networks";
+import { createToken } from "../action";
 
 export function CreateTokenDetails() {
   const [formData, setFormData] = useState({
@@ -74,25 +75,23 @@ export function CreateTokenDetails() {
       const response = await fetch(dexScreenerUrl);
       const userData = await response.json();
       console.log(userData[0])
-      const { data, error } = await supabase.from("token").insert([
-        {
-          tokenAddress: formData?.tokenAddress,
-          address: userData[0]?.baseToken?.address,
-          network: userData[0]?.chainId,
-          name: userData[0]?.baseToken?.name,
-          ticker: null,
-          description: formData.description,
-          image: userData[0]?.info?.imageUrl,
-          telegram: userData[0]?.info?.socials[1]?.url,
-          twitter: userData[0]?.info?.socials[0]?.url,
-          website: userData[0]?.info?.websites[0]?.url,
-          totalSupply: userData[0]?.marketCap,
-          tokenSymbol: userData[0]?.baseToken?.symbol,
-          positionId: null,
-          lockerAddress: null,
-          earthToken: null,
-        },
-      ]);
+      const { data, error } = await createToken({
+        tokenAddress: formData?.tokenAddress,
+        address: userData[0]?.baseToken?.address,
+        network: userData[0]?.chainId,
+        name: userData[0]?.baseToken?.name,
+        ticker: null,
+        description: formData.description,
+        image: userData[0]?.info?.imageUrl,
+        telegram: userData[0]?.info?.socials[1]?.url,
+        twitter: userData[0]?.info?.socials[0]?.url,
+        website: userData[0]?.info?.websites[0]?.url,
+        totalSupply: userData[0]?.marketCap,
+        tokenSymbol: userData[0]?.baseToken?.symbol,
+        positionId: null,
+        lockerAddress: null,
+        earthToken: null,
+      });
       if (error) throw new Error(error);
       setLoading(false);
       console.log(data);
