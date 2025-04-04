@@ -6,6 +6,7 @@ import { supabase } from "../services/supabase.js";
 import { BtnLoader } from "./Loader";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
+import { networks } from "../constants/networks";
 
 export function CreateTokenDetails() {
   const [formData, setFormData] = useState({
@@ -47,19 +48,8 @@ export function CreateTokenDetails() {
     lockerAddress: "",
     earthToken: "",
   });
-  const chainId = "base"
-  const networks = [
-    {
-      displayName: "Base",
-      chainId: 8453,
-      chainName: "base",
-    },
-    {
-      displayName: "Polygon",
-      chainId: 137,
-      chainName: "polygon",
-    },
-  ]
+
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -78,7 +68,9 @@ export function CreateTokenDetails() {
       if (!validateForm()) return;
       console.log(formData)
       setLoading(true);
-      const dexScreenerUrl = `https://api.dexscreener.com/tokens/v1/${chainId}/${formData?.tokenAddress}`
+      const networkFilter = networks.find(network => network.displayName === formData?.network);
+      console.log(networkFilter)
+      const dexScreenerUrl = `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${formData?.tokenAddress}`
       const response = await fetch(dexScreenerUrl);
       const userData = await response.json();
       console.log(userData[0])
@@ -86,10 +78,10 @@ export function CreateTokenDetails() {
         {
           tokenAddress: formData?.tokenAddress,
           address: userData[0]?.baseToken?.address,
-          network: formData?.network,
+          network: userData[0]?.chainId,
           name: userData[0]?.baseToken?.name,
           ticker: null,
-          description: null,
+          description: formData.description,
           image: userData[0]?.info?.imageUrl,
           telegram: userData[0]?.info?.socials[1]?.url,
           twitter: userData[0]?.info?.socials[0]?.url,
@@ -161,7 +153,16 @@ export function CreateTokenDetails() {
             />
             {errors.address && <p className="text-red-500 text-sm ">{errors.address}</p>}
           </div>
-
+          <div className="w-full">
+            <label className=" font-normal font-primary text-[13px]  text-[#000000]">DESCRIPTION</label>
+            <input
+              type="text"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="w-full bg-gray-50 outline-none font-primary border-[#D5D5D5]  border-b-[1px]    "
+            />
+            {errors.description && <p className="text-red-500 text-sm ">{errors.description}</p>}
+          </div>
           <div className="flex flex-col gap-2">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">NETWORK</label>
             <select
@@ -178,6 +179,7 @@ export function CreateTokenDetails() {
             </select>
             {errors.network && <p className="text-red-500 text-sm ">{errors.network}</p>}
           </div>
+
           <div className="flex w-full py-4  gap-8 justify-center items-center">
             <button type="submit" disabled={loading} className="text-[#FF0000] flex items-center justify-center gap-3 font-normal font-primary text-[13px]">
               SUBMIT {loading ? <BtnLoader /> : null}

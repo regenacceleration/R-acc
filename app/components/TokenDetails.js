@@ -15,9 +15,10 @@ import { Uniswap } from "./Uniswap";
 import { pairedTokenAddress } from "./constants";
 import { useNotification } from "../hooks/useNotification";
 import Updates from "./Updates";
+import { networks } from "../constants/networks";
 
 export function TokenDetails() {
-  const { id:name } = useParams();
+  const { id: name } = useParams();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pairData, setPairData] = useState(null);
@@ -29,12 +30,16 @@ export function TokenDetails() {
   const address = getAddress();
   const { showMessage } = useNotification();
 
+
   const onCopy = (text) => {
     setCopied(text);
     setTimeout(() => {
       setCopied('')
     }, 500);
   };
+
+
+  const [networkObj, setNetworkObj] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +57,9 @@ export function TokenDetails() {
           throw new Error(`Error fetching token details: ${error.message}`);
         }
         setToken(token);
+        const networkFilter = networks.find(network => network.chainName === token?.network);
+        console.log(networkFilter)
+        setNetworkObj(networkFilter)
         console.log("Fetched Token:", token);
 
         if (!token) throw new Error("Token not found");
@@ -60,20 +68,17 @@ export function TokenDetails() {
         const [pairResponse, holdersResponse, holdersAmountResponse] =
           await Promise.all([
             fetch(
-              `https://api.dexscreener.com/tokens/v1/base/${
-                token?.tokenAddress || env.tempContract
+              `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token?.tokenAddress || env.tempContract
               }`
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/top-holders?chain_id=8453&contract_address=${
-                token?.tokenAddress || env.tempContract
+              `https://api.chainbase.online/v1/token/top-holders?chain_id=${networkObj?.chainId}&contract_address=${token?.tokenAddress || env.tempContract
               }&limit=10`,
               { method: "GET", headers }
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/metadata?contract_address=${
-                token?.tokenAddress || env.tempContract
-              }&chain_id=8453`,
+              `https://api.chainbase.online/v1/token/metadata?contract_address=${token?.tokenAddress || env.tempContract
+              }&chain_id=${networkObj?.chainId}`,
               { method: "GET", headers }
             ),
           ]);
@@ -99,9 +104,9 @@ export function TokenDetails() {
         setHoldersData(holdersData);
         setHoldersAmount(holdersAmountData?.data?.total_supply);
 
-        // console.log("Pair Data:", pairData);
-        // console.log("Holders Data:", holdersData.data);
-        // console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
+        console.log("Pair Data:", pairData?.[0]);
+        console.log("Holders Data:", holdersData.data);
+        console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -147,8 +152,7 @@ export function TokenDetails() {
       {/* Main Content */}
 
       <div
-        className={`w-[100%] items-center justify-center h-screen ${
-          loading || isLoaded ? "flex" : "hidden"
+        className={`w-[100%] items-center justify-center h-screen ${loading || isLoaded ? "flex" : "hidden"
           }`}
       >
         <Loader className='text-[#7C7C7C]' size='text-7xl' />
@@ -171,7 +175,7 @@ export function TokenDetails() {
             </div>
             <div className='flex items-end mt-3 gap-3'>
               <Link
-                href={`https://www.geckoterminal.com/base/pools/${token?.tokenAddress}`}
+                href={`https://www.geckoterminal.com/${networkObj?.chainName}/pools/${token?.tokenAddress}`}
                 target='_blank'
                 className='text-[#7C7C7C] font-normal text-[12px] hover:text-black '
               >
@@ -236,8 +240,7 @@ export function TokenDetails() {
             <div className='w-full rounded-lg  '>
               <iframe
                 className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
-                src={`https://www.geckoterminal.com/base/pools/${
-                  token?.tokenAddress || env.tempContract
+                src={`https://www.geckoterminal.com/${networkObj?.chainName}/pools/${token?.tokenAddress || env.tempContract
                   }?embed=1&info=0&swaps=0&chart=1`}
               ></iframe>
             </div>
@@ -245,10 +248,9 @@ export function TokenDetails() {
               <div className=' flex justify-start items-start border-b border-[#D5D5D5] '>
                 <div>
                   <button
-                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
-                      activeTab === "description"
-                      ? "  text-[18px] text-[#000000]"
-                      : "text-[#D5D5D5] text-[18px]"
+                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${activeTab === "description"
+                        ? "  text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[18px]"
                       }`}
                     onClick={() => setActiveTab("description")}
                   >
@@ -257,10 +259,9 @@ export function TokenDetails() {
                 </div>
                 <div>
                   <button
-                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${
-                      activeTab === "updates"
-                      ? "  text-[18px] text-[#000000]"
-                      : "text-[#D5D5D5] text-[18px]"
+                    className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${activeTab === "updates"
+                        ? "  text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[18px]"
                       }`}
                     onClick={() => setActiveTab("updates")}
                   >
@@ -301,7 +302,7 @@ export function TokenDetails() {
                 address: token?.tokenAddress,
                 symbol: token?.tokenSymbol,
                 decimals: 18,
-                chainId: 8453,
+                chainId: networkObj?.chainId,
                 logoURI: token?.image,
               }}
               className='w-full'
@@ -372,13 +373,13 @@ export function TokenDetails() {
                   {formatAddress(pairedTokenAddress)}
                 </p>
                 <CopyToClipboard
-                  onCopy={()=>onCopy('pairedTokenAddress')}
+                  onCopy={() => onCopy('pairedTokenAddress')}
                   className='cursor-pointer'
                   text={pairedTokenAddress}
                 >
                   <FaCopy
                     fontSize={12}
-                    style={{ color: copied ==='pairedTokenAddress' ? "#000000" : "#7C7C7C" }}
+                    style={{ color: copied === 'pairedTokenAddress' ? "#000000" : "#7C7C7C" }}
                   />
                 </CopyToClipboard>
               </div>
@@ -396,7 +397,7 @@ export function TokenDetails() {
                 >
                   <FaCopy
                     fontSize={12}
-                    style={{ color: copied ==='tokenAddress' ? "#000000" : "#7C7C7C" }}
+                    style={{ color: copied === 'tokenAddress' ? "#000000" : "#7C7C7C" }}
                   />
                 </CopyToClipboard>
               </div>
@@ -559,7 +560,7 @@ export function TokenDetails() {
               holdersData={holdersData}
               holdersAmount={holdersAmount}
             />
-          </div>:null}
+          </div> : null}
         </div>
       </div>
     </div>
