@@ -37,9 +37,8 @@ export function TokenDetails() {
       setCopied('')
     }, 500);
   };
-
-
-  const [networkObj, setNetworkObj] = useState(null)
+ 
+  const [networkObj, setNetworkObj] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +59,7 @@ export function TokenDetails() {
         const networkFilter = networks.find(network => network.chainName === token?.network);
         console.log(networkFilter)
         setNetworkObj(networkFilter)
+      
         console.log("Fetched Token:", token);
 
         if (!token) throw new Error("Token not found");
@@ -72,13 +72,13 @@ export function TokenDetails() {
               }`
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/top-holders?chain_id=${networkObj?.chainId}&contract_address=${token?.tokenAddress || env.tempContract
+              `https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token?.tokenAddress || env.tempContract
               }&limit=10`,
               { method: "GET", headers }
             ),
             fetch(
               `https://api.chainbase.online/v1/token/metadata?contract_address=${token?.tokenAddress || env.tempContract
-              }&chain_id=${networkObj?.chainId}`,
+              }&chain_id=${networkFilter?.chainId}`,
               { method: "GET", headers }
             ),
           ]);
@@ -116,6 +116,8 @@ export function TokenDetails() {
 
     fetchData();
   }, [name]);
+
+  console.log(networkObj)
 
   const calculateAge = (date) => {
     if (!date) return "N/A";
