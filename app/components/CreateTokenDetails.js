@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { useNotification } from "../hooks/useNotification";
 import { networks } from "../constants/networks";
 import { createToken } from "../action";
+import LogInHeader from "./LogInHeader";
+
 
 export function CreateTokenDetails() {
   const [formData, setFormData] = useState({
@@ -123,9 +125,9 @@ export function CreateTokenDetails() {
   };
 
   return (
-    <div className="min-h-screen pb-6 bg-gray-50 ">
-      <Header />
-      <div className="flex w-full h-screen overflow-x-hidden items-center justify-center ">
+    <div className="flex flex-col w-full h-screen bg-gray-50">
+      <LogInHeader />
+      <div className="flex flex-col h-full items-center justify-center">
         <form
           onSubmit={handleSubmit}
           className="space-y-4 text-black">
