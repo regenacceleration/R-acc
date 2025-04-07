@@ -105,8 +105,14 @@ export function CreateTokenDetails() {
         lockerAddress: null,
         earthToken: null,
       });
-      if (error) throw new Error(error);
-      setLoading(false);
+      if (error) {
+        console.log(error);
+        showMessage({
+          type: "error",
+          value: error?.message,
+        });
+        return
+      };
       console.log(data);
       showMessage({
         type: "success",
@@ -136,6 +142,8 @@ export function CreateTokenDetails() {
         value: "Error occurred",
       });
       console.log("Error inserting data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,11 +179,11 @@ export function CreateTokenDetails() {
           </div>
           <div className="w-full">
             <label className=" font-normal font-primary text-[13px]  text-[#000000]">DESCRIPTION</label>
-            <input
-              type="text"
+            <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full bg-gray-50 outline-none font-primary border-[#D5D5D5]  border-b-[1px]    "
+              className="outline-none font-primary px-2  w-full  resize-none  border-[1px] bg-gray-50 border-[#D5D5D5]  "
+              rows={3}
             />
             {errors.description && <p className="text-red-500 text-sm ">{errors.description}</p>}
           </div>
