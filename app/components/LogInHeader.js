@@ -21,7 +21,7 @@ export default function LogInHeader() {
         {pathname === "/login" ? (
           <Link href='/'>
             <div style={{cursor:"pointer"}} className='flex items-center w-full justify-between px-8 py-4'>
-              <Home />
+              <Home className="text-black" />
             </div>
           </Link>
 
@@ -29,11 +29,11 @@ export default function LogInHeader() {
           <div className="flex items-center w-full justify-between px-8 py-4" >
             <Link href='/'>
               <div style={{cursor:"pointer"}} className='flex' >
-                <Home />
+                <Home className="text-black" />
               </div>
             </Link>
-            <div style={{cursor:"pointer"}} className='flex'>
-              <LogOut className="hover:text-[#FF0000]" onClick={logOut} />
+            <div style={{cursor:"pointer"}} className='flex '>
+              <LogOut className="hover:text-[#FF0000] text-black" onClick={logOut} />
             </div>
           </div>
         )}
