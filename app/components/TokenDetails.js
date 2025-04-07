@@ -5,7 +5,7 @@ import Header from "./Header";
 import images from "../constants/images";
 import { useParams } from "next/navigation";
 import { supabase } from "../services/supabase.js";
-import { Loader } from "./Loader";
+import { BtnLoader, Loader } from "./Loader";
 import Link from "next/link";
 import { formatAddress, formatNumber, getAddress } from "../utils/helperFn";
 import env from "../constants/env";
@@ -29,8 +29,10 @@ export function TokenDetails() {
   const [isLoaded, setIsLoaded] = useState(true);
   const address = getAddress();
   const { showMessage } = useNotification();
+  const [iframeLoading, setIframeLoading] = useState(true);
+  const hasRun = useRef(false);
 
-
+  
   const onCopy = (text) => {
     setCopied(text);
     setTimeout(() => {
@@ -57,10 +59,18 @@ export function TokenDetails() {
         }
         setToken(token);
         const networkFilter = networks.find(network => network.chainName === token?.network);
-        console.log(networkFilter)
         setNetworkObj(networkFilter)
+        const currentChainId = +localStorage.getItem('chainId')
+          if (currentChainId !== networkFilter.chainId) {
+            if (!hasRun.current) {
+              hasRun.current = true;
+              showMessage({
+                type: 'error',
+                value: `Connect the wallet with ${networkFilter?.displayName} network`
+              })
+            }
+          }
       
-        console.log("Fetched Token:", token);
 
         if (!token) throw new Error("Token not found");
 
@@ -128,20 +138,19 @@ export function TokenDetails() {
         : `${difference} day`;
   };
 
-  const hasRun = useRef(false);
-  useEffect(() => {
-    if (!hasRun.current) {
-      hasRun.current = true;
-      if (!address) {
-        setTimeout(() => {
-          showMessage({
-            type: "error",
-            value: "Connect the wallet with BASE Network",
-          });
-        }, 1000);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!hasRun.current) {
+  //     hasRun.current = true;
+  //     if (!address && !networkObj?.displayName) {
+  //       setTimeout(() => {
+  //         showMessage({
+  //           type: "error",
+  //           value: `Connect the wallet ${networkObj?.displayName ? `with ${networkObj?.displayName} Network` :''}`,
+  //         });
+  //       }, 3000);
+  //     }
+  //   }
+  // }, [networkObj?.displayName]);
 
   return (
     <div className='min-h-screen bg-gray-50'>
@@ -235,13 +244,20 @@ export function TokenDetails() {
               </div>
             </div>
           </div>
-          <div className='flex flex-col px-4  w-full'>
-            {token?.tokenAddress && networkObj?.chainNamev2  ?<div className='w-full rounded-lg  '>
+          <div className='flex flex-col px-4 al w-full'>
+            {token?.tokenAddress && networkObj?.chainNamev2 ? <div className={`w-full relative flex items-center justify-center rounded-lg  min-h-[64vh] `}>
               <iframe
-                className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
+                onLoad={()=>setIframeLoading(false)}
+                className={`w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg ${iframeLoading ? 'invisible' : 'visible'}`}
         src={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.tokenAddress}?embed=1&info=0&swaps=0&chart=1`}
               ></iframe>
-            </div>:null}
+              {iframeLoading ? <div className='absolute inset-0 flex items-center justify-center'>
+                <BtnLoader />
+                </div>
+                :null}
+            </div> : null}
+            
+
             <div className='border-[1px] mt-4 border-[#D5D5D5]'>
               <div className=' flex justify-start items-start border-b border-[#D5D5D5] '>
                 <div>

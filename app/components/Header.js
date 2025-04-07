@@ -36,8 +36,9 @@ export default function Header() {
 
   useEffect(() => {
     if (address) {
-      if (networkResult !== 8453) return;
+      // if (networkResult !== 8453) return;
       localStorage.setItem("address", address);
+      localStorage.setItem("chainId", networkResult);
       setAccount(address);
     }
     const storedAddress = getAddress();
