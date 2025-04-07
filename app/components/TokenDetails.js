@@ -68,17 +68,14 @@ export function TokenDetails() {
         const [pairResponse, holdersResponse, holdersAmountResponse] =
           await Promise.all([
             fetch(
-              `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token?.tokenAddress || env.tempContract
-              }`
+              `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token?.tokenAddress}`
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token?.tokenAddress || env.tempContract
-              }&limit=10`,
+              `https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token?.tokenAddress}&limit=10`,
               { method: "GET", headers }
             ),
             fetch(
-              `https://api.chainbase.online/v1/token/metadata?contract_address=${token?.tokenAddress || env.tempContract
-              }&chain_id=${networkFilter?.chainId}`,
+              `https://api.chainbase.online/v1/token/metadata?contract_address=${token?.tokenAddress}&chain_id=${networkFilter?.chainId}`,
               { method: "GET", headers }
             ),
           ]);
@@ -239,13 +236,12 @@ export function TokenDetails() {
             </div>
           </div>
           <div className='flex flex-col px-4  w-full'>
-            <div className='w-full rounded-lg  '>
+            {token?.tokenAddress && networkObj?.chainNamev2  ?<div className='w-full rounded-lg  '>
               <iframe
                 className='w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg'
-                src={`https://www.geckoterminal.com/${networkObj?.chainName}/pools/${token?.tokenAddress || env.tempContract
-                  }?embed=1&info=0&swaps=0&chart=1`}
+        src={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.tokenAddress}?embed=1&info=0&swaps=0&chart=1`}
               ></iframe>
-            </div>
+            </div>:null}
             <div className='border-[1px] mt-4 border-[#D5D5D5]'>
               <div className=' flex justify-start items-start border-b border-[#D5D5D5] '>
                 <div>

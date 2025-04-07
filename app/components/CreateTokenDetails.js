@@ -76,7 +76,18 @@ export function CreateTokenDetails() {
       const dexScreenerUrl = `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${formData?.tokenAddress}`
       const response = await fetch(dexScreenerUrl);
       const userData = await response.json();
-      console.log(userData[0])
+      console.log(userData)
+
+      if (userData && !userData.length)
+      {
+        showMessage({
+          type: "error",
+          value: "Token Data Not found",
+        });
+        setLoading(false);
+        return
+      }
+
       const { data, error } = await createToken({
         tokenAddress: formData?.tokenAddress,
         address: userData[0]?.baseToken?.address,
@@ -120,6 +131,10 @@ export function CreateTokenDetails() {
       });
       router.push("/");
     } catch (error) {
+      showMessage({
+        type: "error",
+        value: "Error occurred",
+      });
       console.log("Error inserting data:", error);
     }
   };
@@ -130,7 +145,7 @@ export function CreateTokenDetails() {
       <div className="flex flex-col h-full items-center justify-center">
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 text-black">
+          className="space-y-6 w-[450px] text-black">
 
 
           <div>
