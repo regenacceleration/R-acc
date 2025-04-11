@@ -183,11 +183,11 @@ export function TokenDetails() {
             </div>
             <div className='flex items-end mt-3 gap-3'>
               <Link
-                href={`https://www.geckoterminal.com/${networkObj?.chainName}/pools/${token?.tokenAddress}`}
+                href={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.imported === true ? token?.poolAddress : token?.tokenAddress}`}
                 target='_blank'
                 className='text-[#7C7C7C] font-normal text-[12px] hover:text-black '
               >
-                {formatAddress(token?.tokenAddress || env.tempContract)}
+                {formatAddress(token?.imported === true ? token?.poolAddress : token?.tokenAddress|| env.tempContract)}
               </Link>
               <div className='flex gap-6 items-end '>
                 {token?.website ? (
@@ -249,7 +249,7 @@ export function TokenDetails() {
               <iframe
                 onLoad={()=>setIframeLoading(false)}
                 className={`w-full h-fit bg-gray-100 min-h-[64vh] mt-4 rounded-lg ${iframeLoading ? 'invisible' : 'visible'}`}
-        src={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.tokenAddress}?embed=1&info=0&swaps=0&chart=1`}
+        src={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.imported === true ? token?.poolAddress : token?.tokenAddress}?embed=1&info=0&swaps=0&chart=1`}
               ></iframe>
               {iframeLoading ? <div className='absolute inset-0 flex items-center justify-center'>
                 <BtnLoader />

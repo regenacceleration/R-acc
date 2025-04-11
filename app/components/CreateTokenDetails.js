@@ -28,6 +28,8 @@ export function CreateTokenDetails() {
     positionId: "",
     lockerAddress: "",
     earthToken: "",
+    imported:"",
+    poolAddress:""
   });
 
   const [loading, setLoading] = useState(false);
@@ -50,6 +52,8 @@ export function CreateTokenDetails() {
     positionId: "",
     lockerAddress: "",
     earthToken: "",
+    imported:"",
+    poolAddress:""
   });
 
 
@@ -90,6 +94,8 @@ export function CreateTokenDetails() {
 
       const { data, error } = await createToken({
         tokenAddress: formData?.tokenAddress,
+        poolAddress:formData?.poolAddress,
+        imported: true,
         address: userData[0]?.baseToken?.address,
         network: userData[0]?.chainId,
         name: userData[0]?.baseToken?.name,
@@ -121,6 +127,7 @@ export function CreateTokenDetails() {
       setFormData({
         tokenAddress: "",
         address: "",
+        poolAddress:"",
         network: "",
         // name: "",
         // ticker: "",
@@ -165,6 +172,17 @@ export function CreateTokenDetails() {
               className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
             />
             {errors.tokenAddress && <p className="text-red-500 text-sm ">{errors.tokenAddress}</p>}
+          </div>
+
+          <div>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">POOL ADDRESS</label>
+            <input
+              type="text"
+              value={formData.poolAddress}
+              onChange={(e) => setFormData({ ...formData, poolAddress: e.target.value })}
+              className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
+            />
+            {errors.poolAddress && <p className="text-red-500 text-sm ">{errors.poolAddress}</p>}
           </div>
 
           <div className="w-full">
