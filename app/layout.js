@@ -15,8 +15,8 @@ const courierPrime = Courier_Prime({
 });
 
 export const metadata = {
-  title: "R-acc",
-  description: "degen to regen pipeline",
+  title: "Reserve",
+  description: "Trade tokens with a purpose",
 };
 
 export default function RootLayout({ children }) {
