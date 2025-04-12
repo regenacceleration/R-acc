@@ -189,7 +189,7 @@ export function TokenDetails() {
               >
                 {formatAddress(token?.imported === true ? token?.poolAddress : token?.tokenAddress|| env.tempContract)}
               </Link>
-              <div className='flex gap-6 items-end '>
+              <div className='flex gap-3 items-end '>
                 {token?.website ? (
                   <div className='flex gap-2 justify-center items-center'>
                     <Image
@@ -242,6 +242,12 @@ export function TokenDetails() {
                   </div>
                 ) : null}
               </div>
+              <div className="flex justify-center items-center gap-2">
+                <img
+                    className="w-[10px] h-[10px] flex items-center justify-center"
+                    src={networkObj?.logo} />
+                <p className='text-[#7C7C7C] font-normal font-secondary text-[12px]'>{networkObj?.displayName}</p>
+            </div>
             </div>
           </div>
           <div className='flex flex-col px-4 al w-full'>

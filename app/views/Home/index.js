@@ -148,8 +148,8 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50 ">
       <Header />
       <div className="flex flex-col mt-[1rem] justify-center items-center">
-        <h1 className="text-[#000000] font-primary font-black text-[68px]">r/acc</h1>
-        <p className="text-[#7F7F7F] font-normal text-[17px] font-primary ">degen to regen pipeline</p>
+        <h1 className="text-[#000000] font-primary font-black text-[68px]">Reserve</h1>
+        <p className="text-[#7F7F7F] font-normal text-[17px] font-primary ">Trade tokens with a purpose</p>
         <div className="flex justify-center mt-[2rem] gap-3 w-full items-end">
           {/* <input
             type="text"

@@ -5,4 +5,6 @@ export default {
     website : "/assets/icons/website.png",
     coverPic : "/assets/images/cover-pic.png",
     earthcoin : "/assets/images/earthcoin.png",
+    base : "/assets/images/base.png",
+    polygon : "/assets/images/polygon.png",
 }
