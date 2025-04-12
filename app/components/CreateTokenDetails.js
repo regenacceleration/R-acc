@@ -63,6 +63,7 @@ export function CreateTokenDetails() {
     // if (!formData.walletAddress) newErrors.walletAddress = "WalletAddress is required";
     if (!formData.tokenAddress) newErrors.tokenAddress = "TokenAddress is required";
     if (!formData.network) newErrors.network = "Network is required";
+    if (!formData.poolAddress) newErrors.poolAddress = "PoolAddress is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

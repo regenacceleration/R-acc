@@ -21,7 +21,7 @@ export function LogIn() {
         email: "",
         password: ""
     });
-
+    const [error, setError] = useState("")
 
     const validateForm = () => {
         const newErrors = {};
@@ -45,7 +45,9 @@ export function LogIn() {
             });
 
             if (error) {
+                setLoading(false);
                 console.error('Login error:', error.message);
+                setError(error.message)
                 return;
             }
             setLoading(false);
@@ -81,6 +83,7 @@ export function LogIn() {
                             className="  w-full  outline-none font-primary border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
                         />
                         {errors.email && <p className="text-red-500 text-sm ">{errors.email}</p>}
+
                     </div>
                     <div className="w-full">
                         <label className=" font-normal font-primary text-[13px]  text-[#000000]">PASSWORD</label>
@@ -91,6 +94,7 @@ export function LogIn() {
                             className="w-full bg-gray-50 outline-none font-primary border-[#D5D5D5]  border-b-[1px]    "
                         />
                         {errors.password && <p className="text-red-500 text-sm ">{errors.password}</p>}
+                        <p className="text-red-500 text-sm ">{error}</p>
                     </div>
                     <div className="flex w-full py-4  gap-8 justify-center items-center">
                         <button type="submit"
