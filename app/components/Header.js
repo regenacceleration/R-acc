@@ -24,8 +24,8 @@ export default function Header() {
 
   const connectWallet = async () => {
     if (isActive) {
-      //  connector.deactivate && connector.deactivate()
-      //  await connector.deactivate()
+      localStorage.clear()
+      setAccount('');
     } else {
       // connector.deactivate()
       // connector.connectEagerly()
@@ -154,7 +154,7 @@ export default function Header() {
           )}
 
           <button
-            className='text-[#000000] font-normal font-primary text-[13px]'
+            className='text-[#000000] font-normal font-primary text-[13px] hover:text-[#FF0000]'
             onClick={connectWallet}
           >
             {" "}
