@@ -9,6 +9,10 @@ import { useNotification } from "../hooks/useNotification";
 import { networks } from "../constants/networks";
 import { createToken } from "../action";
 import LogInHeader from "./LogInHeader";
+import useImgApi from "../hooks/useImgApi";
+import images from "../constants/images";
+import Image from "next/image";
+import { validateUrl } from "../utils/helperFn";
 
 
 export function CreateTokenDetails() {
@@ -31,10 +35,11 @@ export function CreateTokenDetails() {
     imported:"",
     poolAddress:""
   });
-
+  const { apiFn, loading: imgLoading } = useImgApi();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { showMessage } = useNotification();
+  const [img, setImg] = useState("");
 
   const [errors, setErrors] = useState({
     tokenAddress: "",
@@ -64,9 +69,28 @@ export function CreateTokenDetails() {
     if (!formData.tokenAddress) newErrors.tokenAddress = "TokenAddress is required";
     if (!formData.network) newErrors.network = "Network is required";
     if (!formData.poolAddress) newErrors.poolAddress = "PoolAddress is required";
+        if (formData.telegram && !validateUrl(formData.telegram)) newErrors.telegram = "Invalid Url";
+        if (formData.twitter && !validateUrl(formData.twitter)) newErrors.twitter = "Invalid Url";
+        if (formData.website && !validateUrl(formData.website)) newErrors.website = "Invalid Url";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+
+    setImg(file);
+    const { response, error: Error } = await apiFn({
+      file: file,
+    });
+    setFormData((data) => ({ ...data, image: response }));
+    if (Error) {
+      console.log(Error);
+      setLoading(false);
+      setErrors((errors) => ({ ...errors, image: Error }));
+      return;
+    }
   };
 
 
@@ -102,10 +126,10 @@ export function CreateTokenDetails() {
         name: userData[0]?.baseToken?.name,
         ticker: null,
         description: formData.description,
-        image: userData[0]?.info?.imageUrl,
-        telegram: userData[0]?.info?.socials[1]?.url,
-        twitter: userData[0]?.info?.socials[0]?.url,
-        website: userData[0]?.info?.websites[0]?.url,
+        image: formData?.image,
+        telegram: formData?.telegram,
+        twitter: formData?.twitter,
+        website: formData.website,
         totalSupply: userData[0]?.marketCap,
         tokenSymbol: userData[0]?.baseToken?.symbol,
         positionId: null,
@@ -156,7 +180,7 @@ export function CreateTokenDetails() {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen bg-gray-50">
+    <div className="flex flex-col w-full  bg-gray-50">
       <LogInHeader />
       <div className="flex flex-col h-full items-center justify-center">
         <form
@@ -196,6 +220,27 @@ export function CreateTokenDetails() {
             />
             {errors.address && <p className="text-red-500 text-sm ">{errors.address}</p>}
           </div>
+                    <div>
+                      <label className=" font-normal font-primary text-[13px] text-[#000000]">IMAGE</label>
+                      <div className="relative flex flex-col  w-full   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]">
+                        {/* {selectedImage ? (
+                          <img src={selectedImage} alt="Uploaded Preview" className="w-full h-40 object-cover rounded-md" />
+                        ) : (
+                          <p className="text-gray-600">IMAGE</p>
+                        )} */}
+                        <div className="absolute bottom-2 flex items-center justify-between w-[90%]">
+                          <p className=" text-black font-primary text-xs min-w-[90%] whitespace-nowrap text-ellipsis overflow-hidden">{formData?.image ? img?.name : ""}</p>
+                          {imgLoading ? <BtnLoader /> : formData?.image && <Image className="w-5 h-5 " width={40} height={40} alt="upload" src={formData?.image} />}
+                        </div>
+          
+                        <label htmlFor="upload" type="button" className="absolute right-2 cursor-pointer bottom-2  transition">
+                          <Image className="w-[22px] h-[22px]" width={40} height={40} alt="upload" src={images.upload} />
+                        </label>
+                        <input id="upload" type="file" accept="image/*" className="opacity-0 cursor-pointer" onChange={handleImageChange} />
+                      </div>
+                      {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
+          </div>
+          
           <div className="w-full">
             <label className=" font-normal font-primary text-[13px]  text-[#000000]">DESCRIPTION</label>
             <textarea
@@ -221,6 +266,39 @@ export function CreateTokenDetails() {
               ))}
             </select>
             {errors.network && <p className="text-red-500 text-sm ">{errors.network}</p>}
+          </div>
+          
+          <div>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">TELEGRAM</label>
+            <input
+              type="text"
+              value={formData.telegram}
+              onChange={(e) => setFormData({ ...formData, telegram: e.target.value })}
+              className="  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
+            />
+            {errors.telegram && <p className="text-red-500 text-sm ">{errors.telegram}</p>}
+          </div>
+
+          <div>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">TWITTER</label>
+            <input
+              type="text"
+              value={formData.twitter}
+              onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
+              className="  w-full outline-none font-primary  border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
+            />
+            {errors.twitter && <p className="text-red-500 text-sm ">{errors.twitter}</p>}
+          </div>
+
+          <div>
+            <label className=" font-normal font-primary text-[13px] text-[#000000]">WEBSITE</label>
+            <input
+              type="text"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+              className="  w-full outline-none font-primary   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]  "
+            />
+            {errors.website && <p className="text-red-500 text-sm ">{errors.website}</p>}
           </div>
 
           <div className="flex w-full py-4  gap-8 justify-center items-center">

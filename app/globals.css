@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+@font-face {
+  font-family: "Georgian";
+  src: local("Georgian"),
+    url("/fonts/georgia.ttf");
+}
+
+
+:root {
+  --title-font: "Georgian";
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

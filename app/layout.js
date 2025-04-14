@@ -1,8 +1,8 @@
-import {Source_Code_Pro,Courier_Prime,Noto_Sans_Georgian } from "next/font/google";
+import {Source_Code_Pro,Courier_Prime } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
-const sourceCodePro = Noto_Sans_Georgian({
+const sourceCodePro = Source_Code_Pro({
   variable: "--primary-font",
   subsets: ["latin"],
   weight: ['200' , '300' , '400' , '500' , '600' , '700' , '800' , '900']

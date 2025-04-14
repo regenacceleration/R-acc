@@ -16,6 +16,7 @@ export default {
     fontFamily: {
       primary: ["var(--primary-font)"],
       secondary: ["var(--secondary-font)"],
+      title: ["var(--title-font)"],
     },
   },
   plugins: [],
