@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { formatAddress, getAddress, VerifyNetwork } from "../utils/helperFn";
-import { chain, pairedTokenAddress } from "./constants";
+import { chain } from "./constants";
 import { connectors } from "../connectors";
 import { Uniswap } from "./Uniswap";
 import ConnectWallet from "./ConnectWalletPopup";
 import { useNotification } from "../hooks/useNotification";
+import { networks } from "../constants/networks";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
@@ -19,13 +20,15 @@ export default function Header() {
   const isActive = hooks.useIsActive();
   const networkResult = hooks.useChainId();
   const address = hooks.useAccount();
-  const {showMessage}=useNotification()
+  const { showMessage } = useNotification()
+  const [pairedTokenAddress,setPairedTokenAddress]=useState('')
 
 
   const connectWallet = async () => {
     if (isActive) {
-      localStorage.clear()
+      localStorage.clear();
       setAccount('');
+      window.location.reload()
     } else {
       // connector.deactivate()
       // connector.connectEagerly()
@@ -39,6 +42,8 @@ export default function Header() {
       // if (networkResult !== 8453) return;
       localStorage.setItem("address", address);
       localStorage.setItem("chainId", networkResult);
+      const networkFilter = networks.find(network => network.chainId === networkResult);
+      setPairedTokenAddress(networkFilter?.[0]?.earthAddress)
       setAccount(address);
     }
     const storedAddress = getAddress();
