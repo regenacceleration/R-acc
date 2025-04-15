@@ -150,7 +150,7 @@ export function Uniswap(props) {
   return (
     <iframe
       ref={iframeRef}
-      src={`https://app.uniswap.org/#/swap?outputCurrency=${'0x9d6501275e91c0b2b0845C2c5334dEa1EC6a3c18'}&inputCurrency=${props?.defaultInputTokenAddress}`}
+      src={`https://app.uniswap.org/#/swap?outputCurrency=${props?.defaultOutputTokenAddress}&inputCurrency=${props?.defaultInputTokenAddress}`}
       height="500px"
       width="100%"
    

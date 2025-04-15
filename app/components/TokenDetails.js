@@ -12,7 +12,7 @@ import env from "../constants/env";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { FaCopy } from "react-icons/fa";
 import { Uniswap } from "./Uniswap";
-import { pairedTokenAddress } from "./constants";
+// import { pairedTokenAddress } from "./constants";
 import { useNotification } from "../hooks/useNotification";
 import Updates from "./Updates";
 import { networks } from "../constants/networks";
@@ -314,7 +314,7 @@ export function TokenDetails() {
         <div className='flex w-[50%] mt-10 flex-col'>
           {token?.tokenAddress && (
             <Uniswap
-              defaultInputTokenAddress={pairedTokenAddress}
+              defaultInputTokenAddress={networkObj?.earthAddress}
               defaultOutputTokenAddress={token?.tokenAddress}
               setIsLoaded={setIsLoaded}
               token={{
@@ -390,12 +390,12 @@ export function TokenDetails() {
               <p>$EARTH address</p>
               <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
-                  {formatAddress(pairedTokenAddress)}
+                  {formatAddress(networkObj?.earthAddress)}
                 </p>
                 <CopyToClipboard
                   onCopy={() => onCopy('pairedTokenAddress')}
                   className='cursor-pointer'
-                  text={pairedTokenAddress}
+                  text={networkObj?.earthAddress}
                 >
                   <FaCopy
                     fontSize={12}
