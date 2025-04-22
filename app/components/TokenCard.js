@@ -35,33 +35,19 @@ function IndToken({ token }) {
         telegram: validateAndFormatUrl(token?.telegram),
         website: validateAndFormatUrl(token?.website),
     }
-
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const headers = { 'x-api-key': env.coinBaseApiKey };
                 const networkFilter = networks.find(network => network.chainName === token?.network);
                 setNetworkObj(networkFilter)
-                const [holdersResponse, pairResponse] = await Promise.all([
-                    // fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
-                    fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`)
-                ]);
+                const  pairResponse = await fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`);
 
-                if (!holdersResponse.ok || !pairResponse.ok) {
-                    throw new Error('One or both network requests failed');
+                if (!holdersResponse.ok) {
+                    throw new Error('Network requests failed');
                 }
 
-                const [holdersData, pairData] = await Promise.all([
-                    // holdersResponse.json(),
-                    pairResponse.json()
-                ]);
-
-                // setCount(holdersData.count);
+                const pairData = await pairResponse.json();
                 setPairData(pairData?.[0]);
-
-                // console.log('Holders count:', holdersData.count);
-                console.log('Pair data:', pairData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -70,7 +56,40 @@ function IndToken({ token }) {
         fetchData();
     }, [token.id]);
 
-    console.log(networkObj)
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const headers = { 'x-api-key': env.coinBaseApiKey };
+    //             const networkFilter = networks.find(network => network.chainName === token?.network);
+    //             setNetworkObj(networkFilter)
+    //             const [holdersResponse, pairResponse] = await Promise.all([
+    //                 // fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
+    //                 fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`)
+    //             ]);
+
+    //             if (!holdersResponse.ok || !pairResponse.ok) {
+    //                 throw new Error('One or both network requests failed');
+    //             }
+
+    //             const [holdersData, pairData] = await Promise.all([
+    //                 // holdersResponse.json(),
+    //                 pairResponse.json()
+    //             ]);
+
+    //             // setCount(holdersData.count);
+    //             setPairData(pairData?.[0]);
+
+    //             // console.log('Holders count:', holdersData.count);
+    //             console.log('Pair data:', pairData?.[0])
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [token.id]);
+
+    // console.log(networkObj)
 
     return (
 

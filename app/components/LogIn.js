@@ -35,7 +35,6 @@ export function LogIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData)
         try {
             if (!validateForm()) return;
             setLoading(true);
@@ -51,7 +50,6 @@ export function LogIn() {
                 return;
             }
             setLoading(false);
-            console.log(data);
             showMessage({
                 type: "success",
                 value: "Login Successfully",

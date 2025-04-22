@@ -227,7 +227,7 @@ export function CreateTokenModal() {
         parsedEarth
       );
 
-      console.log(tx);
+      // console.log(tx);
 
       console.log("Waiting for deployment confirmation...");
 
@@ -251,11 +251,11 @@ export function CreateTokenModal() {
         console.log(`Token deployed successfully!`);
 
         // Store deployment info in state if needed
-        console.log({
-          tokenAddress,
-          positionId: positionId.toString(),
-          lockerAddress,
-        });
+        // console.log({
+        //   tokenAddress,
+        //   positionId: positionId.toString(),
+        //   lockerAddress,
+        // });
         return {
           tokenAddress,
           positionId: positionId.toString(),
