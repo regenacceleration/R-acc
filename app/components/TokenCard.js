@@ -43,16 +43,16 @@ function IndToken({ token }) {
                 const headers = { 'x-api-key': env.coinBaseApiKey };
                 const networkFilter = networks.find(network => network.chainName === token?.network);
                 setNetworkObj(networkFilter)
-                const [holdersResponse, pairResponse] = await Promise.all([
+                const [ pairResponse] = await Promise.all([
                     // fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
                     fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`)
                 ]);
 
-                if (!holdersResponse.ok || !pairResponse.ok) {
+                if ( !pairResponse.ok) {
                     throw new Error('One or both network requests failed');
                 }
 
-                const [holdersData, pairData] = await Promise.all([
+                const [ pairData] = await Promise.all([
                     // holdersResponse.json(),
                     pairResponse.json()
                 ]);
