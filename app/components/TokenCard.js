@@ -44,7 +44,7 @@ function IndToken({ token }) {
                 const networkFilter = networks.find(network => network.chainName === token?.network);
                 setNetworkObj(networkFilter)
                 const [holdersResponse, pairResponse] = await Promise.all([
-                    fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
+                    // fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
                     fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`)
                 ]);
 
@@ -53,15 +53,15 @@ function IndToken({ token }) {
                 }
 
                 const [holdersData, pairData] = await Promise.all([
-                    holdersResponse.json(),
+                    // holdersResponse.json(),
                     pairResponse.json()
                 ]);
 
-                setCount(holdersData.count);
+                // setCount(holdersData.count);
                 setPairData(pairData?.[0]);
 
                 // console.log('Holders count:', holdersData.count);
-                // console.log('Pair data:', pairData);
+                console.log('Pair data:', pairData);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -96,10 +96,13 @@ function IndToken({ token }) {
                 </div>
 
                 {/* Holders */}
-                <div className="flex flex-col justify-start items-start">
-                    <p className="text-[#000000]   font-secondary font-normal text-[13px]">{count || 0}</p>
+                <div></div>
+                {/* <div className="flex flex-col justify-start items-start">
+                    <p className="text-[#000000]   font-secondary font-normal text-[13px]">
+                       {count || 0}
+                        </p>
                     <p className="text-[#7C7C7C] font-secondary font-normal text-[13px]">Holders</p>
-                </div>
+                </div> */}
             </div>
 
             <div className="flex justify-center items-center gap-1">
