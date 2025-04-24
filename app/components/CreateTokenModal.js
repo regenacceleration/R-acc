@@ -365,7 +365,7 @@ export function CreateTokenModal() {
     <div className="min-h- pb-6 bg-gray-50 ">
       <Header />
       <div className="flex w-full justify-center mt-5 items-center">
-        <form onSubmit={handleSubmit} className="space-y-4 text-black">
+        <form onSubmit={handleSubmit} className="space-y-4 px-8 md:px-0 text-black">
           <div className="w-full">
             <label className=" font-normal font-primary text-[13px]  text-[#000000]">NAME</label>
             <input

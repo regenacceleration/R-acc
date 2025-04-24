@@ -9,6 +9,7 @@ import { Uniswap } from "./Uniswap";
 import ConnectWallet from "./ConnectWalletPopup";
 import { useNotification } from "../hooks/useNotification";
 import { networks } from "../constants/networks";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
   const [account, setAccount] = useState(null);
@@ -22,6 +23,7 @@ export default function Header() {
   const address = hooks.useAccount();
   const { showMessage } = useNotification()
   const [pairedTokenAddress,setPairedTokenAddress]=useState('')
+  const [isOpen, setIsOpen] = useState(false);
 
 
   const connectWallet = async () => {
@@ -131,7 +133,9 @@ export default function Header() {
           </div>
         )}
 
-        <div className='flex gap-8'>
+
+
+        <div className='hidden md:flex gap-8'>
           <Link href='/form'>
             <button className='text-[#FF0000] font-normal font-primary text-[13px]'>
               CREATE TOKEN
@@ -147,16 +151,7 @@ export default function Header() {
             </button>
           </div>
 
-          {buyEarth && (
-            <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'>
-              <div ref={modalRef} className='absolute z-50 Uniswap sm:w-[30%]'>
-                <Uniswap
-                  defaultInputTokenAddress='NATIVE'
-                  defaultOutputTokenAddress={pairedTokenAddress}
-                />
-              </div>
-            </div>
-          )}
+         
 
           <button
             className='text-[#000000] font-normal font-primary text-[13px] hover:text-[#FF0000]'
@@ -166,7 +161,49 @@ export default function Header() {
             {account ? formatAddress(account) : "CONNECT WALLET"}
           </button>
         </div>
+        <button
+        onClick={() => setIsOpen(!isOpen)}
+        className='md:hidden text-black text-xl'
+      >
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+      {isOpen && (
+        <div className='md:hidden space-y-4 bg-white shadow-lg rounded-md p-4 z-50 absolute top-16 left-4 right-4'>
+          <Link href='/form'>
+            <button className='text-[#FF0000] font-normal font-primary text-[13px]'>
+              CREATE TOKEN
+            </button>
+          </Link>
+          <div>
+            <button
+              onClick={handleBuy}
+              className='text-[#FF0000] font-normal font-primary text-[13px]'
+            >
+              {" "}
+              Buy $EARTH
+            </button>
+          </div>
+         
+          <button
+            className='text-[#000000] font-normal font-primary text-[13px] hover:text-[#FF0000]'
+            onClick={connectWallet}
+          >
+            {" "}
+            {account ? formatAddress(account) : "CONNECT WALLET"}
+          </button>
+        </div>
+      )}
       </header>
+      {buyEarth && (
+            <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'>
+              <div ref={modalRef} className='absolute z-50 Uniswap sm:w-[30%]'>
+                <Uniswap
+                  defaultInputTokenAddress='NATIVE'
+                  defaultOutputTokenAddress={pairedTokenAddress}
+                />
+              </div>
+            </div>
+          )}
       {connectwallet ? (
         <ConnectWallet
           isOpen={connectwallet}

@@ -166,22 +166,22 @@ export function TokenDetails() {
         <Loader className='text-[#7C7C7C]' size='text-7xl' />
       </div>
 
-      <div className={`w-full p-6  ${loading || isLoaded ? "none" : "flex"}`}>
+      <div className={`w-full p-6  ${loading || isLoaded ? "none" : "flex flex-col md:flex-row"}`}>
         {/* Left Section */}
 
         <div className='flex w-full flex-col'>
-          <div className='flex items-center px-4 gap-6'>
+          <div className='flex flex-col md:flex-row items-start md:items-center px-4 gap-6'>
             <div className='flex gap-3'>
               <img
                 className='w-[50px] h-[50px] rounded-full border-[1px] border-[#D5D5D5]'
                 src={token?.image}
                 alt='racc'
               />
-              <p className='text-[#000000] font-primary font-semibold text-[36px]'>
+              <p className='text-[#000000] font-primary font-semibold text-[32px]'>
                 {token?.name}
               </p>
             </div>
-            <div className='flex items-end mt-3 gap-3'>
+            <div className='flex flex-col md:flex-row items-start md:items-end mt-3 gap-3'>
               <Link
                 href={`https://www.geckoterminal.com/${networkObj?.chainNamev2}/pools/${token?.imported === true ? token?.poolAddress : token?.tokenAddress}`}
                 target='_blank'
@@ -311,7 +311,7 @@ export function TokenDetails() {
 
         {/* Right Section */}
 
-        <div className='flex w-[50%] mt-10 flex-col'>
+        <div className='flex w-[100%] md:w-[50%] mt-10 flex-col'>
           {token?.tokenAddress && (
             <Uniswap
               defaultInputTokenAddress={networkObj?.earthAddress}

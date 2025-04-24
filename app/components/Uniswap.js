@@ -153,6 +153,7 @@ export function Uniswap(props) {
       src={`https://app.uniswap.org/#/swap?outputCurrency=${props?.defaultOutputTokenAddress}&inputCurrency=${props?.defaultInputTokenAddress}`}
       height="500px"
       width="100%"
+      className="flex justify-center items-center"
    
     />
       // <SwapWidget

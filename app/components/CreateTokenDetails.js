@@ -185,7 +185,7 @@ export function CreateTokenDetails() {
       <div className="flex flex-col h-full items-center justify-center">
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 w-[450px] text-black">
+          className="space-y-6 px-8 md:px-0 w-full md:w-[450px] text-black">
 
 
           <div>

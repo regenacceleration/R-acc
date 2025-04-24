@@ -43,16 +43,16 @@ function IndToken({ token }) {
                 const headers = { 'x-api-key': env.coinBaseApiKey };
                 const networkFilter = networks.find(network => network.chainName === token?.network);
                 setNetworkObj(networkFilter)
-                const [ pairResponse] = await Promise.all([
+                const [pairResponse] = await Promise.all([
                     // fetch(`https://api.chainbase.online/v1/token/top-holders?chain_id=${networkFilter?.chainId}&contract_address=${token.tokenAddress || env.tempContract}&limit=10`, { method: 'GET', headers }),
                     fetch(`https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${token.tokenAddress || env.tempContract}`)
                 ]);
 
-                if ( !pairResponse.ok) {
+                if (!pairResponse.ok) {
                     throw new Error('One or both network requests failed');
                 }
 
-                const [ pairData] = await Promise.all([
+                const [pairData] = await Promise.all([
                     // holdersResponse.json(),
                     pairResponse.json()
                 ]);
@@ -96,7 +96,12 @@ function IndToken({ token }) {
                 </div>
 
                 {/* Holders */}
-                <div></div>
+                <div className="flex justify-center items-center gap-1">
+                    <img
+                        className="w-[12px] h-[12px] flex items-center justify-center"
+                        src={networkObj?.logo} />
+                    <p className="text-[#7C7C7C] mt-1 font-secondary font-normal text-[13px]">{networkObj?.displayName}</p>
+                </div>
                 {/* <div className="flex flex-col justify-start items-start">
                     <p className="text-[#000000]   font-secondary font-normal text-[13px]">
                        {count || 0}
@@ -105,12 +110,7 @@ function IndToken({ token }) {
                 </div> */}
             </div>
 
-            <div className="flex justify-center items-center gap-1">
-                <img
-                    className="w-[12px] h-[12px] flex items-center justify-center"
-                    src={networkObj?.logo} />
-                <p className="text-[#7C7C7C] mt-1 font-secondary font-normal text-[13px]">{networkObj?.displayName}</p>
-            </div>
+
 
             {/* Description */}
             <div className="mt-6 text-center">
