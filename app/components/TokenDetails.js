@@ -177,7 +177,7 @@ export function TokenDetails() {
                 src={token?.image}
                 alt='racc'
               />
-              <p className='text-[#000000] font-primary font-semibold text-[32px]'>
+              <p className='text-[#000000] font-primary font-semibold text-[24px] md:text-[36px]'>
                 {token?.name}
               </p>
             </div>
@@ -269,8 +269,8 @@ export function TokenDetails() {
                 <div>
                   <button
                     className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${activeTab === "description"
-                        ? "  text-[18px] text-[#000000]"
-                        : "text-[#D5D5D5] text-[18px]"
+                        ? "  text-[14px] md:text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[14px] md:text-[18px]"
                       }`}
                     onClick={() => setActiveTab("description")}
                   >
@@ -280,8 +280,8 @@ export function TokenDetails() {
                 <div>
                   <button
                     className={`flex-1 w-fit py-2 text-left font-secondary  p-4  border-r border-[#D5D5D5] font-normal ${activeTab === "updates"
-                        ? "  text-[18px] text-[#000000]"
-                        : "text-[#D5D5D5] text-[18px]"
+                        ? "  text-[14px] md:text-[18px] text-[#000000]"
+                        : "text-[#D5D5D5] text-[14px] md:text-[18px]"
                       }`}
                     onClick={() => setActiveTab("updates")}
                   >
@@ -296,7 +296,7 @@ export function TokenDetails() {
                     {token?.description}
                   </p>
                 ) : (
-                  <div className="p-3">
+                  <div className="p-4 md:p-3">
                     <Updates token={token} />
                   </div>
                   // <HolderData
@@ -386,7 +386,7 @@ export function TokenDetails() {
             </div> */}
 
           <div className='flex flex-col gap-2 py-2 p-4 mt-5 border border-[#D5D5D5]'>
-            <div className='flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
+            <div className='flex flex-col md:flex-row items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
               <p>$EARTH address</p>
               <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>
@@ -404,7 +404,7 @@ export function TokenDetails() {
                 </CopyToClipboard>
               </div>
             </div>
-            <div className='flex items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
+            <div className='flex flex-col md:flex-row items-center justify-between gap-2  w-full text-left font-secondary font-normal text-[16px] text-[#000000]'>
               <p>{token?.name} address</p>
               <div className='flex gap-2'>
                 <p className='text-[#7C7C7C] font-normal text-[12px]'>

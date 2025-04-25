@@ -122,20 +122,21 @@ export default function Updates({ token }) {
 
   return (
     <div >
-        {getAddress() === token?.address ? (
-          <div className="flex mt-4 items-center gap-3 justify-between rounded-lg w-full">
-            <div className="flex flex-col flex-1">
+        {getAddress() !== token?.address ? (
+          <div className="flex flex-col md:flex-row mt-4 items-center gap-3 justify-between rounded-lg w-full">
+            <div className="flex flex-col w-full flex-1">
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="Add an update..."
-                className="flex-1 text-black bg-gray-200 w-full px-3 py-2 rounded-lg outline-none mb-0 resize-none"
+                className="flex-1 placeholder:text-[14px] md:placeholder:text-[18px] text-black bg-gray-200 w-full px-3 py-2 rounded-lg outline-none mb-0 resize-none"
               />
               {errors && <p className="text-red-500 text-sm">{errors}</p>}
             </div>
-            <div >
+           
+            <div className="w-full md:w-fit  h-10">
               <button
-                className="w-full px-4 py-2 bg-black text-white rounded-lg flex items-center justify-center gap-3 font-normal font-primary text-[16px] min-w-24 h-10"
+                className="w-full px-4 py-2 bg-black text-white rounded-lg flex items-center justify-center gap-3 font-normal font-primary text-[14px] md:text-[16px]"
                 type="button"
                 onClick={handleSubmit}
               >
@@ -146,7 +147,8 @@ export default function Updates({ token }) {
                 )}
               </button>
             </div>
-          </div>
+            </div>
+          
         ) : null}
       <InfiniteScroll
         dataLength={updates.length}
@@ -166,7 +168,7 @@ export default function Updates({ token }) {
               <div key={index} className='w-[90%] py-4'>
                 <div className='flex flex-col items-start gap-3'>
                   {/* <p className="font-bold text-[#000000] font-primary text-[14px]">{update.name}</p> */}
-                  <p className='text-[#000000] font-primary font-normal text-[16px]'>
+                  <p className='text-[#000000] font-primary font-normal text-[12px] md:text-[16px]'>
                     {update.update}
                   </p>
                   <p className='text-[#000000] font-primary font-normal text-[12px]'>
