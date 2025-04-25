@@ -122,7 +122,7 @@ export default function Updates({ token }) {
 
   return (
     <div >
-        {getAddress() !== token?.address ? (
+        {getAddress() === token?.address ? (
           <div className="flex flex-col md:flex-row mt-4 items-center gap-3 justify-between rounded-lg w-full">
             <div className="flex flex-col w-full flex-1">
               <textarea
