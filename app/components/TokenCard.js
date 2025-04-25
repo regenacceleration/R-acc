@@ -60,7 +60,7 @@ function IndToken({ token }) {
                 // setCount(holdersData.count);
                 setPairData(pairData?.[0]);
 
-                /
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -68,7 +68,7 @@ function IndToken({ token }) {
 
         fetchData();
     }, [token.id]);
-
+    
 
     return (
 
