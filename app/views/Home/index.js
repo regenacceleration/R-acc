@@ -17,7 +17,7 @@ export default function Home() {
   // const containerRef = useRef(null);
   // const [page, setPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const rowsPerPage = 10
+  const rowsPerPage = 6
 
   const fetchToken = async (page, search = "") => {
     try {

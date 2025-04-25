@@ -365,7 +365,7 @@ export function CreateTokenModal() {
     <div className="min-h- pb-6 bg-gray-50 ">
       <Header />
       <div className="flex w-full justify-center mt-5 items-center">
-        <form onSubmit={handleSubmit} className="space-y-4 px-8 md:px-0 text-black">
+        <form onSubmit={handleSubmit} className="space-y-4 flex flex-col justify-center items-center w-[80%] md:w-[35%] text-black">
           <div className="w-full">
             <label className=" font-normal font-primary text-[13px]  text-[#000000]">NAME</label>
             <input
@@ -377,7 +377,7 @@ export function CreateTokenModal() {
             {errors.name && <p className="text-red-500 text-sm ">{errors.name}</p>}
           </div>
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">Symbol</label>
             <input
               type="text"
@@ -405,7 +405,7 @@ export function CreateTokenModal() {
             )}
           </div> */}
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">DESCRIPTION</label>
             <textarea
               value={formData.description}
@@ -432,7 +432,7 @@ export function CreateTokenModal() {
             <input type="file" onChange={handleImageUpload} />
             {errors.image && <p className="text-red-500 text-sm ">{errors.image}</p>}
           </div> */}
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">IMAGE</label>
             <div className="relative flex flex-col  w-full   border-b-[1px] px-2 bg-gray-50 border-[#D5D5D5]">
               {/* {selectedImage ? (
@@ -472,7 +472,7 @@ export function CreateTokenModal() {
             )}
           </div> */}
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">TELEGRAM</label>
             <input
               type="text"
@@ -483,7 +483,7 @@ export function CreateTokenModal() {
             {errors.telegram && <p className="text-red-500 text-sm ">{errors.telegram}</p>}
           </div>
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">TWITTER</label>
             <input
               type="text"
@@ -494,7 +494,7 @@ export function CreateTokenModal() {
             {errors.twitter && <p className="text-red-500 text-sm ">{errors.twitter}</p>}
           </div>
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">WEBSITE</label>
             <input
               type="text"
@@ -505,7 +505,7 @@ export function CreateTokenModal() {
             {errors.website && <p className="text-red-500 text-sm ">{errors.website}</p>}
           </div>
 
-          <div>
+          <div className="w-full">
             <label className=" font-normal font-primary text-[13px] text-[#000000]">Total Supply you want to create</label>
             <input
               type="number"
