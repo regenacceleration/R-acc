@@ -99,7 +99,6 @@ export function Uniswap(props) {
     provider.send('eth_requestAccounts', []).then(() => {
       if (iframeRef.current) {
         iframeRef.current.addEventListener('load', () => {
-          console.log('dd');
           
           iframeRef.current.contentWindow.postMessage(
             {
@@ -118,7 +117,6 @@ export function Uniswap(props) {
       const handleMessage = (e) => {
         if (e.origin !== widgetUrl || !e.data.jsonrpc || !provider.getSigner()) return;
         const request = e.data.method;
-        console.log(request);
         
         provider.send(request?.method, request?.params || []).then((result) => {
           iframeRef.current?.contentWindow?.postMessage(

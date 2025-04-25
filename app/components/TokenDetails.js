@@ -111,9 +111,9 @@ export function TokenDetails() {
         setHoldersData(holdersData);
         setHoldersAmount(holdersAmountData?.data?.total_supply);
 
-        console.log("Pair Data:", pairData?.[0]);
-        console.log("Holders Data:", holdersData.data);
-        console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
+        // console.log("Pair Data:", pairData?.[0]);
+        // console.log("Holders Data:", holdersData.data);
+        // console.log("Holders Amount:", holdersAmountData?.data?.total_supply);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -124,7 +124,6 @@ export function TokenDetails() {
     fetchData();
   }, [name]);
 
-  console.log(networkObj)
 
   const calculateAge = (date) => {
     if (!date) return "N/A";

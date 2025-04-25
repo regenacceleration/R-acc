@@ -60,8 +60,7 @@ function IndToken({ token }) {
                 // setCount(holdersData.count);
                 setPairData(pairData?.[0]);
 
-                // console.log('Holders count:', holdersData.count);
-                console.log('Pair data:', pairData);
+                /
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -70,7 +69,6 @@ function IndToken({ token }) {
         fetchData();
     }, [token.id]);
 
-    console.log(networkObj)
 
     return (
 

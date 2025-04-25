@@ -15,7 +15,6 @@ function useImgApi() {
       const { data, error } = await supabase.storage
         .from("tokens")
         .upload(`${uuidv4()}.${file.type.replace("image/","")}`, file);
-      console.log(data);
       
       if (error) {
         console.log(error);

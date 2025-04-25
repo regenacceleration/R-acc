@@ -98,14 +98,14 @@ export function CreateTokenDetails() {
     e.preventDefault();
     try {
       if (!validateForm()) return;
-      console.log(formData)
+      
       setLoading(true);
       const networkFilter = networks.find(network => network.displayName === formData?.network);
-      console.log(networkFilter)
+      
       const dexScreenerUrl = `https://api.dexscreener.com/tokens/v1/${networkFilter?.chainName}/${formData?.tokenAddress}`
       const response = await fetch(dexScreenerUrl);
       const userData = await response.json();
-      console.log(userData)
+      
 
       if (userData && !userData.length)
       {
@@ -144,7 +144,7 @@ export function CreateTokenDetails() {
         });
         return
       };
-      console.log(data);
+      
       showMessage({
         type: "success",
         value: "Token Deployed Successfully",
