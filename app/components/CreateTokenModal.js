@@ -69,7 +69,7 @@ export function CreateTokenModal() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.name?.trim()) newErrors.name = "Name is required";
     if (!formData.ticker) newErrors.ticker = "Ticker is required";
     if (!formData.description) newErrors.description = "Description is required";
     if (!formData.image) newErrors.image = "Image is required";
@@ -211,7 +211,7 @@ export function CreateTokenModal() {
       // Execute deployment
 
       const tx = await contract.deployToken(
-        name,
+        name?.trim(),
         tokenSymbol,
         parsedSupply,
         parsedFee,
@@ -296,7 +296,7 @@ export function CreateTokenModal() {
       if (!validateForm()) return;
 
       setLoading(true);
-      const { data: fetchData, fetchDataError } = await supabase.from(supabaseTable.token).select("*").eq("name", formData?.name);
+      const { data: fetchData, fetchDataError } = await supabase.from(supabaseTable.token).select("*").eq("name", formData?.name?.trim());
       if (fetchDataError) {
         setErrors((errors) => ({
           ...errors,
@@ -321,7 +321,7 @@ export function CreateTokenModal() {
         return;
       }
       const { data, error } = await createToken({
-          name: formData?.name,
+        name: formData?.name?.trim(),
           ticker: formData?.ticker,
           description: formData?.description,
           image: formData?.image,
